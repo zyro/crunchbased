@@ -9,12 +9,30 @@
 *.class
 
 # generated files
-bin/
-gen/
+bin
+gen
+target
 
 # Local configuration file (sdk path, etc)
 local.properties
 
-# Eclipse project files
+## intellij metadata files
+*.iml
+*.ipr
+*.iws
+.idea
+
+## eclipse metadata files
+.factorypath
+.settings
 .classpath
 .project
+
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+Icon?
+Thumbs.db

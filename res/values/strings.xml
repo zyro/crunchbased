@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CrunchBase</string>
+    <string name="menu_imagesCheckbox">Load and display images</string>
+    <string name="menu_cacheCheckbox">Enable caching</string>
+    <string name="menu_aboutItem">About</string>
+    <string name="about_dismiss">Dismiss</string>
+    <string name="about_full">
+        \n\u00A0CrunchBase for Android - version 1.0.0\n\n
+        Author: Andrei Mihu\n
+        Source: zyro/crunchbase-android\n\n
+        Android Sliding Layer library\n
+        Author: 6Wunderkinder\n
+        Source: 6wunderkinder/android-sliding-layer-lib\n
+    </string>
+</resources>
