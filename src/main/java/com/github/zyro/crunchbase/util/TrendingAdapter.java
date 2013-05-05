@@ -20,9 +20,13 @@ public class TrendingAdapter extends BaseAdapter {
     /** The data list backing this adapter. */
     private List<TrendingItem> data;
 
+    /** Context used to lookup resources. */
+    private Context context;
+
     /** Constructor to properly initialise state of adapter. */
     public TrendingAdapter(final Context context) {
         super();
+        this.context = context;
         inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         clearTrendingItems();
@@ -53,6 +57,10 @@ public class TrendingAdapter extends BaseAdapter {
                 WordUtils.capitalize(item.getNamespace().replace("-", " ")));
         ((TextView) conView.findViewById(R.id.trendingItemPoints)).setText(
                 item.getPoints().toString());
+        ((TextView) conView.findViewById(R.id.trendingItemPointsLabel)).setText(
+                item.getPoints() == 1 ?
+                        context.getString(R.string.trending_points_singular) :
+                        context.getString(R.string.trending_points_plural));
 
         return conView;
     }

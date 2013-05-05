@@ -23,7 +23,6 @@
         <TextView android:id="@+id/trendingItemPointsLabel"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:text="@string/trending_points"
                   android:textColor="#548291"
                   android:textSize="10sp"
                   android:paddingTop="0dp"

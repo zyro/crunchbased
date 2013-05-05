@@ -19,7 +19,8 @@
     </string>
     <string name="trending_header">Top 10 Trending Now</string>
     <string name="details_view">Details</string>
-    <string name="trending_points">points</string>
+    <string name="trending_points_plural">points</string>
+    <string name="trending_points_singular">point</string>
     <string name="refreshing">Refreshing…</string>
     <string name="no_items">No items found. Refresh to retry.</string>
 </resources>
