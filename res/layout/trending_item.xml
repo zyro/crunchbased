@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:baselineAligned="false">
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_height="wrap_content"
+                  android:layout_width="0dp"
+                  android:layout_weight="1">
+
+        <TextView android:id="@+id/trendingItemPoints"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="#548291"
+                  android:textSize="30sp"
+                  android:paddingTop="5dp"
+                  android:paddingLeft="10dp"
+                  android:paddingBottom="0dp"
+                  android:gravity="center"/>
+
+        <TextView android:id="@+id/trendingItemPointsLabel"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/trending_points"
+                  android:textColor="#548291"
+                  android:textSize="10sp"
+                  android:paddingTop="0dp"
+                  android:paddingLeft="10dp"
+                  android:paddingBottom="5dp"
+                  android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_height="wrap_content"
+                  android:layout_width="0dp"
+                  android:layout_weight="5">
+
+        <TextView android:id="@+id/trendingItemName"
+                  android:layout_width="wrap_content"
+                  android:layout_height="fill_parent"
+                  android:textColor="@android:color/black"
+                  android:textSize="18sp"
+                  android:paddingTop="10dp"
+                  android:paddingLeft="10dp"
+                  android:paddingBottom="4dp"/>
+
+        <TextView android:id="@+id/trendingItemType"
+                  android:layout_width="wrap_content"
+                  android:layout_height="fill_parent"
+                  android:textColor="@android:color/darker_gray"
+                  android:textSize="14sp"
+                  android:paddingTop="4dp"
+                  android:paddingLeft="10dp"
+                  android:paddingBottom="10dp"/>
+
+    </LinearLayout>
+
+    <ImageView android:src="@drawable/navigation_next_item"
+               android:contentDescription="@string/details_view"
+               android:layout_height="wrap_content"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_gravity="center"/>
+
+</LinearLayout>

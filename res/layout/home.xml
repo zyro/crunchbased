@@ -4,20 +4,25 @@
               android:layout_width="fill_parent"
               android:layout_height="wrap_content">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:fillViewport="true">
+    <TextView android:id="@+id/trendingHeader"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/trending_header"
+              android:textSize="18sp"
+              android:gravity="center"
+              android:textColor="#FFFFFFFF"
+              android:background="#FF548291"
+              android:layout_alignParentTop="true"
+              android:padding="8dp"/>
 
-        <TextView android:id="@+id/homeText"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:text="Placeholder"/>
+    <ListView android:id="@+id/trendingList"
+              android:layout_height="wrap_content"
+              android:layout_width="fill_parent"
+              android:background="@android:color/white"
+              android:cacheColorHint="@android:color/white"
+              android:layout_below="@id/trendingHeader"/>
 
-    </ScrollView>
-
-    <include layout="@layout/menu"/>
+    <include layout="@layout/sliding_menu"/>
 
 </RelativeLayout>
 

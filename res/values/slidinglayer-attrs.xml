@@ -22,7 +22,6 @@
   ~ limitations under the License.
 -->
 <resources>
-
     <declare-styleable name="SlidingLayer">
         <attr name="shadowDrawable" format="boolean"/>
         <attr name="shadowWidth" format="dimension"/>
@@ -34,5 +33,4 @@
             <enum name="middle" value="-3"/>
         </attr>
     </declare-styleable>
-
 </resources>

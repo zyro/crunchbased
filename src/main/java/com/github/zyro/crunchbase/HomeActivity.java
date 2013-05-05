@@ -6,34 +6,49 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.Window;
-import android.widget.CheckBox;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 import com.github.zyro.crunchbase.service.ApiClient;
 import com.github.zyro.crunchbase.service.Preferences_;
+import com.github.zyro.crunchbase.service.WebClient;
 import com.github.zyro.crunchbase.util.SlidingLayer;
+import com.github.zyro.crunchbase.util.TrendingAdapter;
+import com.github.zyro.crunchbase.util.TrendingItem;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
+
+import java.util.List;
 
 @EActivity(R.layout.home)
 public class HomeActivity extends Activity {
 
+    protected TrendingAdapter adapter;
+
+    protected Menu menu;
+
     @Bean
-    ApiClient apiClient;
+    protected ApiClient apiClient;
+
+    @Bean
+    protected WebClient webClient;
 
     @Pref
-    Preferences_ preferences;
+    protected Preferences_ preferences;
 
     @ViewById(R.id.slidingMenu)
-    SlidingLayer sl;
+    protected SlidingLayer sl;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        this.menu = menu;
+        return true;
     }
 
     @AfterViews
@@ -44,25 +59,49 @@ public class HomeActivity extends Activity {
         ((CheckBox) findViewById(R.id.cacheCheckbox))
                 .setChecked(preferences.cacheEnabled().get());
 
-        //get();
+        adapter = new TrendingAdapter(this);
+        ((ListView) findViewById(R.id.trendingList)).setAdapter(adapter);
+
+        refreshTrendingList();
     }
 
     @Background
-    public void get() {
-        started();
-        String s = apiClient.showCompany("facebook");
-        done(s);
+    public void refreshTrendingList() {
+        refreshTrendingListStarted();
+        final List<TrendingItem> trendingItems =  webClient.getTrending();
+        refreshTrendingListDone(trendingItems);
     }
 
     @UiThread
-    public void started() {
+    public void refreshTrendingListStarted() {
+        invalidateOptionsMenu();
+        menu.findItem(R.id.refreshButton).setVisible(false);
         setProgressBarIndeterminateVisibility(true);
     }
 
     @UiThread
-    public void done(String s) {
-        ((TextView) findViewById(R.id.homeText)).setText(s);
+    public void refreshTrendingListDone(final List<TrendingItem> trending) {
+        adapter.clearTrendingItems();
+        for(final TrendingItem trendingItem : trending) {
+            adapter.addItem(trendingItem);
+        }
         setProgressBarIndeterminateVisibility(false);
+        invalidateOptionsMenu();
+    }
+
+    @OptionsItem(R.id.refreshButton)
+    public void refreshButton() {
+        refreshTrendingList();
+    }
+
+    @OptionsItem(R.id.searchButton)
+    public void searchButton() {
+        Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+    }
+
+    @ItemClick(R.id.trendingList)
+    public void handleTrendingListItemClick(TrendingItem trendingItem) {
+        Toast.makeText(this, trendingItem.toString(), Toast.LENGTH_SHORT).show();
     }
 
     public void onCheckboxClicked(View view) {
@@ -88,11 +127,9 @@ public class HomeActivity extends Activity {
         aboutView.setText(Html.fromHtml(getString(R.string.about_html)));
         aboutView.setHighlightColor(Color.alpha(0));
         aboutView.setMovementMethod(LinkMovementMethod.getInstance());
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.menu_aboutItem))
-                .setView(aboutView)
+        new AlertDialog.Builder(this).setView(aboutView)
                 .setNeutralButton(getString(R.string.about_dismiss), null)
-                .show();
+                .setTitle(getString(R.string.menu_aboutItem)).show();
     }
 
     @OptionsItem(android.R.id.home)

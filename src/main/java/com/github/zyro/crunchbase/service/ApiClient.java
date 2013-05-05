@@ -36,9 +36,9 @@ public class ApiClient {
         gson = new Gson();
     }
 
-    public String showCompany(final String entity) {
+    public Company showCompany(final String entity) {
         final String response = performShowRequest(entity, "company");
-        return gson.fromJson(response, Company.class).toString();
+        return gson.fromJson(response, Company.class);
     }
 
     public String showPerson(final String entity) {
