@@ -25,16 +25,20 @@ public class ApiClient {
     private HttpHost target;
     private DefaultHttpClient client;
 
+    private Gson gson;
+
     public ApiClient() {
         target = new HttpHost("api.crunchbase.com", 80, "http");
         final HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(params, 10000);
         HttpConnectionParams.setSoTimeout(params, 10000);
         client = new DefaultHttpClient(params);
+        gson = new Gson();
     }
 
     public String showCompany(final String entity) {
-        return new Gson().fromJson(performShowRequest(entity, "company"), Company.class).toString();
+        final String response = performShowRequest(entity, "company");
+        return gson.fromJson(response, Company.class).toString();
     }
 
     public String showPerson(final String entity) {

@@ -5,12 +5,16 @@
     <string name="menu_cacheCheckbox">Enable caching</string>
     <string name="menu_aboutItem">About</string>
     <string name="about_dismiss">Dismiss</string>
-    <string name="about_full">
-        \n\u00A0CrunchBase for Android - version 1.0.0\n\n
-        Author: Andrei Mihu\n
-        Source: zyro/crunchbase-android\n\n
-        Android Sliding Layer library\n
-        Author: 6Wunderkinder\n
-        Source: 6wunderkinder/android-sliding-layer-lib\n
+    <string name="about_html">
+        <![CDATA[
+        <h5>\u00A0CrunchBase for Android - version 1.0.0</h5>
+        <p>\u00A0Author: Andrei Mihu<br/>
+        \u00A0Source: <a href="https://github.com/zyro/crunchbase-android">
+                        zyro/crunchbase-android</a></p>
+        </p>\u00A0Android Sliding Layer library<br/>
+        \u00A0Author: 6Wunderkinder<br/>
+        \u00A0Source: <a href="https://github.com/6wunderkinder/android-sliding-layer-lib">
+                        6wunderkinder/android-sliding-layer-lib</a></p><br/>
+        ]]>
     </string>
 </resources>

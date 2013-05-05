@@ -2,7 +2,9 @@ package com.github.zyro.crunchbase;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.github.zyro.crunchbase.service.ApiClient;
 import com.github.zyro.crunchbase.service.Preferences_;
-import com.github.zyro.crunchbase.util.GitHubLinkify;
 import com.github.zyro.crunchbase.util.SlidingLayer;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
@@ -43,7 +44,7 @@ public class HomeActivity extends Activity {
         ((CheckBox) findViewById(R.id.cacheCheckbox))
                 .setChecked(preferences.cacheEnabled().get());
 
-        get();
+        //get();
     }
 
     @Background
@@ -84,9 +85,9 @@ public class HomeActivity extends Activity {
             sl.closeLayer(true);
         }
         final TextView aboutView = new TextView(this);
-        aboutView.setText(getString(R.string.about_full));
+        aboutView.setText(Html.fromHtml(getString(R.string.about_html)));
+        aboutView.setHighlightColor(Color.alpha(0));
         aboutView.setMovementMethod(LinkMovementMethod.getInstance());
-        GitHubLinkify.addLinks(aboutView);
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.menu_aboutItem))
                 .setView(aboutView)
