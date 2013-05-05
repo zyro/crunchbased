@@ -15,6 +15,13 @@
               android:layout_alignParentTop="true"
               android:padding="8dp"/>
 
+    <TextView android:id="@+id/trendingEmpty"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#FF000000"
+              android:textSize="18sp"
+              android:layout_centerInParent="true"/>
+
     <ListView android:id="@+id/trendingList"
               android:layout_height="wrap_content"
               android:layout_width="fill_parent"

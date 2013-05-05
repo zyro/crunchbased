@@ -77,6 +77,12 @@ public class HomeActivity extends Activity {
         invalidateOptionsMenu();
         menu.findItem(R.id.refreshButton).setVisible(false);
         setProgressBarIndeterminateVisibility(true);
+
+        if(adapter.isEmpty()) {
+            final TextView label = (TextView) findViewById(R.id.trendingEmpty);
+            label.setText(R.string.refreshing);
+            label.setVisibility(View.VISIBLE);
+        }
     }
 
     @UiThread
@@ -85,8 +91,13 @@ public class HomeActivity extends Activity {
         for(final TrendingItem trendingItem : trending) {
             adapter.addItem(trendingItem);
         }
+
         setProgressBarIndeterminateVisibility(false);
         invalidateOptionsMenu();
+
+        final TextView label = (TextView) findViewById(R.id.trendingEmpty);
+        label.setText(R.string.no_items);
+        label.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @OptionsItem(R.id.refreshButton)
