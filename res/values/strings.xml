@@ -21,11 +21,13 @@
     <string name="no_items">No items found. Refresh to retry.</string>
 
     <!-- Home activity strings -->
-    <string name="trending_header">Top 10 Trending Now</string>
+    <string name="trending_header">Trending Now</string>
+    <string name="recent_header">Recently Funded</string>
     <string name="details_view">Details</string>
     <string name="trending_points_plural">points</string>
     <string name="trending_points_singular">point</string>
 
     <!-- Company activity strings -->
     <string name="company_header">Company Details</string>
+    <string name="company_image">Company Image</string>
 </resources>

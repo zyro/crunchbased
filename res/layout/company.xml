@@ -15,13 +15,35 @@
               android:layout_alignParentTop="true"
               android:padding="8dp"/>
 
-    <ScrollView android:layout_width="fill_parent"
+    <TextView android:id="@+id/companyEmpty"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#FF000000"
+              android:textSize="18sp"
+              android:layout_centerInParent="true"/>
+
+    <ScrollView android:id="@+id/companyDataHolder"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@id/companyHeader">
 
-        <TextView android:id="@+id/companyData"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"/>
+        <LinearLayout android:orientation="vertical"
+                      android:layout_height="wrap_content"
+                      android:layout_width="fill_parent">
+
+            <ImageView android:id="@+id/companyImage"
+                       android:src="@drawable/content_picture"
+                       android:contentDescription="@string/company_image"
+                       android:layout_height="110dp"
+                       android:layout_width="110dp"
+                       android:padding="2dp"
+                       android:scaleType="centerInside"/>
+
+            <TextView android:id="@+id/companyData"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </ScrollView>
 

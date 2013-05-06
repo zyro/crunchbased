@@ -20,12 +20,9 @@ import com.github.zyro.crunchbase.util.SlidingLayer;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
 
-/**
- * Common behaviour, should not be used directly as an Activity. Behaves
- * strangely if made 'abstract', likely due to AndroidAnnotations.
- */
+/** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
-public class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity {
 
     /** Reference to the options Menu. Initialized when menu is inflated. */
     protected Menu menu;

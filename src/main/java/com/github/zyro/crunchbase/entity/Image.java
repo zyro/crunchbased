@@ -23,7 +23,7 @@ public class Image {
 
     public String getSmallAsset() {
         List<Object> size = available_sizes.get(0);
-        return (String) size.get(1);
+        return prependSlashIfMissing((String) size.get(1));
     }
 
     public Integer getMediumSizeX() {
@@ -40,7 +40,7 @@ public class Image {
 
     public String getMediumAsset() {
         List<Object> size = available_sizes.get(1);
-        return (String) size.get(1);
+        return prependSlashIfMissing((String) size.get(1));
     }
 
     public Integer getLargeSizeX() {
@@ -57,7 +57,11 @@ public class Image {
 
     public String getLargeAsset() {
         List<Object> size = available_sizes.get(2);
-        return (String) size.get(1);
+        return prependSlashIfMissing((String) size.get(1));
+    }
+
+    protected String prependSlashIfMissing(final String string) {
+        return string.startsWith("/") ? string : "/" + string;
     }
 
 }

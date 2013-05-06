@@ -36,32 +36,32 @@ public class ApiClient {
         gson = new Gson();
     }
 
-    public Company showCompany(final String entity) {
-        final String response = performShowRequest(entity, "company");
+    public Company getCompany(final String permalink) {
+        final String response = performGetRequest(permalink, "company");
         return gson.fromJson(response, Company.class);
     }
 
-    public String showPerson(final String entity) {
-        return performShowRequest(entity, "person");
+    public String getPerson(final String permalink) {
+        return performGetRequest(permalink, "person");
     }
 
-    public String showFinancialOrganization(final String entity) {
-        return performShowRequest(entity, "financial-organization");
+    public String getFinancialOrganization(final String permalink) {
+        return performGetRequest(permalink, "financial-organization");
     }
 
-    public String showProduct(final String entity) {
-        return performShowRequest(entity, "product");
+    public String getProduct(final String permalink) {
+        return performGetRequest(permalink, "product");
     }
 
-    public String showServiceProvider(final String entity) {
-        return performShowRequest(entity, "service-provider");
+    public String getServiceProvider(final String permalink) {
+        return performGetRequest(permalink, "service-provider");
     }
 
-    private String performShowRequest(final String entity, final String show) {
+    private String performGetRequest(final String permalink, final String get) {
         try {
-            final HttpGet request = new HttpGet("/v/1/" + show + "/" +
-                    URLEncoder.encode(entity.toLowerCase(), "UTF-8") + ".js?" +
-                    API_KEY);
+            final HttpGet request = new HttpGet("/v/1/" + get + "/" +
+                    URLEncoder.encode(permalink.toLowerCase(), "UTF-8") +
+                    ".js?" + API_KEY);
             final ResponseHandler<String> handler = new BasicResponseHandler();
             return client.execute(target, request, handler);
         }

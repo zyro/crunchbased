@@ -1,8 +1,15 @@
 package com.github.zyro.crunchbase;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.entity.Company;
+import com.github.zyro.crunchbase.entity.Image;
 import com.googlecode.androidannotations.annotations.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @EActivity(R.layout.company)
 public class CompanyActivity extends BaseActivity {
@@ -10,6 +17,8 @@ public class CompanyActivity extends BaseActivity {
     /** The permalink of the company being displayed. */
     @Extra
     protected String permalink;
+
+    protected Map<Image, Bitmap> images = new HashMap<Image, Bitmap>();
 
     @AfterViews
     public void initState() {
@@ -19,7 +28,11 @@ public class CompanyActivity extends BaseActivity {
     @Background
     public void refreshCompanyDetails() {
         refreshCompanyDetailsStarted();
-        final Company company = apiClient.showCompany(permalink);
+        final Company company = apiClient.getCompany(permalink);
+        if(company.getImage() != null) {
+            Bitmap b = webClient.getLargeImage(company.getImage());
+            images.put(company.getImage(), b);
+        }
         refreshCompanyDetailsDone(company);
     }
 
@@ -30,7 +43,7 @@ public class CompanyActivity extends BaseActivity {
         setProgressBarIndeterminateVisibility(true);
 
         //if(adapter.isEmpty()) {
-        //    final TextView label = (TextView) findViewById(R.id.trendingEmpty);
+        //    final TextView label = (TextView) findViewById(R.id.companyEmpty);
         //    label.setText(R.string.refreshing);
         //    label.setVisibility(View.VISIBLE);
         //}
@@ -38,6 +51,8 @@ public class CompanyActivity extends BaseActivity {
 
     @UiThread
     public void refreshCompanyDetailsDone(final Company company) {
+        ((ImageView) findViewById(R.id.companyImage)).setImageBitmap(images.get(company.getImage()));
+        ((ImageView) findViewById(R.id.companyImage)).invalidate();
         ((TextView) findViewById(R.id.companyData)).setText(company.toString());
 
         setProgressBarIndeterminateVisibility(false);

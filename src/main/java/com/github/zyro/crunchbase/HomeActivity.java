@@ -2,6 +2,8 @@ package com.github.zyro.crunchbase;
 
 import android.view.*;
 import android.widget.*;
+import com.github.zyro.crunchbase.util.RecentAdapter;
+import com.github.zyro.crunchbase.util.RecentItem;
 import com.github.zyro.crunchbase.util.TrendingAdapter;
 import com.github.zyro.crunchbase.util.TrendingItem;
 import com.googlecode.androidannotations.annotations.*;
@@ -18,18 +20,20 @@ public class HomeActivity extends BaseActivity {
         adapter = new TrendingAdapter(this);
         ((ListView) findViewById(R.id.trendingList)).setAdapter(adapter);
 
-        refreshTrendingList();
+        refreshContents();
     }
 
     @Background
-    public void refreshTrendingList() {
-        refreshTrendingListStarted();
-        final List<TrendingItem> trendingItems = webClient.getTrending();
-        refreshTrendingListDone(trendingItems);
+    public void refreshContents() {
+        refreshContentsStarted();
+        final String data = webClient.getPageData();
+        final List<TrendingItem> trendingItems = webClient.getTrending(data);
+        final List<RecentItem> recentItems = webClient.getRecent(data);
+        refreshContentsDone(trendingItems, recentItems);
     }
 
     @UiThread
-    public void refreshTrendingListStarted() {
+    public void refreshContentsStarted() {
         invalidateOptionsMenu();
         menu.findItem(R.id.refreshButton).setVisible(false);
         setProgressBarIndeterminateVisibility(true);
@@ -42,8 +46,11 @@ public class HomeActivity extends BaseActivity {
     }
 
     @UiThread
-    public void refreshTrendingListDone(final List<TrendingItem> trending) {
-        adapter.clearTrendingItems();
+    public void refreshContentsDone(final List<TrendingItem> trending,
+                                    final List<RecentItem> recent) {
+        if(!trending.isEmpty()) {
+            adapter.clearTrendingItems();
+        }
         for(final TrendingItem trendingItem : trending) {
             adapter.addItem(trendingItem);
         }
@@ -69,7 +76,7 @@ public class HomeActivity extends BaseActivity {
 
     @OptionsItem(R.id.refreshButton)
     public void refreshButton() {
-        refreshTrendingList();
+        refreshContents();
     }
 
     @OptionsItem(android.R.id.home)
