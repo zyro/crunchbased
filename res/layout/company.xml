@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+
+    <TextView android:id="@+id/companyHeader"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/company_header"
+              android:textSize="18sp"
+              android:gravity="center"
+              android:textColor="#FFFFFFFF"
+              android:background="#FF548291"
+              android:layout_alignParentTop="true"
+              android:padding="8dp"/>
+
+    <ScrollView android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@id/companyHeader">
+
+        <TextView android:id="@+id/companyData"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"/>
+
+    </ScrollView>
+
+    <include layout="@layout/sliding_menu"/>
+
+</RelativeLayout>
+
