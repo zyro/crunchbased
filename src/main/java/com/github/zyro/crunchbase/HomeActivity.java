@@ -1,82 +1,46 @@
 package com.github.zyro.crunchbase;
 
-import android.view.*;
-import android.widget.*;
-import com.github.zyro.crunchbase.util.RecentAdapter;
-import com.github.zyro.crunchbase.util.RecentItem;
-import com.github.zyro.crunchbase.util.TrendingAdapter;
-import com.github.zyro.crunchbase.util.TrendingItem;
+import android.app.ActionBar;
+import android.os.Bundle;
+import com.github.zyro.crunchbase.util.HomeTabListener;
 import com.googlecode.androidannotations.annotations.*;
-
-import java.util.List;
 
 @EActivity(R.layout.home)
 public class HomeActivity extends BaseActivity {
 
-    protected TrendingAdapter adapter;
+    public HomeTrendingFragment trendingFragment;
 
-    @AfterViews
-    public void initState() {
-        adapter = new TrendingAdapter(this);
-        ((ListView) findViewById(R.id.trendingList)).setAdapter(adapter);
+    public HomeRecentFragment recentFragment;
 
-        refreshContents();
-    }
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Background
-    public void refreshContents() {
-        refreshContentsStarted();
-        final String data = webClient.getPageData();
-        final List<TrendingItem> trendingItems = webClient.getTrending(data);
-        final List<RecentItem> recentItems = webClient.getRecent(data);
-        refreshContentsDone(trendingItems, recentItems);
-    }
+        trendingFragment = new HomeTrendingFragment_();
+        recentFragment = new HomeRecentFragment_();
 
-    @UiThread
-    public void refreshContentsStarted() {
-        invalidateOptionsMenu();
-        menu.findItem(R.id.refreshButton).setVisible(false);
-        setProgressBarIndeterminateVisibility(true);
+        final ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        if(adapter.isEmpty()) {
-            final TextView label = (TextView) findViewById(R.id.trendingEmpty);
-            label.setText(R.string.refreshing);
-            label.setVisibility(View.VISIBLE);
-        }
-    }
+        ActionBar.Tab tab = actionBar.newTab()
+                .setText(R.string.trending_header)
+                .setTabListener(new HomeTabListener(trendingFragment, R.id.homeFragmentContainer));
+        actionBar.addTab(tab);
 
-    @UiThread
-    public void refreshContentsDone(final List<TrendingItem> trending,
-                                    final List<RecentItem> recent) {
-        if(!trending.isEmpty()) {
-            adapter.clearTrendingItems();
-        }
-        for(final TrendingItem trendingItem : trending) {
-            adapter.addItem(trendingItem);
-        }
-
-        setProgressBarIndeterminateVisibility(false);
-        invalidateOptionsMenu();
-
-        final TextView label = (TextView) findViewById(R.id.trendingEmpty);
-        label.setText(R.string.no_items);
-        label.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
-    }
-
-    @ItemClick(R.id.trendingList)
-    public void handleTrendingListItemClick(final TrendingItem trendingItem) {
-        if(trendingItem.getNamespace().equals("company")) {
-            CompanyActivity_.intent(this).permalink(trendingItem.getPermalink()).start();
-            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-        }
-        else {
-            Toast.makeText(this, trendingItem.toString(), Toast.LENGTH_SHORT).show();
-        }
+        tab = actionBar.newTab()
+                .setText(R.string.recent_header)
+                .setTabListener(new HomeTabListener(recentFragment, R.id.homeFragmentContainer));
+        actionBar.addTab(tab);
     }
 
     @OptionsItem(R.id.refreshButton)
     public void refreshButton() {
-        refreshContents();
+        if(!trendingFragment.isDetached()) {
+            trendingFragment.refreshContents();
+        }
+        else if(!recentFragment.isDetached()) {
+            recentFragment.refreshContents();
+        }
     }
 
     @OptionsItem(android.R.id.home)

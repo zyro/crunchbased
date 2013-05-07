@@ -1,33 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content">
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
-    <TextView android:id="@+id/trendingHeader"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/trending_header"
-              android:textSize="18sp"
-              android:gravity="center"
-              android:textColor="#FFFFFFFF"
-              android:background="#FF548291"
-              android:layout_alignParentTop="true"
-              android:padding="8dp"/>
-
-    <TextView android:id="@+id/trendingEmpty"
+    <TextView android:id="@+id/homeEmpty"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textColor="#FF000000"
               android:textSize="18sp"
               android:layout_centerInParent="true"/>
 
-    <ListView android:id="@+id/trendingList"
-              android:layout_height="wrap_content"
-              android:layout_width="fill_parent"
-              android:background="@android:color/white"
-              android:cacheColorHint="@android:color/white"
-              android:layout_below="@id/trendingHeader"/>
+    <LinearLayout android:id="@+id/homeFragmentContainer"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
 
     <include layout="@layout/sliding_menu"/>
 

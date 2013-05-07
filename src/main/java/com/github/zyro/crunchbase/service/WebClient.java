@@ -62,7 +62,7 @@ public class WebClient {
             final String[] link = element.getElementsByTag("a").attr("href")
                     .replace("http://www.crunchbase.com/", "").split("/");
             trendingItem.setNamespace(link[0]);
-            trendingItem.setPermalink(link[1]);
+            trendingItem.setPermalink(link[1].replaceAll("[?].*", ""));
             trendingItem.setPoints(element.getElementsByTag("img").size());
             trendingItem.setName(element.getElementsByTag("a").text().trim());
 
@@ -83,7 +83,9 @@ public class WebClient {
             recentItem.setPermalink(element.getElementsByTag("a").attr("href")
                     .replace("/company/", ""));
             recentItem.setName(element.getElementsByTag("a").text().trim());
-            recentItem.setBusiness(element.getElementsByTag("strong").last().text().trim());
+            recentItem.setSubtext(element.getElementsByTag("strong").size() > 1 ?
+                    element.getElementsByTag("strong").last().text().trim() :
+                    element.getElementsByTag("span").last().text().trim());
             recentItem.setFunds(element.getElementsByClass("horizbar").text().trim());
 
             recentItems.add(recentItem);
