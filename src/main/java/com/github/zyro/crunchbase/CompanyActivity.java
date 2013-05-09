@@ -1,7 +1,6 @@
 package com.github.zyro.crunchbase;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.entity.Company;

@@ -3,7 +3,7 @@ package com.github.zyro.crunchbase.util;
 import lombok.Data;
 
 @Data
-public class RecentItem {
+public class HomeRecentItem {
 
     private String name;
     private String subtext;

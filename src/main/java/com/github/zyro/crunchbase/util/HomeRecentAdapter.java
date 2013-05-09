@@ -7,25 +7,30 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.R;
+import com.googlecode.androidannotations.annotations.AfterInject;
+import com.googlecode.androidannotations.annotations.EBean;
+import com.googlecode.androidannotations.annotations.RootContext;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecentAdapter extends BaseAdapter {
+@EBean
+@NoArgsConstructor
+public class HomeRecentAdapter extends BaseAdapter {
 
     /** The inflater to use as a layout source. */
     private LayoutInflater inflater;
 
     /** The data list backing this adapter. */
-    private List<RecentItem> data;
+    private List<HomeRecentItem> data;
 
     /** Context used to lookup resources. */
-    private Context context;
+    @RootContext
+    protected Context context;
 
-    /** Constructor to properly initialise state of adapter. */
-    public RecentAdapter(final Context context) {
-        super();
-        this.context = context;
+    @AfterInject
+    public void initState() {
         inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         clearRecentItems();
@@ -33,11 +38,11 @@ public class RecentAdapter extends BaseAdapter {
 
     /** Clear the entire data set. */
     public void clearRecentItems() {
-        data = new ArrayList<RecentItem>();
+        data = new ArrayList<HomeRecentItem>();
         notifyDataSetChanged();
     }
 
-    public void addItem(final RecentItem item) {
+    public void addItem(final HomeRecentItem item) {
         data.add(item);
         notifyDataSetChanged();
     }
@@ -48,7 +53,7 @@ public class RecentAdapter extends BaseAdapter {
         if(conView == null) {
             conView = inflater.inflate(R.layout.recent_item, null);
         }
-        final RecentItem item = getItem(position);
+        final HomeRecentItem item = getItem(position);
 
         ((TextView) conView.findViewById(R.id.recentItemName)).setText(
                 item.getName());
@@ -66,7 +71,7 @@ public class RecentAdapter extends BaseAdapter {
     }
 
     @Override
-    public RecentItem getItem(final int position) {
+    public HomeRecentItem getItem(final int position) {
         return data.get(position);
     }
 

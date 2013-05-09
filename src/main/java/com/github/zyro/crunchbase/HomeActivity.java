@@ -1,45 +1,88 @@
 package com.github.zyro.crunchbase;
 
 import android.app.ActionBar;
-import android.os.Bundle;
-import com.github.zyro.crunchbase.util.HomeTabListener;
+import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import com.googlecode.androidannotations.annotations.*;
 
 @EActivity(R.layout.home)
 public class HomeActivity extends BaseActivity {
 
-    public HomeTrendingFragment trendingFragment;
+    /*GestureDetector.SimpleOnGestureListener simpleOnGestureListener
+            = new GestureDetector.SimpleOnGestureListener(){
 
-    public HomeRecentFragment recentFragment;
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                               float velocityY) {
+            float sensitvity = 50;
+
+            // TODO Auto-generated method stub
+            if((e1.getX() - e2.getX()) >= sensitvity){
+                Log.e("AndroidRuntime", "LEFT");
+            }else if((e2.getX() - e1.getX()) >= sensitvity){
+                Log.e("AndroidRuntime", "RIGHT");
+            }
+
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+    };
+
+    GestureDetector gestureDetector
+            = new GestureDetector(simpleOnGestureListener);
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
+    }*/
 
-        trendingFragment = new HomeTrendingFragment_();
-        recentFragment = new HomeRecentFragment_();
+    @ViewById(R.id.homeFragmentContainer)
+    protected ViewPager viewPager;
 
+    @AfterViews
+    public void initState() {
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        ActionBar.Tab tab = actionBar.newTab()
-                .setText(R.string.trending_header)
-                .setTabListener(new HomeTabListener(trendingFragment, R.id.homeFragmentContainer));
-        actionBar.addTab(tab);
+        viewPager.setAdapter(new HomePagerAdapter(getSupportFragmentManager()));
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int index) {
+                getActionBar().setSelectedNavigationItem(index);
+            }
+        });
 
-        tab = actionBar.newTab()
+        final ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            @Override
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+            @Override
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {}
+            @Override
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {}
+        };
+
+        final ActionBar.Tab trendingTab = actionBar.newTab()
+                .setText(R.string.trending_header)
+                .setTabListener(tabListener);
+        actionBar.addTab(trendingTab);
+
+        final ActionBar.Tab recentTab = actionBar.newTab()
                 .setText(R.string.recent_header)
-                .setTabListener(new HomeTabListener(recentFragment, R.id.homeFragmentContainer));
-        actionBar.addTab(tab);
+                .setTabListener(tabListener);
+        actionBar.addTab(recentTab);
     }
 
     @OptionsItem(R.id.refreshButton)
     public void refreshButton() {
-        if(!trendingFragment.isDetached()) {
-            trendingFragment.refreshContents();
+        final Fragment current = ((HomePagerAdapter) viewPager.getAdapter())
+                .getActiveFragment(getActionBar().getSelectedNavigationIndex());
+        if(current instanceof HomeTrendingFragment) {
+            ((HomeTrendingFragment) current).refreshContents();
         }
-        else if(!recentFragment.isDetached()) {
-            recentFragment.refreshContents();
+        else if(current instanceof HomeRecentFragment) {
+            ((HomeRecentFragment) current).refreshContents();
         }
     }
 

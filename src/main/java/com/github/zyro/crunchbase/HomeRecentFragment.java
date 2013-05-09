@@ -1,13 +1,13 @@
 package com.github.zyro.crunchbase;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.service.WebClient;
-import com.github.zyro.crunchbase.util.RecentAdapter;
-import com.github.zyro.crunchbase.util.RecentItem;
+import com.github.zyro.crunchbase.util.HomeRecentAdapter;
+import com.github.zyro.crunchbase.util.HomeRecentItem;
 import com.googlecode.androidannotations.annotations.*;
 
 import java.util.List;
@@ -16,22 +16,25 @@ import java.util.List;
 public class HomeRecentFragment extends Fragment {
 
     @Bean
-    WebClient webClient;
+    protected WebClient webClient;
 
-    protected RecentAdapter adapter;
+    @Bean
+    protected HomeRecentAdapter adapter;
+
+    @ViewById(R.id.recentEmpty)
+    protected TextView recentEmpty;
 
     protected HomeActivity activity;
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(final View view, final Bundle savedState) {
+        super.onViewCreated(view, savedState);
 
         if(activity == null) {
             activity = (HomeActivity) getActivity();
         }
 
-        if(adapter == null) {
-            adapter = new RecentAdapter(activity);
+        if(adapter.isEmpty()) {
             refreshContents();
         }
 
@@ -41,8 +44,7 @@ public class HomeRecentFragment extends Fragment {
     @Background
     public void refreshContents() {
         refreshContentsStarted();
-        final String data = webClient.getPageData();
-        final List<RecentItem> recentItems = webClient.getRecent(data);
+        final List<HomeRecentItem> recentItems = webClient.getRecent();
         refreshContentsDone(recentItems);
     }
 
@@ -53,31 +55,29 @@ public class HomeRecentFragment extends Fragment {
         activity.setProgressBarIndeterminateVisibility(true);
 
         if(adapter.isEmpty()) {
-            final TextView label = (TextView) activity.findViewById(R.id.homeEmpty);
-            label.setText(R.string.refreshing);
-            label.setVisibility(View.VISIBLE);
+            recentEmpty.setText(R.string.refreshing);
+            recentEmpty.setVisibility(View.VISIBLE);
         }
     }
 
     @UiThread
-    public void refreshContentsDone(final List<RecentItem> recent) {
+    public void refreshContentsDone(final List<HomeRecentItem> recent) {
         if(!recent.isEmpty()) {
             adapter.clearRecentItems();
         }
-        for(final RecentItem recentItem : recent) {
+        for(final HomeRecentItem recentItem : recent) {
             adapter.addItem(recentItem);
         }
 
         activity.setProgressBarIndeterminateVisibility(false);
         activity.invalidateOptionsMenu();
 
-        final TextView label = (TextView) activity.findViewById(R.id.homeEmpty);
-        label.setText(R.string.no_items);
-        label.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+        recentEmpty.setText(R.string.no_items);
+        recentEmpty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @ItemClick(R.id.recentList)
-    public void handleTrendingListItemClick(final RecentItem recentItem) {
+    public void handleTrendingListItemClick(final HomeRecentItem recentItem) {
         CompanyActivity_.intent(activity).permalink(recentItem.getPermalink()).start();
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }

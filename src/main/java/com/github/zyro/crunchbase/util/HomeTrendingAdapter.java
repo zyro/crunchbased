@@ -7,26 +7,31 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.R;
+import com.googlecode.androidannotations.annotations.AfterInject;
+import com.googlecode.androidannotations.annotations.EBean;
+import com.googlecode.androidannotations.annotations.RootContext;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrendingAdapter extends BaseAdapter {
+@EBean
+@NoArgsConstructor
+public class HomeTrendingAdapter extends BaseAdapter {
 
     /** The inflater to use as a layout source. */
     private LayoutInflater inflater;
 
     /** The data list backing this adapter. */
-    private List<TrendingItem> data;
+    private List<HomeTrendingItem> data;
 
     /** Context used to lookup resources. */
-    private Context context;
+    @RootContext
+    protected Context context;
 
-    /** Constructor to properly initialise state of adapter. */
-    public TrendingAdapter(final Context context) {
-        super();
-        this.context = context;
+    @AfterInject
+    public void initState() {
         inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         clearTrendingItems();
@@ -34,11 +39,11 @@ public class TrendingAdapter extends BaseAdapter {
 
     /** Clear the entire data set. */
     public void clearTrendingItems() {
-        data = new ArrayList<TrendingItem>();
+        data = new ArrayList<HomeTrendingItem>();
         notifyDataSetChanged();
     }
 
-    public void addItem(final TrendingItem item) {
+    public void addItem(final HomeTrendingItem item) {
         data.add(item);
         notifyDataSetChanged();
     }
@@ -49,7 +54,7 @@ public class TrendingAdapter extends BaseAdapter {
         if(conView == null) {
             conView = inflater.inflate(R.layout.trending_item, null);
         }
-        final TrendingItem item = getItem(position);
+        final HomeTrendingItem item = getItem(position);
 
         ((TextView) conView.findViewById(R.id.trendingItemName)).setText(
                 item.getName());
@@ -71,7 +76,7 @@ public class TrendingAdapter extends BaseAdapter {
     }
 
     @Override
-    public TrendingItem getItem(final int position) {
+    public HomeTrendingItem getItem(final int position) {
         return data.get(position);
     }
 

@@ -3,7 +3,7 @@ package com.github.zyro.crunchbase.util;
 import lombok.Data;
 
 @Data
-public class TrendingItem {
+public class HomeTrendingItem {
 
     private String name;
     private String namespace;

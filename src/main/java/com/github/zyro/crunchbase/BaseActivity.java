@@ -1,9 +1,9 @@
 package com.github.zyro.crunchbase;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
@@ -22,10 +22,7 @@ import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
 
 /** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
-public abstract class BaseActivity extends Activity {
-
-    /** Reference to the options Menu. Initialized when menu is inflated. */
-    protected Menu menu;
+public abstract class BaseActivity extends FragmentActivity {
 
     /** Access to remote API request functions. */
     @Bean
@@ -42,6 +39,9 @@ public abstract class BaseActivity extends Activity {
     /** Reference to the sliding menu to bind open/close actions to. */
     @ViewById(R.id.slidingMenu)
     protected SlidingLayer sl;
+
+    /** Reference to the options menu. Initialized when menu is inflated. */
+    protected Menu menu;
 
     /** Request common window features, BaseActivity has no view of its own. */
     @Override

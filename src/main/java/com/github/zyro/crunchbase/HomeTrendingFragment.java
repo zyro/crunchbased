@@ -1,14 +1,14 @@
 package com.github.zyro.crunchbase;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.github.zyro.crunchbase.service.WebClient;
-import com.github.zyro.crunchbase.util.TrendingAdapter;
-import com.github.zyro.crunchbase.util.TrendingItem;
+import com.github.zyro.crunchbase.util.HomeTrendingAdapter;
+import com.github.zyro.crunchbase.util.HomeTrendingItem;
 import com.googlecode.androidannotations.annotations.*;
 
 import java.util.List;
@@ -17,22 +17,25 @@ import java.util.List;
 public class HomeTrendingFragment extends Fragment {
 
     @Bean
-    WebClient webClient;
+    protected WebClient webClient;
 
-    protected TrendingAdapter adapter;
+    @Bean
+    protected HomeTrendingAdapter adapter;
+
+    @ViewById(R.id.trendingEmpty)
+    protected TextView trendingEmpty;
 
     protected HomeActivity activity;
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(final View view, final Bundle savedState) {
+        super.onViewCreated(view, savedState);
 
         if(activity == null) {
             activity = (HomeActivity) getActivity();
         }
 
-        if(adapter == null) {
-            adapter = new TrendingAdapter(activity);
+        if(adapter.isEmpty()) {
             refreshContents();
         }
 
@@ -42,8 +45,7 @@ public class HomeTrendingFragment extends Fragment {
     @Background
     public void refreshContents() {
         refreshContentsStarted();
-        final String data = webClient.getPageData();
-        final List<TrendingItem> trendingItems = webClient.getTrending(data);
+        final List<HomeTrendingItem> trendingItems = webClient.getTrending();
         refreshContentsDone(trendingItems);
     }
 
@@ -54,31 +56,29 @@ public class HomeTrendingFragment extends Fragment {
         activity.setProgressBarIndeterminateVisibility(true);
 
         if(adapter.isEmpty()) {
-            final TextView label = (TextView) activity.findViewById(R.id.homeEmpty);
-            label.setText(R.string.refreshing);
-            label.setVisibility(View.VISIBLE);
+            trendingEmpty.setText(R.string.refreshing);
+            trendingEmpty.setVisibility(View.VISIBLE);
         }
     }
 
     @UiThread
-    public void refreshContentsDone(final List<TrendingItem> trending) {
+    public void refreshContentsDone(final List<HomeTrendingItem> trending) {
         if(!trending.isEmpty()) {
             adapter.clearTrendingItems();
         }
-        for(final TrendingItem trendingItem : trending) {
+        for(final HomeTrendingItem trendingItem : trending) {
             adapter.addItem(trendingItem);
         }
 
         activity.setProgressBarIndeterminateVisibility(false);
         activity.invalidateOptionsMenu();
 
-        final TextView label = (TextView) activity.findViewById(R.id.homeEmpty);
-        label.setText(R.string.no_items);
-        label.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+        trendingEmpty.setText(R.string.no_items);
+        trendingEmpty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @ItemClick(R.id.trendingList)
-    public void handleTrendingListItemClick(final TrendingItem trendingItem) {
+    public void handleTrendingListItemClick(final HomeTrendingItem trendingItem) {
         if(trendingItem.getNamespace().equals("company")) {
             CompanyActivity_.intent(activity).permalink(trendingItem.getPermalink()).start();
             activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
