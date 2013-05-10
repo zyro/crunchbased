@@ -9,33 +9,6 @@ import com.googlecode.androidannotations.annotations.*;
 @EActivity(R.layout.home)
 public class HomeActivity extends BaseActivity {
 
-    /*GestureDetector.SimpleOnGestureListener simpleOnGestureListener
-            = new GestureDetector.SimpleOnGestureListener(){
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                               float velocityY) {
-            float sensitvity = 50;
-
-            // TODO Auto-generated method stub
-            if((e1.getX() - e2.getX()) >= sensitvity){
-                Log.e("AndroidRuntime", "LEFT");
-            }else if((e2.getX() - e1.getX()) >= sensitvity){
-                Log.e("AndroidRuntime", "RIGHT");
-            }
-
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-    };
-
-    GestureDetector gestureDetector
-            = new GestureDetector(simpleOnGestureListener);
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
-    }*/
-
     @ViewById(R.id.homeFragmentContainer)
     protected ViewPager viewPager;
 
