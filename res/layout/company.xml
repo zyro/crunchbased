@@ -10,15 +10,15 @@
               android:text="@string/company_header"
               android:textSize="18sp"
               android:gravity="center"
-              android:textColor="#FFFFFFFF"
-              android:background="#FF548291"
+              android:textColor="@android:color/white"
+              android:background="@color/crunchbase"
               android:layout_alignParentTop="true"
               android:padding="8dp"/>
 
     <TextView android:id="@+id/companyEmpty"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textColor="#FF000000"
+              android:textColor="@android:color/black"
               android:textSize="18sp"
               android:layout_centerInParent="true"/>
 

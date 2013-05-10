@@ -30,7 +30,7 @@
         <TextView android:id="@+id/recentItemFunds"
                   android:layout_width="wrap_content"
                   android:layout_height="fill_parent"
-                  android:textColor="#548291"
+                  android:textColor="@color/crunchbase"
                   android:textSize="18sp"
                   android:paddingTop="4dp"
                   android:paddingLeft="10dp"
