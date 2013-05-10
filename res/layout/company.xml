@@ -22,7 +22,7 @@
               android:textSize="18sp"
               android:layout_centerInParent="true"/>
 
-    <ScrollView android:id="@+id/companyDataHolder"
+    <ScrollView android:id="@+id/companyContents"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@id/companyHeader">

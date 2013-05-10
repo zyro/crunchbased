@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.Image;
+import com.github.zyro.crunchbase.util.SwipeBackListener;
 import com.googlecode.androidannotations.annotations.*;
 
 import java.util.HashMap;
@@ -21,6 +22,8 @@ public class CompanyActivity extends BaseActivity {
 
     @AfterViews
     public void initState() {
+        findViewById(R.id.companyContents).setOnTouchListener(
+                new SwipeBackListener(this));
         refreshCompanyDetails();
     }
 
