@@ -1,65 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.zyro.crunchbase.util.SlidingLayer
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:slidingLayer="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/slidingMenu"
-        android:layout_width="@dimen/layer_width"
-        android:layout_height="match_parent"
-        slidingLayer:shadowDrawable="@drawable/menu_shadow"
-        slidingLayer:shadowWidth="@dimen/shadow_width"
-        slidingLayer:stickTo="auto"
-        slidingLayer:closeOnTapEnabled="true">
-
-    <RelativeLayout android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical"
-                    android:background="#4D4D4D">
-
-        <CheckBox android:id="@+id/imagesCheckbox"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:text="@string/menu_imagesCheckbox"
-                  android:textColor="#D4D4D4"
-                  android:gravity="right|center_vertical"
-                  android:padding="10dp"
-                  android:layout_alignParentTop="true"
-                  android:onClick="onCheckboxClicked"/>
-
-        <View android:id="@+id/separator1"
-              android:layout_width="fill_parent"
-              android:layout_height="1dp"
-              android:background="@android:color/darker_gray"
-              android:layout_below="@id/imagesCheckbox"/>
-
-        <CheckBox android:id="@+id/cacheCheckbox"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:text="@string/menu_cacheCheckbox"
-                  android:textColor="#D4D4D4"
-                  android:gravity="right|center_vertical"
-                  android:padding="10dp"
-                  android:layout_below="@id/separator1"
-                  android:onClick="onCheckboxClicked"/>
-
-        <View android:id="@+id/separator2"
-              android:layout_width="fill_parent"
-              android:layout_height="1dp"
-              android:background="@android:color/darker_gray"
-              android:layout_below="@id/cacheCheckbox"/>
-
-        <Button android:id="@+id/aboutItem"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/menu_aboutItem"
-                android:textColor="#D4D4D4"
-                android:background="#4D4D4D"
-                android:layout_alignParentBottom="true"/>
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:background="@color/menu_background">
 
-        <View android:layout_width="fill_parent"
-              android:layout_height="1dp"
-              android:background="@android:color/darker_gray"
-              android:layout_above="@id/aboutItem"/>
+    <CheckBox android:id="@+id/imagesCheckbox"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/menu_imagesCheckbox"
+              android:textColor="@color/menu_text"
+              android:gravity="right|center_vertical"
+              android:padding="10dp"
+              android:layout_alignParentTop="true"
+              android:onClick="onCheckboxClicked"/>
 
-    </RelativeLayout>
+    <View android:id="@+id/separator1"
+          android:layout_width="fill_parent"
+          android:layout_height="1dp"
+          android:background="@android:color/darker_gray"
+          android:layout_below="@id/imagesCheckbox"/>
 
-</com.github.zyro.crunchbase.util.SlidingLayer>
+    <CheckBox android:id="@+id/cacheCheckbox"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/menu_cacheCheckbox"
+              android:textColor="@color/menu_text"
+              android:gravity="right|center_vertical"
+              android:padding="10dp"
+              android:layout_below="@id/separator1"
+              android:onClick="onCheckboxClicked"/>
+
+    <View android:id="@+id/separator2"
+          android:layout_width="fill_parent"
+          android:layout_height="1dp"
+          android:background="@android:color/darker_gray"
+          android:layout_below="@id/cacheCheckbox"/>
+
+    <Button android:id="@+id/aboutItem"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_aboutItem"
+            android:textColor="@color/menu_text"
+            android:background="@color/menu_background"
+            android:layout_alignParentBottom="true"/>
+
+    <View android:layout_width="fill_parent"
+          android:layout_height="1dp"
+          android:background="@android:color/darker_gray"
+          android:layout_above="@id/aboutItem"/>
+
+</RelativeLayout>

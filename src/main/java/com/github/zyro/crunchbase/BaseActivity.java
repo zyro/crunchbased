@@ -16,9 +16,9 @@ import android.widget.Toast;
 import com.github.zyro.crunchbase.service.ApiClient;
 import com.github.zyro.crunchbase.service.Preferences_;
 import com.github.zyro.crunchbase.service.WebClient;
-import com.github.zyro.crunchbase.util.SlidingLayer;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 /** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
@@ -37,8 +37,7 @@ public abstract class BaseActivity extends FragmentActivity {
     protected Preferences_ preferences;
 
     /** Reference to the sliding menu to bind open/close actions to. */
-    @ViewById(R.id.slidingMenu)
-    protected SlidingLayer sl;
+    protected SlidingMenu slidingMenu;
 
     /** Reference to the options menu. Initialized when menu is inflated. */
     protected Menu menu;
@@ -48,6 +47,14 @@ public abstract class BaseActivity extends FragmentActivity {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+        slidingMenu = new SlidingMenu(this);
+        slidingMenu.setMode(SlidingMenu.LEFT);
+        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+        slidingMenu.setBehindOffsetRes(R.dimen.layer_offset);
+        slidingMenu.setFadeDegree(0.35f);
+        slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
+        slidingMenu.setMenu(R.layout.sliding_menu);
     }
 
     /** Create the options menu, store a reference to it for later use. */
@@ -92,8 +99,8 @@ public abstract class BaseActivity extends FragmentActivity {
     /** Listener for the sliding menu 'About' button. */
     @Click(R.id.aboutItem)
     public void aboutItem() {
-        if(sl.isOpened()) {
-            sl.closeLayer(true);
+        if(slidingMenu.isMenuShowing()) {
+            slidingMenu.toggle();
         }
         final TextView aboutView = new TextView(this);
         aboutView.setText(Html.fromHtml(getString(R.string.about_html)));
@@ -104,21 +111,11 @@ public abstract class BaseActivity extends FragmentActivity {
                 .setTitle(getString(R.string.menu_aboutItem)).show();
     }
 
-    /** Utility method to toggle the sliding menu. */
-    public void toggleSlidingMenu() {
-        if(sl.isOpened()) {
-            sl.closeLayer(true);
-        }
-        else {
-            sl.openLayer(true);
-        }
-    }
-
     /** Back button listener. Close sliding menu if open, call super if not. */
     @Override
     public void onBackPressed() {
-        if(sl.isOpened()) {
-            sl.closeLayer(true);
+        if(slidingMenu.isMenuShowing()) {
+            slidingMenu.toggle();
         }
         else {
             super.onBackPressed();
@@ -132,7 +129,7 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     public boolean onKeyDown(final int keyCode, final KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_MENU) {
-            toggleSlidingMenu();
+            slidingMenu.toggle();
             return true;
         }
         return super.onKeyDown(keyCode, event);

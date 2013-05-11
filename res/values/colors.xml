@@ -2,4 +2,6 @@
 <resources>
     <color name="crunchbase_pressed">#CC548291</color>
     <color name="crunchbase">#548291</color>
+    <color name="menu_background">#4D4D4D</color>
+    <color name="menu_text">#D4D4D4</color>
 </resources>

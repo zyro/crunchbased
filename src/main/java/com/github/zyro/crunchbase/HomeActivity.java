@@ -61,7 +61,7 @@ public class HomeActivity extends BaseActivity {
 
     @OptionsItem(android.R.id.home)
     public void homeButton() {
-        super.toggleSlidingMenu();
+        slidingMenu.toggle();
     }
 
 }
