@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Generic or shared strings -->
     <string name="app_name">CrunchBase</string>
+    <string name="splash_image">Splash</string>
+    <string name="refreshing">Refreshing…</string>
+    <string name="no_items">Nothing found. Refresh to retry.</string>
+
+    <!-- Menu strings -->
     <string name="menu_imagesCheckbox">Load and display images</string>
     <string name="menu_cacheCheckbox">Enable caching</string>
     <string name="menu_aboutItem">About</string>
     <string name="about_dismiss">Dismiss</string>
     <string name="about_html">
         <![CDATA[
-        <h5>\u00A0CrunchBase for Android - version 1.0.0</h5>
+        <br/><h5>\u00A0CrunchBase for Android - version 1.0.0</h5>
         <p>\u00A0Author: Andrei Mihu<br/>
         \u00A0Source: <a href="https://github.com/zyro/crunchbase-android">
-                        zyro/crunchbase-android</a></p>
-        </p>\u00A0Android Sliding Layer library<br/>
-        \u00A0Author: 6Wunderkinder<br/>
-        \u00A0Source: <a href="https://github.com/6wunderkinder/android-sliding-layer-lib">
-                        6wunderkinder/android-sliding-layer-lib</a></p><br/>
+                        zyro/crunchbase-android</a></p><br/>
         ]]>
     </string>
-    <string name="refreshing">Refreshing…</string>
-    <string name="no_items">No items found. Refresh to retry.</string>
 
     <!-- Home activity strings -->
     <string name="trending_header">Trending Now</string>
