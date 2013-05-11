@@ -5,7 +5,6 @@ import com.googlecode.androidannotations.annotations.*;
 
 /** Splash screen activity, will display logo and go to Home after a delay. */
 @EActivity(R.layout.splash)
-@Fullscreen
 @NoTitle
 public class SplashActivity extends Activity {
 
