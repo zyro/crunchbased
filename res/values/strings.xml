@@ -21,8 +21,9 @@
     </string>
 
     <!-- Home activity strings -->
-    <string name="trending_header">Trending Now</string>
-    <string name="recent_header">Recently Funded</string>
+    <string name="trending_header">Trending</string>
+    <string name="recent_header">Recent</string>
+    <string name="biggest_header">Top This Year</string>
     <string name="details_view">Details</string>
     <string name="trending_points_plural">points</string>
     <string name="trending_points_singular">point</string>

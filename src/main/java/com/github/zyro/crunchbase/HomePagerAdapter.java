@@ -20,6 +20,7 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
         fragments = new ArrayList<Fragment>();
         fragments.add(new HomeTrendingFragment_());
         fragments.add(new HomeRecentFragment_());
+        fragments.add(new HomeBiggestFragment_());
 
         this.notifyDataSetChanged();
     }

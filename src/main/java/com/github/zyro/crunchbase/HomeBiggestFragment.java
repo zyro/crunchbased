@@ -6,23 +6,25 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.service.WebClient;
+import com.github.zyro.crunchbase.util.HomeBiggestAdapter;
+import com.github.zyro.crunchbase.util.HomeBiggestItem;
 import com.github.zyro.crunchbase.util.HomeRecentAdapter;
 import com.github.zyro.crunchbase.util.HomeRecentItem;
 import com.googlecode.androidannotations.annotations.*;
 
 import java.util.List;
 
-@EFragment(R.layout.home_recent)
-public class HomeRecentFragment extends Fragment {
+@EFragment(R.layout.home_biggest)
+public class HomeBiggestFragment extends Fragment {
 
     @Bean
     protected WebClient webClient;
 
     @Bean
-    protected HomeRecentAdapter adapter;
+    protected HomeBiggestAdapter adapter;
 
-    @ViewById(R.id.recentEmpty)
-    protected TextView recentEmpty;
+    @ViewById(R.id.biggestEmpty)
+    protected TextView biggestEmpty;
 
     protected HomeActivity activity;
 
@@ -38,13 +40,13 @@ public class HomeRecentFragment extends Fragment {
             refreshContents();
         }
 
-        ((ListView) activity.findViewById(R.id.recentList)).setAdapter(adapter);
+        ((ListView) activity.findViewById(R.id.biggestList)).setAdapter(adapter);
     }
 
     @Background
     public void refreshContents() {
         refreshContentsStarted();
-        final List<HomeRecentItem> recentItems = webClient.getRecent();
+        final List<HomeBiggestItem> recentItems = webClient.getBiggest();
         refreshContentsDone(recentItems);
     }
 
@@ -55,30 +57,30 @@ public class HomeRecentFragment extends Fragment {
         activity.setProgressBarIndeterminateVisibility(true);
 
         if(adapter.isEmpty()) {
-            recentEmpty.setText(R.string.refreshing);
-            recentEmpty.setVisibility(View.VISIBLE);
+            biggestEmpty.setText(R.string.refreshing);
+            biggestEmpty.setVisibility(View.VISIBLE);
         }
     }
 
     @UiThread
-    public void refreshContentsDone(final List<HomeRecentItem> recent) {
+    public void refreshContentsDone(final List<HomeBiggestItem> recent) {
         if(!recent.isEmpty()) {
             adapter.clearRecentItems();
         }
-        for(final HomeRecentItem recentItem : recent) {
+        for(final HomeBiggestItem recentItem : recent) {
             adapter.addItem(recentItem);
         }
 
         activity.setProgressBarIndeterminateVisibility(false);
         activity.invalidateOptionsMenu();
 
-        recentEmpty.setText(R.string.no_items);
-        recentEmpty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+        biggestEmpty.setText(R.string.no_items);
+        biggestEmpty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    @ItemClick(R.id.recentList)
-    public void handleRecentListItemClick(final HomeRecentItem recentItem) {
-        CompanyActivity_.intent(activity).permalink(recentItem.getPermalink()).start();
+    @ItemClick(R.id.biggestList)
+    public void handleBiggestListItemClick(final HomeBiggestItem biggestItem) {
+        CompanyActivity_.intent(activity).permalink(biggestItem.getPermalink()).start();
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
     }
 

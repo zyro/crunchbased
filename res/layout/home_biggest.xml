@@ -3,10 +3,10 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:id="@+id/trendingContents"
+              android:id="@+id/biggestContents"
               android:layout_alignParentTop="true">
 
-    <TextView android:id="@+id/trendingEmpty"
+    <TextView android:id="@+id/biggestEmpty"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="@string/refreshing"
@@ -14,7 +14,7 @@
               android:textSize="18sp"
               android:layout_centerInParent="true"/>
 
-    <ListView android:id="@+id/trendingList"
+    <ListView android:id="@+id/biggestList"
               android:layout_height="wrap_content"
               android:layout_width="fill_parent"
               android:background="@android:color/white"

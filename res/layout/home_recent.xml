@@ -9,7 +9,7 @@
     <TextView android:id="@+id/recentEmpty"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="@string/no_items"
+              android:text="@string/refreshing"
               android:textColor="@android:color/black"
               android:textSize="18sp"
               android:layout_centerInParent="true"/>

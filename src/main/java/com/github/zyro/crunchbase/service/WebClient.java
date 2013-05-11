@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import com.github.zyro.crunchbase.entity.Image;
+import com.github.zyro.crunchbase.util.HomeBiggestItem;
 import com.github.zyro.crunchbase.util.HomeRecentItem;
 import com.github.zyro.crunchbase.util.HomeTrendingItem;
 import com.google.common.io.CharStreams;
@@ -56,6 +57,32 @@ public class WebClient {
         }
 
         return trendingItems;
+    }
+
+    public List<HomeBiggestItem> getBiggest() {
+        final List<HomeBiggestItem> recentItems = new ArrayList<HomeBiggestItem>();
+
+        final String data = getPageData();
+
+        final Document document = Jsoup.parse(data);
+        for(final Element element : document
+                .getElementById("content-biggestfunded").getElementsByTag("li")) {
+            final HomeBiggestItem biggestItem = new HomeBiggestItem();
+
+            biggestItem.setPermalink(element.getElementsByTag("a").attr("href")
+                    .replace("/company/", ""));
+            biggestItem.setName(element.getElementsByTag("a").text().trim());
+            biggestItem.setSubtext(element.getElementsByTag("strong").size() > 1 ?
+                    element.getElementsByTag("strong").last().text().trim() :
+                    element.getElementsByTag("span").size() > 0 ?
+                            element.getElementsByTag("span").last().text().trim() :
+                            "<< unknown, shite data or format >>");
+            biggestItem.setFunds(element.getElementsByClass("horizbar").text().trim());
+
+            recentItems.add(biggestItem);
+        }
+
+        return recentItems;
     }
 
     public List<HomeRecentItem> getRecent() {

@@ -18,6 +18,7 @@ public class HomeActivity extends BaseActivity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         viewPager.setAdapter(new HomePagerAdapter(getSupportFragmentManager()));
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int index) {
@@ -45,6 +46,11 @@ public class HomeActivity extends BaseActivity {
                 .setText(R.string.recent_header)
                 .setTabListener(tabListener);
         actionBar.addTab(recentTab);
+
+        final ActionBar.Tab biggestTab = actionBar.newTab()
+                .setText(R.string.biggest_header)
+                .setTabListener(tabListener);
+        actionBar.addTab(biggestTab);
     }
 
     @OptionsItem(R.id.refreshButton)
@@ -56,6 +62,9 @@ public class HomeActivity extends BaseActivity {
         }
         else if(current instanceof HomeRecentFragment) {
             ((HomeRecentFragment) current).refreshContents();
+        }
+        else if(current instanceof HomeBiggestFragment) {
+            ((HomeBiggestFragment) current).refreshContents();
         }
     }
 
