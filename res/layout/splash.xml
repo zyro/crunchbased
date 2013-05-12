@@ -13,4 +13,14 @@
                android:scaleType="fitCenter"
                android:layout_centerInParent="true"/>
 
+    <TextView android:id="@+id/splashBottom"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/splash_bottom"
+              android:textColor="@android:color/darker_gray"
+              android:textSize="14sp"
+              android:padding="10dp"
+              android:layout_alignParentBottom="true"
+              android:gravity="center_horizontal"/>
+
 </RelativeLayout>

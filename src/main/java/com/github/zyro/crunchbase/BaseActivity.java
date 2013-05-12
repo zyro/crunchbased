@@ -4,15 +4,13 @@ import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
-import android.widget.CheckBox;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.github.zyro.crunchbase.service.ApiClient;
 import com.github.zyro.crunchbase.service.Preferences_;
 import com.github.zyro.crunchbase.service.WebClient;
@@ -69,9 +67,11 @@ public abstract class BaseActivity extends FragmentActivity {
     @AfterViews
     public void initMenuState() {
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        ((CheckBox) findViewById(R.id.imagesCheckbox))
+        //((CheckBox) findViewById(R.id.imagesCheckbox))
+        //        .setChecked(preferences.loadImages().get());
+        ((Switch) findViewById(R.id.imagesSwitch))
                 .setChecked(preferences.loadImages().get());
-        ((CheckBox) findViewById(R.id.cacheCheckbox))
+        ((Switch) findViewById(R.id.cacheSwitch))
                 .setChecked(preferences.cacheEnabled().get());
     }
 
@@ -81,17 +81,17 @@ public abstract class BaseActivity extends FragmentActivity {
         Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
     }
 
-    /** Listener for sliding menu checkbox items. */
-    public void onCheckboxClicked(final View view) {
-        boolean checked = ((CheckBox) view).isChecked();
+    /** Listener for sliding menu Switch items. */
+    public void onSwitchClicked(final View view) {
+        final boolean on = ((Switch) view).isChecked();
         switch(view.getId()) {
-            case R.id.imagesCheckbox:
-                preferences.loadImages().put(checked);
-                Toast.makeText(this, "Images " + checked, Toast.LENGTH_SHORT).show();
+            case R.id.imagesSwitch:
+                preferences.loadImages().put(on);
+                Toast.makeText(this, "Images " + on, Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.cacheCheckbox:
-                preferences.cacheEnabled().put(checked);
-                Toast.makeText(this, "Cache " + checked, Toast.LENGTH_SHORT).show();
+            case R.id.cacheSwitch:
+                preferences.cacheEnabled().put(on);
+                Toast.makeText(this, "Cache " + on, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -103,9 +103,10 @@ public abstract class BaseActivity extends FragmentActivity {
             slidingMenu.toggle();
         }
         final TextView aboutView = new TextView(this);
-        aboutView.setText(Html.fromHtml(getString(R.string.about_html)));
+        aboutView.setText(R.string.about_text);
         aboutView.setHighlightColor(Color.alpha(0));
         aboutView.setMovementMethod(LinkMovementMethod.getInstance());
+        Linkify.addLinks(aboutView, Linkify.WEB_URLS);
         new AlertDialog.Builder(this).setView(aboutView)
                 .setNeutralButton(getString(R.string.about_dismiss), null)
                 .setTitle(getString(R.string.menu_aboutItem)).show();

@@ -5,37 +5,35 @@
                 android:orientation="vertical"
                 android:background="@color/menu_background">
 
-    <CheckBox android:id="@+id/imagesCheckbox"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/menu_imagesCheckbox"
-              android:textColor="@color/menu_text"
-              android:gravity="right|center_vertical"
-              android:padding="10dp"
-              android:layout_alignParentTop="true"
-              android:onClick="onCheckboxClicked"/>
+    <Switch android:id="@+id/imagesSwitch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_imagesSwitch"
+            android:textColor="@color/menu_text"
+            android:padding="10dp"
+            android:layout_alignParentTop="true"
+            android:onClick="onSwitchClicked"/>
 
     <View android:id="@+id/separator1"
           android:layout_width="fill_parent"
           android:layout_height="1dp"
           android:background="@android:color/darker_gray"
-          android:layout_below="@id/imagesCheckbox"/>
+          android:layout_below="@id/imagesSwitch"/>
 
-    <CheckBox android:id="@+id/cacheCheckbox"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/menu_cacheCheckbox"
-              android:textColor="@color/menu_text"
-              android:gravity="right|center_vertical"
-              android:padding="10dp"
-              android:layout_below="@id/separator1"
-              android:onClick="onCheckboxClicked"/>
+    <Switch android:id="@+id/cacheSwitch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_cacheSwitch"
+            android:textColor="@color/menu_text"
+            android:padding="10dp"
+            android:layout_below="@id/separator1"
+            android:onClick="onSwitchClicked"/>
 
     <View android:id="@+id/separator2"
           android:layout_width="fill_parent"
           android:layout_height="1dp"
           android:background="@android:color/darker_gray"
-          android:layout_below="@id/cacheCheckbox"/>
+          android:layout_below="@id/cacheSwitch"/>
 
     <Button android:id="@+id/aboutItem"
             android:layout_width="fill_parent"
@@ -47,7 +45,7 @@
 
     <View android:layout_width="fill_parent"
           android:layout_height="1dp"
-          android:background="@android:color/darker_gray"
+          android:background="@color/menu_text"
           android:layout_above="@id/aboutItem"/>
 
 </RelativeLayout>

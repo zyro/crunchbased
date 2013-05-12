@@ -76,7 +76,7 @@ public class WebClient {
                     element.getElementsByTag("strong").last().text().trim() :
                     element.getElementsByTag("span").size() > 0 ?
                             element.getElementsByTag("span").last().text().trim() :
-                            "<< unknown, shite data or format >>");
+                            "<<< unknown >>>");
             biggestItem.setFunds(element.getElementsByClass("horizbar").text().trim());
 
             recentItems.add(biggestItem);
@@ -102,7 +102,7 @@ public class WebClient {
                     element.getElementsByTag("strong").last().text().trim() :
                     element.getElementsByTag("span").size() > 0 ?
                             element.getElementsByTag("span").last().text().trim() :
-                            "<< unknown, shite data or format >>");
+                            "<<< unknown >>>");
             recentItem.setFunds(element.getElementsByClass("horizbar").text().trim());
 
             recentItems.add(recentItem);

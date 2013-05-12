@@ -3,21 +3,28 @@
     <!-- Generic or shared strings -->
     <string name="app_name">CrunchBase</string>
     <string name="splash_image">Splash</string>
+    <string name="splash_bottom">Unofficial CrunchBase app for Android</string>
     <string name="refreshing">Refreshing…</string>
     <string name="no_items">Nothing found. Refresh to retry.</string>
 
     <!-- Menu strings -->
-    <string name="menu_imagesCheckbox">Load and display images</string>
-    <string name="menu_cacheCheckbox">Enable caching</string>
+    <string name="menu_imagesSwitch">Fetch images</string>
+    <string name="menu_cacheSwitch">Enable caching</string>
     <string name="menu_aboutItem">About</string>
     <string name="about_dismiss">Dismiss</string>
-    <string name="about_html">
-        <![CDATA[
-        <br/><h5>\u00A0CrunchBase for Android - version 1.0.0</h5>
-        <p>\u00A0Author: Andrei Mihu<br/>
-        \u00A0Source: <a href="https://github.com/zyro/crunchbase-android">
-                        zyro/crunchbase-android</a></p><br/>
-        ]]>
+    <string name="about_text">
+        \n
+        <b>Unofficial CrunchBase app for Android</b>\n\n
+        Version: 1.0.0\n
+        Author: Andrei Mihu
+        \n\n
+        This is an unofficial application not affiliated with CrunchBase
+        in any way. This is a free and open source application. Comments, bug
+        reports, feature requests and code contributions are all most welcome.
+        \n\n
+        The project repository can be found here:\n
+        https://github.com/zyro/crunchbase-android
+        \n
     </string>
 
     <!-- Home activity strings -->
