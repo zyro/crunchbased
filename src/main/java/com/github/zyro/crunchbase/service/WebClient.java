@@ -2,23 +2,12 @@ package com.github.zyro.crunchbase.service;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import com.github.zyro.crunchbase.entity.Image;
-import com.github.zyro.crunchbase.util.HomeBiggestItem;
-import com.github.zyro.crunchbase.util.HomeRecentItem;
-import com.github.zyro.crunchbase.util.HomeTrendingItem;
+import com.github.zyro.crunchbase.util.HomeData;
 import com.google.common.io.CharStreams;
 import com.googlecode.androidannotations.annotations.EBean;
 import com.googlecode.androidannotations.api.Scope;
 import lombok.NoArgsConstructor;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,84 +25,85 @@ import java.util.List;
 @NoArgsConstructor
 public class WebClient {
 
-    public List<HomeTrendingItem> getTrending() {
-        final List<HomeTrendingItem> trendingItems = new ArrayList<HomeTrendingItem>();
+    public HomeData getHomeData() {
+        try {
+            HttpURLConnection conn = (HttpURLConnection) new URL(
+                    "http://www.crunchbase.com/").openConnection();
+            InputStreamReader in = new InputStreamReader(new BufferedInputStream(conn.getInputStream()));
+            String response = CharStreams.toString(in);
+            in.close();
+            conn.disconnect();
 
-        final String data = getPageData();
+            final HomeData data = new HomeData();
 
-        final Document document = Jsoup.parse(data);
-        for(final Element element : document
-                .getElementById("trending-now").getElementsByTag("li")) {
-            final HomeTrendingItem trendingItem = new HomeTrendingItem();
+            final Document document = Jsoup.parse(response);
 
-            final String[] link = element.getElementsByTag("a").attr("href")
-                    .replace("http://www.crunchbase.com/", "").split("/");
-            trendingItem.setNamespace(link[0]);
-            trendingItem.setPermalink(link[1].replaceAll("[?].*", ""));
-            trendingItem.setPoints(element.getElementsByTag("img").size());
-            trendingItem.setName(element.getElementsByTag("a").text().trim());
+            final List<HomeData.Trending> trendingItems =
+                    new ArrayList<HomeData.Trending>();
+            for(final Element element : document
+                    .getElementById("trending-now").getElementsByTag("li")) {
+                final HomeData.Trending trendingItem = new HomeData.Trending();
 
-            trendingItems.add(trendingItem);
+                final String[] link = element.getElementsByTag("a").attr("href")
+                        .replace("http://www.crunchbase.com/", "").split("/");
+                trendingItem.setNamespace(link[0]);
+                trendingItem.setPermalink(link[1].replaceAll("[?].*", ""));
+                trendingItem.setPoints(element.getElementsByTag("img").size());
+                trendingItem.setName(element.getElementsByTag("a").text().trim());
+
+                trendingItems.add(trendingItem);
+            }
+            data.setTrending(trendingItems);
+
+            final List<HomeData.Recent> recentItems =
+                    new ArrayList<HomeData.Recent>();
+            for(final Element element : document
+                    .getElementById("content-newlyfunded").getElementsByTag("li")) {
+                final HomeData.Recent recentItem = new HomeData.Recent();
+
+                recentItem.setPermalink(element.getElementsByTag("a").attr("href")
+                        .replace("/company/", ""));
+                recentItem.setName(element.getElementsByTag("a").text().trim());
+                recentItem.setSubtext(element.getElementsByTag("strong").size() > 1 ?
+                        element.getElementsByTag("strong").last().text().trim() :
+                        element.getElementsByTag("span").size() > 0 ?
+                                element.getElementsByTag("span").last().text().trim() :
+                                "<<< unknown >>>");
+                recentItem.setFunds(element.getElementsByClass("horizbar").text().trim());
+
+                recentItems.add(recentItem);
+            }
+            data.setRecent(recentItems);
+
+            final List<HomeData.Biggest> biggestItems =
+                    new ArrayList<HomeData.Biggest>();
+            for(final Element element : document
+                    .getElementById("content-biggestfunded").getElementsByTag("li")) {
+                final HomeData.Biggest biggestItem = new HomeData.Biggest();
+
+                biggestItem.setPermalink(element.getElementsByTag("a").attr("href")
+                        .replace("/company/", ""));
+                biggestItem.setName(element.getElementsByTag("a").text().trim());
+                biggestItem.setSubtext(element.getElementsByTag("strong").size() > 1 ?
+                        element.getElementsByTag("strong").last().text().trim() :
+                        element.getElementsByTag("span").size() > 0 ?
+                                element.getElementsByTag("span").last().text().trim() :
+                                "<<< unknown >>>");
+                biggestItem.setFunds(element.getElementsByClass("horizbar").text().trim());
+
+                biggestItems.add(biggestItem);
+            }
+            data.setBiggest(biggestItems);
+
+            return data;
         }
-
-        return trendingItems;
-    }
-
-    public List<HomeBiggestItem> getBiggest() {
-        final List<HomeBiggestItem> recentItems = new ArrayList<HomeBiggestItem>();
-
-        final String data = getPageData();
-
-        final Document document = Jsoup.parse(data);
-        for(final Element element : document
-                .getElementById("content-biggestfunded").getElementsByTag("li")) {
-            final HomeBiggestItem biggestItem = new HomeBiggestItem();
-
-            biggestItem.setPermalink(element.getElementsByTag("a").attr("href")
-                    .replace("/company/", ""));
-            biggestItem.setName(element.getElementsByTag("a").text().trim());
-            biggestItem.setSubtext(element.getElementsByTag("strong").size() > 1 ?
-                    element.getElementsByTag("strong").last().text().trim() :
-                    element.getElementsByTag("span").size() > 0 ?
-                            element.getElementsByTag("span").last().text().trim() :
-                            "<<< unknown >>>");
-            biggestItem.setFunds(element.getElementsByClass("horizbar").text().trim());
-
-            recentItems.add(biggestItem);
-        }
-
-        return recentItems;
-    }
-
-    public List<HomeRecentItem> getRecent() {
-        final List<HomeRecentItem> recentItems = new ArrayList<HomeRecentItem>();
-
-        final String data = getPageData();
-
-        final Document document = Jsoup.parse(data);
-        for(final Element element : document
-                .getElementById("content-newlyfunded").getElementsByTag("li")) {
-            final HomeRecentItem recentItem = new HomeRecentItem();
-
-            recentItem.setPermalink(element.getElementsByTag("a").attr("href")
-                    .replace("/company/", ""));
-            recentItem.setName(element.getElementsByTag("a").text().trim());
-            recentItem.setSubtext(element.getElementsByTag("strong").size() > 1 ?
-                    element.getElementsByTag("strong").last().text().trim() :
-                    element.getElementsByTag("span").size() > 0 ?
-                            element.getElementsByTag("span").last().text().trim() :
-                            "<<< unknown >>>");
-            recentItem.setFunds(element.getElementsByClass("horizbar").text().trim());
-
-            recentItems.add(recentItem);
-        }
-
-        return recentItems;
+        catch(IOException e) { throw new RuntimeException(e); } // TODO: proper handling
     }
 
     public Bitmap getLargeImage(final Image image) {
         try {
-            HttpURLConnection conn = (HttpURLConnection) new URL("http://www.crunchbase.com/" + image.getLargeAsset()).openConnection();
+            HttpURLConnection conn = (HttpURLConnection) new URL(
+                    "http://www.crunchbase.com/" + image.getLargeAsset()).openConnection();
             InputStream in = new BufferedInputStream(conn.getInputStream());
             final Bitmap bitmap = BitmapFactory.decodeStream(in);
             in.close();
@@ -121,19 +111,6 @@ public class WebClient {
             return bitmap;
         }
         catch(IOException e) { throw new RuntimeException(e); } // TODO: proper handling
-    }
-
-    protected String getPageData() {
-        try {
-            HttpURLConnection conn = (HttpURLConnection) new URL("http://www.crunchbase.com/").openConnection();
-            InputStreamReader in = new InputStreamReader(new BufferedInputStream(conn.getInputStream()));
-            String response = CharStreams.toString(in);
-            in.close();
-            conn.disconnect();
-            return response;
-        }
-        catch(IOException e) {} // TODO: proper handling
-        return null;
     }
 
 }

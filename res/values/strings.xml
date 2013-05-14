@@ -5,6 +5,7 @@
     <string name="splash_image">Splash</string>
     <string name="splash_bottom">Unofficial CrunchBase app for Android</string>
     <string name="refreshing">Refreshing…</string>
+    <string name="refreshed">Last refreshed\u0020</string>
     <string name="no_items">Nothing found. Refresh to retry.</string>
 
     <!-- Menu strings -->

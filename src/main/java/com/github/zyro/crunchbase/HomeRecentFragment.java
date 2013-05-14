@@ -2,27 +2,32 @@ package com.github.zyro.crunchbase;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.service.WebClient;
-import com.github.zyro.crunchbase.util.HomeRecentAdapter;
-import com.github.zyro.crunchbase.util.HomeRecentItem;
+import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EFragment(R.layout.home_recent)
-public class HomeRecentFragment extends Fragment {
+public class HomeRecentFragment extends Fragment implements HomeFragment {
+
+    @SystemService
+    protected LayoutInflater inflater;
 
     @Bean
     protected WebClient webClient;
 
-    @Bean
-    protected HomeRecentAdapter adapter;
+    protected Adapter adapter = new Adapter();
 
     @ViewById(R.id.recentEmpty)
-    protected TextView recentEmpty;
+    protected TextView empty;
 
     protected HomeActivity activity;
 
@@ -34,52 +39,96 @@ public class HomeRecentFragment extends Fragment {
             activity = (HomeActivity) getActivity();
         }
 
-        if(adapter.isEmpty()) {
-            refreshContents();
-        }
-
         ((ListView) activity.findViewById(R.id.recentList)).setAdapter(adapter);
     }
 
-    @Background
-    public void refreshContents() {
-        refreshContentsStarted();
-        final List<HomeRecentItem> recentItems = webClient.getRecent();
-        refreshContentsDone(recentItems);
+    @Override
+    public void refreshStarted() {
+        empty.setText(R.string.refreshing);
+        empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    @UiThread
-    public void refreshContentsStarted() {
-        activity.invalidateOptionsMenu();
-        activity.menu.findItem(R.id.refreshButton).setVisible(false);
-        activity.setProgressBarIndeterminateVisibility(true);
-
-        if(adapter.isEmpty()) {
-            recentEmpty.setText(R.string.refreshing);
-            recentEmpty.setVisibility(View.VISIBLE);
+    @Override
+    public void refreshContents(final HomeData data) {
+        if(!data.getRecent().isEmpty()) {
+            adapter.clearItems();
+        }
+        for(final HomeData.Recent item : data.getRecent()) {
+            adapter.addItem(item);
         }
     }
 
-    @UiThread
-    public void refreshContentsDone(final List<HomeRecentItem> recent) {
-        if(!recent.isEmpty()) {
-            adapter.clearRecentItems();
-        }
-        for(final HomeRecentItem recentItem : recent) {
-            adapter.addItem(recentItem);
-        }
-
-        activity.setProgressBarIndeterminateVisibility(false);
-        activity.invalidateOptionsMenu();
-
-        recentEmpty.setText(R.string.no_items);
-        recentEmpty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+    @Override
+    public void refreshDone() {
+        empty.setText(R.string.no_items);
+        empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     @ItemClick(R.id.recentList)
-    public void handleRecentListItemClick(final HomeRecentItem recentItem) {
-        CompanyActivity_.intent(activity).permalink(recentItem.getPermalink()).start();
+    public void handleRecentListItemClick(final HomeData.Recent item) {
+        CompanyActivity_.intent(activity).permalink(item.getPermalink()).start();
         activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+    }
+
+    private class Adapter extends BaseAdapter {
+
+        /** The data list backing this adapter. */
+        private List<HomeData.Recent> data;
+
+        /** Initialize correct state. */
+        public Adapter() {
+            clearItems();
+        }
+
+        /** Clear the entire data set. */
+        public void clearItems() {
+            data = new ArrayList<HomeData.Recent>();
+            notifyDataSetChanged();
+        }
+
+        /** Add an item to the adapter. */
+        public void addItem(final HomeData.Recent item) {
+            data.add(item);
+            notifyDataSetChanged();
+        }
+
+        /** Create a view for an item the adapter manages. */
+        @Override
+        public View getView(final int position, View conView,
+                            final ViewGroup parent) {
+            if(conView == null) {
+                conView = inflater.inflate(R.layout.recent_item, null);
+            }
+            final HomeData.Recent item = getItem(position);
+
+            ((TextView) conView.findViewById(R.id.recentItemName)).setText(
+                    item.getName());
+            ((TextView) conView.findViewById(R.id.recentItemBusiness)).setText(
+                    item.getSubtext());
+            ((TextView) conView.findViewById(R.id.recentItemFunds)).setText(
+                    item.getFunds());
+
+            return conView;
+        }
+
+        /** Get total number of items in the adapter. */
+        @Override
+        public int getCount() {
+            return data.size();
+        }
+
+        /** Get an item at a specific position*/
+        @Override
+        public HomeData.Recent getItem(final int position) {
+            return data.get(position);
+        }
+
+        /** Get the ID of a given list position. */
+        @Override
+        public long getItemId(final int position) {
+            return position;
+        }
+
     }
 
 }
