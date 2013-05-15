@@ -1,8 +1,9 @@
-package com.github.zyro.crunchbase;
+package com.github.zyro.crunchbase.activity;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.Image;
 import com.github.zyro.crunchbase.util.SwipeBackListener;

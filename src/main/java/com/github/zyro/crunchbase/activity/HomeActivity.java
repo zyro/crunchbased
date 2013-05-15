@@ -1,12 +1,16 @@
-package com.github.zyro.crunchbase;
+package com.github.zyro.crunchbase.activity;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
+import com.github.zyro.crunchbase.fragment.HomeBiggestFragment_;
+import com.github.zyro.crunchbase.fragment.HomeRecentFragment_;
+import com.github.zyro.crunchbase.fragment.HomeTrendingFragment_;
+import com.github.zyro.crunchbase.R;
+import com.github.zyro.crunchbase.fragment.HomeFragment;
 import com.github.zyro.crunchbase.util.DateFormatter;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
@@ -76,8 +80,8 @@ public class HomeActivity extends BaseActivity {
         menu.findItem(R.id.refreshButton).setVisible(false);
         setProgressBarIndeterminateVisibility(true);
 
-        for(final Fragment fragment : adapter.getAll()) {
-            ((HomeFragment) fragment).refreshStarted();
+        for(final HomeFragment fragment : adapter.getAll()) {
+            fragment.refreshStarted();
         }
     }
 
@@ -90,9 +94,9 @@ public class HomeActivity extends BaseActivity {
 
     @UiThread
     public void refreshContentsDone(final HomeData data) {
-        for(final Fragment fragment : adapter.getAll()) {
-            ((HomeFragment) fragment).refreshContents(data);
-            ((HomeFragment) fragment).refreshDone();
+        for(final HomeFragment fragment : adapter.getAll()) {
+            fragment.refreshContents(data);
+            fragment.refreshDone();
         }
 
         setProgressBarIndeterminateVisibility(false);
@@ -112,13 +116,13 @@ public class HomeActivity extends BaseActivity {
     private class HomePagerAdapter extends FragmentPagerAdapter {
 
         /** Internal list of fragments. */
-        private List<Fragment> fragments;
+        private List<HomeFragment> fragments;
 
         /** Initialise with appropriate fragment manager instance. */
         public HomePagerAdapter(final FragmentManager fragmentManager) {
             super(fragmentManager);
 
-            fragments = new ArrayList<Fragment>();
+            fragments = new ArrayList<HomeFragment>();
             fragments.add(new HomeTrendingFragment_());
             fragments.add(new HomeRecentFragment_());
             fragments.add(new HomeBiggestFragment_());
@@ -127,13 +131,13 @@ public class HomeActivity extends BaseActivity {
         }
 
         /** Get the full list of fragments this adapter is holding. */
-        public List<Fragment> getAll() {
+        public List<HomeFragment> getAll() {
             return fragments;
         }
 
         /** Get the fragment at a specific page/tab index. */
         @Override
-        public Fragment getItem(final int index) {
+        public HomeFragment getItem(final int index) {
             return fragments.get(index);
         }
 

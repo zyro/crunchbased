@@ -1,4 +1,4 @@
-package com.github.zyro.crunchbase;
+package com.github.zyro.crunchbase.activity;
 
 import android.app.AlertDialog;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.widget.*;
+import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.service.ApiClient;
 import com.github.zyro.crunchbase.service.Preferences_;
 import com.github.zyro.crunchbase.service.WebClient;

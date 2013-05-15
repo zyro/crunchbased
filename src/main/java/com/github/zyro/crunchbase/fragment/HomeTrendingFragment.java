@@ -1,7 +1,6 @@
-package com.github.zyro.crunchbase;
+package com.github.zyro.crunchbase.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.github.zyro.crunchbase.activity.CompanyActivity_;
+import com.github.zyro.crunchbase.activity.HomeActivity;
+import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.service.WebClient;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EFragment(R.layout.home_trending)
-public class HomeTrendingFragment extends Fragment  implements HomeFragment {
+public class HomeTrendingFragment extends HomeFragment {
 
     @SystemService
     protected LayoutInflater inflater;
