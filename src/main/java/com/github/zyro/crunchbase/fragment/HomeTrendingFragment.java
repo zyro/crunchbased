@@ -106,7 +106,7 @@ public class HomeTrendingFragment extends HomeFragment {
         public View getView(final int position, View conView,
                             final ViewGroup parent) {
             if(conView == null) {
-                conView = inflater.inflate(R.layout.trending_item, null);
+                conView = inflater.inflate(R.layout.home_trending_item, null);
             }
             final HomeData.Trending item = getItem(position);
 

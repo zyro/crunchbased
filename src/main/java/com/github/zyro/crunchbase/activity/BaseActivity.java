@@ -68,8 +68,6 @@ public abstract class BaseActivity extends FragmentActivity {
     @AfterViews
     public void initMenuState() {
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        //((CheckBox) findViewById(R.id.imagesCheckbox))
-        //        .setChecked(preferences.loadImages().get());
         ((Switch) findViewById(R.id.imagesSwitch))
                 .setChecked(preferences.loadImages().get());
         ((Switch) findViewById(R.id.cacheSwitch))

@@ -99,7 +99,7 @@ public class HomeRecentFragment extends HomeFragment {
         public View getView(final int position, View conView,
                             final ViewGroup parent) {
             if(conView == null) {
-                conView = inflater.inflate(R.layout.recent_item, null);
+                conView = inflater.inflate(R.layout.home_recent_item, null);
             }
             final HomeData.Recent item = getItem(position);
 

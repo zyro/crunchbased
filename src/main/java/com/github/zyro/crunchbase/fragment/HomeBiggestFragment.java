@@ -100,7 +100,7 @@ public class HomeBiggestFragment extends HomeFragment {
         public View getView(final int position, View conView,
                             final ViewGroup parent) {
             if(conView == null) {
-                conView = inflater.inflate(R.layout.biggest_item, null);
+                conView = inflater.inflate(R.layout.home_biggest_item, null);
             }
             final HomeData.Biggest item = getItem(position);
 

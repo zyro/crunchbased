@@ -1,7 +1,6 @@
 package com.github.zyro.crunchbase.activity;
 
 import android.app.Activity;
-import com.github.zyro.crunchbase.activity.HomeActivity_;
 import com.github.zyro.crunchbase.R;
 import com.googlecode.androidannotations.annotations.*;
 
