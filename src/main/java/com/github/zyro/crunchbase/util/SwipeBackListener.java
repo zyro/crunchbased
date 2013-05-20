@@ -49,7 +49,8 @@ public class SwipeBackListener extends GestureDetector.SimpleOnGestureListener
     @Override
     public boolean onFling(final MotionEvent start, final MotionEvent end,
                            final float velocityX, final float velocityY) {
-        if(Math.abs(start.getY() - end.getY()) <= swipeMaxOffPath &&
+        if(start != null && end != null &&
+                Math.abs(start.getY() - end.getY()) <= swipeMaxOffPath &&
                 end.getX() - start.getX() > swipeMinDistance &&
                 Math.abs(velocityX) > swipeThresholdVelocity) {
             activity.onBackPressed();

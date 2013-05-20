@@ -4,17 +4,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-    <TextView android:id="@+id/companyHeader"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/company_header"
-              android:textSize="18sp"
-              android:gravity="center"
-              android:textColor="@android:color/white"
-              android:background="@color/crunchbase"
-              android:layout_alignParentTop="true"
-              android:padding="8dp"/>
-
     <TextView android:id="@+id/companyEmpty"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -25,21 +14,119 @@
     <ScrollView android:id="@+id/companyContents"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@id/companyHeader">
+                android:layout_alignParentTop="true"
+                android:background="@android:color/white">
 
         <LinearLayout android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+
+            <TextView android:id="@+id/companyHeaderLabel"
+                      android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
-                      android:layout_width="fill_parent">
+                      android:text="@string/company_header"
+                      android:textSize="12sp"
+                      android:gravity="center"
+                      android:textColor="@android:color/white"
+                      android:background="@color/crunchbase"
+                      android:padding="4dp"/>
 
-            <ImageView android:id="@+id/companyImage"
-                       android:src="@drawable/content_picture"
-                       android:contentDescription="@string/company_image"
-                       android:layout_height="110dp"
-                       android:layout_width="110dp"
-                       android:padding="2dp"
-                       android:scaleType="centerInside"/>
+            <LinearLayout android:id="@+id/companyHeader"
+                          android:orientation="horizontal"
+                          android:layout_height="wrap_content"
+                          android:layout_width="fill_parent">
 
-            <TextView android:id="@+id/companyData"
+                <ImageView android:id="@+id/companyImage"
+                           android:src="@drawable/content_picture"
+                           android:contentDescription="@string/company_image"
+                           android:layout_height="110dp"
+                           android:layout_width="110dp"
+                           android:padding="2dp"
+                           android:paddingRight="8dp"
+                           android:scaleType="centerInside"/>
+
+                <LinearLayout android:orientation="vertical"
+                              android:layout_height="wrap_content"
+                              android:layout_width="fill_parent"
+                              android:padding="4dp"
+                              android:layout_gravity="center_vertical">
+
+                    <TextView android:id="@+id/companyName"
+                              android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:textSize="15sp"
+                              android:paddingBottom="4dp"
+                              android:textColor="@android:color/black"/>
+
+                    <TextView android:id="@+id/companyUrl"
+                              android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:textSize="12sp"
+                              android:textColor="@android:color/darker_gray"/>
+
+                    <TextView android:id="@+id/companyFounded"
+                              android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:textSize="12sp"
+                              android:textColor="@android:color/darker_gray"/>
+
+                    <TextView android:id="@+id/companyEmployees"
+                              android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:textSize="12sp"
+                              android:textColor="@android:color/darker_gray"/>
+
+                    <TextView android:id="@+id/companyTotalMoneyRaised"
+                              android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:textSize="12sp"
+                              android:textColor="@android:color/darker_gray"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView android:id="@+id/companyOverviewLabel"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/company_overview"
+                      android:textSize="12sp"
+                      android:gravity="center"
+                      android:textColor="@android:color/white"
+                      android:background="@color/crunchbase"
+                      android:padding="4dp"/>
+
+            <com.github.zyro.crunchbase.util.ExpandablePanel
+                    xmlns:panel="http://schemas.android.com/apk/res/com.github.zyro.crunchbase"
+                    android:id="@+id/companyOverviewHolder"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    panel:animationDuration="500"
+                    panel:collapsedHeight="75dip"
+                    panel:content="@+id/companyOverview"
+                    panel:handle="@+id/expand">
+                <TextView android:id="@id/companyOverview"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:padding="2dp"/>
+                <Button android:id="@id/expand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="More" />
+            </com.github.zyro.crunchbase.util.ExpandablePanel>
+
+            <TextView android:id="@+id/companyRawLabel"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="Raw Data"
+                      android:textSize="12sp"
+                      android:gravity="center"
+                      android:textColor="@android:color/white"
+                      android:background="@color/crunchbase"
+                      android:padding="4dp"/>
+
+            <TextView android:id="@+id/companyRaw"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"/>
 

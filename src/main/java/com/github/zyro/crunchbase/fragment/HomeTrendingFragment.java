@@ -1,5 +1,7 @@
 package com.github.zyro.crunchbase.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,8 +50,10 @@ public class HomeTrendingFragment extends HomeFragment {
 
     @Override
     public void refreshStarted() {
-        empty.setText(R.string.refreshing);
-        empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+        if(empty != null) {
+            empty.setText(R.string.refreshing);
+            empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+        }
     }
 
     @Override
@@ -64,14 +68,19 @@ public class HomeTrendingFragment extends HomeFragment {
 
     @Override
     public void refreshDone() {
-        empty.setText(R.string.no_items);
-        empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+        if(empty != null) {
+            empty.setText(R.string.no_items);
+            empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+        }
     }
 
     @ItemClick(R.id.trendingList)
     public void handleTrendingListItemClick(final HomeData.Trending item) {
         if(item.getNamespace().equals("company")) {
-            CompanyActivity_.intent(activity).permalink(item.getPermalink()).start();
+            final Intent intent = new Intent(activity, CompanyActivity_.class);
+            intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
+                    item.getPermalink()));
+            startActivity(intent);
             activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
         }
         else {

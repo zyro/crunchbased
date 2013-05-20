@@ -119,12 +119,12 @@ public class ExpandablePanel extends LinearLayout {
         mContentHeight = mContent.getMeasuredHeight();
 
         if (mContentHeight < mCollapsedHeight) {
-            viewGroup.setVisibility(View.GONE);
-//            mHandle.setVisibility(View.GONE);
+            //viewGroup.setVisibility(View.GONE);
+            mHandle.setVisibility(View.GONE);
 
         } else {
-            viewGroup.setVisibility(View.VISIBLE);
-//            mHandle.setVisibility(View.VISIBLE);
+            //viewGroup.setVisibility(View.VISIBLE);
+            mHandle.setVisibility(View.VISIBLE);
         }
 
         // Then let the usual thing happen

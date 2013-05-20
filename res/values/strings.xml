@@ -4,8 +4,10 @@
     <string name="app_name">CrunchBase</string>
     <string name="splash_image">Splash</string>
     <string name="splash_bottom">Unofficial CrunchBase app for Android</string>
+    <string name="refresh">Refresh</string>
+    <string name="search">Search</string>
     <string name="refreshing">Refreshing…</string>
-    <string name="refreshed">Last refreshed\u0020</string>
+    <string name="refreshed">Refreshed\u0020</string>
     <string name="no_items">Nothing found. Refresh to retry.</string>
 
     <!-- Menu strings -->
@@ -37,6 +39,10 @@
     <string name="trending_points_singular">point</string>
 
     <!-- Company activity strings -->
-    <string name="company_header">Company Details</string>
+    <string name="company_header">Company</string>
     <string name="company_image">Company Image</string>
+    <string name="company_founded">Founded:\u0020</string>
+    <string name="company_employees">Employees:\u0020</string>
+    <string name="company_total_money">Total money raised:\u0020</string>
+    <string name="company_overview">Overview</string>
 </resources>
