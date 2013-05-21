@@ -8,7 +8,13 @@
     <string name="search">Search</string>
     <string name="refreshing">Refreshing…</string>
     <string name="refreshed">Refreshed\u0020</string>
+    <string name="refresh_failed">
+            Refresh failed. Check your connection, then try again.
+    </string>
     <string name="no_items">Nothing found. Refresh to retry.</string>
+    <string name="unknown">\u003C\u003C\u003Cunknown\u003E\u003E\u003E</string>
+    <string name="more">More</string>
+    <string name="less">Less</string>
 
     <!-- Menu strings -->
     <string name="menu_imagesSwitch">Fetch images</string>
@@ -45,4 +51,5 @@
     <string name="company_employees">Employees:\u0020</string>
     <string name="company_total_money">Total money raised:\u0020</string>
     <string name="company_overview">Overview</string>
+    <string name="company_overview_empty">No overview found.</string>
 </resources>

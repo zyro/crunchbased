@@ -119,9 +119,9 @@ public abstract class BaseActivity extends FragmentActivity {
         }
         else {
             super.onBackPressed();
-            if(!isTaskRoot()) {
-                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-            }
+            //if(!isTaskRoot()) {
+            //    overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+            //}
         }
     }
 

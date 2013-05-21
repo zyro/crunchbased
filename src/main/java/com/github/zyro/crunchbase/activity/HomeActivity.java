@@ -11,18 +11,22 @@ import com.github.zyro.crunchbase.fragment.HomeRecentFragment_;
 import com.github.zyro.crunchbase.fragment.HomeTrendingFragment_;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.fragment.HomeFragment;
-import com.github.zyro.crunchbase.util.DateFormatter;
+import com.github.zyro.crunchbase.service.ClientException;
+import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/** Activity to handle the application home area. */
 @EActivity(R.layout.home)
 public class HomeActivity extends BaseActivity {
 
+    /** Pager adapter for home page tabs. */
     protected HomePagerAdapter adapter;
 
+    /** Initialize tabs and associated view pager. */
     @AfterViews
     public void initState() {
         final ActionBar actionBar = getActionBar();
@@ -69,11 +73,20 @@ public class HomeActivity extends BaseActivity {
         refreshContents();
     }
 
-    @OptionsItem(R.id.refreshButton)
-    public void refreshButton() {
-        refreshContents();
+    /** Begin a data refresh attempt. */
+    @Background
+    public void refreshContents() {
+        refreshContentsStarted();
+        try {
+            final HomeData data = webClient.getHomeData();
+            refreshContentsDone(data);
+        }
+        catch(final ClientException e) {
+            refreshContentsFailed();
+        }
     }
 
+    /** Refresh started action. */
     @UiThread
     public void refreshContentsStarted() {
         invalidateOptionsMenu();
@@ -85,13 +98,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    @Background
-    public void refreshContents() {
-        refreshContentsStarted();
-        final HomeData data = webClient.getHomeData();
-        refreshContentsDone(data);
-    }
-
+    /** Refresh complete action. */
     @UiThread
     public void refreshContentsDone(final HomeData data) {
         for(final HomeFragment fragment : adapter.getAll()) {
@@ -103,10 +110,27 @@ public class HomeActivity extends BaseActivity {
         invalidateOptionsMenu();
 
         Toast.makeText(this, getString(R.string.refreshed) +
-                DateFormatter.formatTimestamp(System.currentTimeMillis()),
+                FormatUtils.formatTimestamp(System.currentTimeMillis()),
                 Toast.LENGTH_SHORT).show();
     }
 
+    /** Refresh failed action. */
+    @UiThread
+    public void refreshContentsFailed() {
+        setProgressBarIndeterminateVisibility(false);
+        invalidateOptionsMenu();
+
+        Toast.makeText(this, getString(R.string.refresh_failed),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    /** Refresh button handler. */
+    @OptionsItem(R.id.refreshButton)
+    public void refreshButton() {
+        refreshContents();
+    }
+
+    /** Home button handler. */
     @OptionsItem(android.R.id.home)
     public void homeButton() {
         slidingMenu.toggle();

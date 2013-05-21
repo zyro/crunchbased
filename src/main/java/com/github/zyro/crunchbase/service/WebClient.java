@@ -1,11 +1,14 @@
 package com.github.zyro.crunchbase.service;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Image;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.google.common.io.CharStreams;
 import com.googlecode.androidannotations.annotations.EBean;
+import com.googlecode.androidannotations.annotations.RootContext;
 import com.googlecode.androidannotations.api.Scope;
 import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
@@ -21,96 +24,115 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Functions to retrieve data from main site. */
 @EBean(scope = Scope.Singleton)
 @NoArgsConstructor
 public class WebClient {
 
-    public HomeData getHomeData() {
+    /** Context used to look up strings. */
+    @RootContext
+    protected Context context;
+
+    /** Get primary home page data elements. */
+    public HomeData getHomeData() throws ClientException {
         try {
-            HttpURLConnection conn = (HttpURLConnection) new URL(
+            // Open a connection and pull data.
+            final HttpURLConnection connection = (HttpURLConnection) new URL(
                     "http://www.crunchbase.com/").openConnection();
-            InputStreamReader in = new InputStreamReader(new BufferedInputStream(conn.getInputStream()));
-            String response = CharStreams.toString(in);
+            final InputStreamReader in = new InputStreamReader(
+                    new BufferedInputStream(connection.getInputStream()));
+            final String response = CharStreams.toString(in);
             in.close();
-            conn.disconnect();
+            connection.disconnect();
 
             final HomeData data = new HomeData();
 
+            // Parse HTML response.
             final Document document = Jsoup.parse(response);
 
+            // Extract Trending items.
             final List<HomeData.Trending> trendingItems =
                     new ArrayList<HomeData.Trending>();
-            for(final Element element : document
-                    .getElementById("trending-now").getElementsByTag("li")) {
-                final HomeData.Trending trendingItem = new HomeData.Trending();
+            for(final Element elem : document.getElementById(
+                    "trending-now").getElementsByTag("li")) {
+                final HomeData.Trending item = new HomeData.Trending();
 
-                final String[] link = element.getElementsByTag("a").attr("href")
+                final String[] link = elem.getElementsByTag("a").attr("href")
                         .replace("http://www.crunchbase.com/", "").split("/");
-                trendingItem.setNamespace(link[0]);
-                trendingItem.setPermalink(link[1].replaceAll("[?].*", ""));
-                trendingItem.setPoints(element.getElementsByTag("img").size());
-                trendingItem.setName(element.getElementsByTag("a").text().trim());
+                item.setNamespace(link[0]);
+                item.setPermalink(link[1].replaceAll("[?].*", ""));
+                item.setPoints(elem.getElementsByTag("img").size());
+                item.setName(elem.getElementsByTag("a").text().trim());
 
-                trendingItems.add(trendingItem);
+                trendingItems.add(item);
             }
             data.setTrending(trendingItems);
 
+            // Extract Recent items.
             final List<HomeData.Recent> recentItems =
                     new ArrayList<HomeData.Recent>();
-            for(final Element element : document
-                    .getElementById("content-newlyfunded").getElementsByTag("li")) {
-                final HomeData.Recent recentItem = new HomeData.Recent();
+            for(final Element elem : document.getElementById(
+                    "content-newlyfunded").getElementsByTag("li")) {
+                final HomeData.Recent item = new HomeData.Recent();
 
-                recentItem.setPermalink(element.getElementsByTag("a").attr("href")
+                item.setPermalink(elem.getElementsByTag("a").attr("href")
                         .replace("/company/", ""));
-                recentItem.setName(element.getElementsByTag("a").text().trim());
-                recentItem.setSubtext(element.getElementsByTag("strong").size() > 1 ?
-                        element.getElementsByTag("strong").last().text().trim() :
-                        element.getElementsByTag("span").size() > 0 ?
-                                element.getElementsByTag("span").last().text().trim() :
-                                "<<< unknown >>>");
-                recentItem.setFunds(element.getElementsByClass("horizbar").text().trim());
+                item.setName(elem.getElementsByTag("a").text().trim());
+                item.setSubtext(elem.getElementsByTag("strong").size() > 1 ?
+                        elem.getElementsByTag("strong").last().text().trim() :
+                        elem.getElementsByTag("span").size() > 0 ?
+                            elem.getElementsByTag("span").last().text().trim() :
+                            context.getString(R.string.unknown));
+                item.setFunds(elem.getElementsByClass("horizbar").text().trim());
 
-                recentItems.add(recentItem);
+                recentItems.add(item);
             }
             data.setRecent(recentItems);
 
+            // Extract Biggest (Top Funded This Year) items.
             final List<HomeData.Biggest> biggestItems =
                     new ArrayList<HomeData.Biggest>();
-            for(final Element element : document
-                    .getElementById("content-biggestfunded").getElementsByTag("li")) {
-                final HomeData.Biggest biggestItem = new HomeData.Biggest();
+            for(final Element elem : document.getElementById(
+                    "content-biggestfunded").getElementsByTag("li")) {
+                final HomeData.Biggest item = new HomeData.Biggest();
 
-                biggestItem.setPermalink(element.getElementsByTag("a").attr("href")
+                item.setPermalink(elem.getElementsByTag("a").attr("href")
                         .replace("/company/", ""));
-                biggestItem.setName(element.getElementsByTag("a").text().trim());
-                biggestItem.setSubtext(element.getElementsByTag("strong").size() > 1 ?
-                        element.getElementsByTag("strong").last().text().trim() :
-                        element.getElementsByTag("span").size() > 0 ?
-                                element.getElementsByTag("span").last().text().trim() :
-                                "<<< unknown >>>");
-                biggestItem.setFunds(element.getElementsByClass("horizbar").text().trim());
+                item.setName(elem.getElementsByTag("a").text().trim());
+                item.setSubtext(elem.getElementsByTag("strong").size() > 1 ?
+                        elem.getElementsByTag("strong").last().text().trim() :
+                        elem.getElementsByTag("span").size() > 0 ?
+                            elem.getElementsByTag("span").last().text().trim() :
+                            context.getString(R.string.unknown));
+                item.setFunds(elem.getElementsByClass("horizbar").text().trim());
 
-                biggestItems.add(biggestItem);
+                biggestItems.add(item);
             }
             data.setBiggest(biggestItems);
 
             return data;
         }
-        catch(IOException e) { throw new RuntimeException(e); } // TODO: proper handling
+        catch(final IOException e) {
+            throw new ClientException(e);
+        }
     }
 
-    public Bitmap getLargeImage(final Image image) {
+    /** Get the bitmap associated with the given Image's Large Asset. */
+    public Bitmap getLargeImage(final Image image) throws ClientException {
         try {
-            HttpURLConnection conn = (HttpURLConnection) new URL(
-                    "http://www.crunchbase.com/" + image.getLargeAsset()).openConnection();
-            InputStream in = new BufferedInputStream(conn.getInputStream());
+            final HttpURLConnection connection = (HttpURLConnection) new URL(
+                    "http://www.crunchbase.com/" + image.getLargeAsset())
+                    .openConnection();
+            final InputStream in = new BufferedInputStream(
+                    connection.getInputStream());
             final Bitmap bitmap = BitmapFactory.decodeStream(in);
             in.close();
-            conn.disconnect();
+            connection.disconnect();
             return bitmap;
         }
-        catch(IOException e) { throw new RuntimeException(e); } // TODO: proper handling
+        catch(final IOException e) {
+            throw new ClientException(e);
+        }
     }
 
 }

@@ -4,21 +4,19 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.github.zyro.crunchbase.R;
 
-public class ExpandablePanel extends LinearLayout {
+public class ExpandablePanel extends RelativeLayout {
 
     private final int mHandleId;
     private final int mContentId;
-    private final int mViewGroupId;
 
     private View mHandle;
     private View mContent;
-    private ViewGroup viewGroup;
 
     private boolean mExpanded = false;
     private int mCollapsedHeight = 0;
@@ -55,16 +53,6 @@ public class ExpandablePanel extends LinearLayout {
             throw new IllegalArgumentException("The content attribute is required and must refer to a valid child.");
         }
 
-        int isViewGroupId = a.getResourceId(R.styleable.ExpandablePanel_isviewgroup, 0);
-        int viewGroupId = a.getResourceId(R.styleable.ExpandablePanel_viewgroup, 0);
-//        isViewGroup = findViewById(isViewGroupId);
-        if (a.getBoolean(R.styleable.ExpandablePanel_isviewgroup, false)) {
-            mViewGroupId = viewGroupId;
-        }
-        else {
-            mViewGroupId = 0;
-        }
-
         mHandleId = handleId;
         mContentId = contentId;
 
@@ -93,10 +81,6 @@ public class ExpandablePanel extends LinearLayout {
                     "The handle attribute is must refer to an"
                             + " existing child.");
         }
-        if(mViewGroupId != 0) {
-            viewGroup = (ViewGroup) findViewById(mViewGroupId);
-        }
-
 
         mContent = findViewById(mContentId);
         if (mContent == null) {
@@ -119,11 +103,9 @@ public class ExpandablePanel extends LinearLayout {
         mContentHeight = mContent.getMeasuredHeight();
 
         if (mContentHeight < mCollapsedHeight) {
-            //viewGroup.setVisibility(View.GONE);
             mHandle.setVisibility(View.GONE);
-
-        } else {
-            //viewGroup.setVisibility(View.VISIBLE);
+        }
+        else {
             mHandle.setVisibility(View.VISIBLE);
         }
 
@@ -142,7 +124,7 @@ public class ExpandablePanel extends LinearLayout {
                 mListener.onExpand(mHandle, mContent);
             }
             a.setDuration(mAnimationDuration);
-            //Need to do this or else the animation will not play if the height is 0
+            // Need to do this or else the animation will not play if the height is 0
             if(mContent.getLayoutParams().height == 0)
             {
                 android.view.ViewGroup.LayoutParams lp = mContent.getLayoutParams();
@@ -183,7 +165,12 @@ public class ExpandablePanel extends LinearLayout {
     }
 
     private class DefaultOnExpandListener implements OnExpandListener {
-        public void onCollapse(View handle, View content) {}
-        public void onExpand(View handle, View content) {}
+        public void onCollapse(View handle, View content) {
+            ((TextView) handle).setText(R.string.more);
+        }
+        public void onExpand(View handle, View content) {
+            ((TextView) handle).setText(R.string.less);
+        }
     }
+
 }

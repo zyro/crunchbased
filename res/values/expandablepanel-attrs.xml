@@ -3,8 +3,6 @@
     <declare-styleable name="ExpandablePanel">
         <attr name="handle" format="reference"/>
         <attr name="content" format="reference"/>
-        <attr name="viewgroup" format="reference"/>
-        <attr name="isviewgroup" format="boolean"/>
         <attr name="collapsedHeight" format="dimension"/>
         <attr name="animationDuration" format="integer"/>
     </declare-styleable>
