@@ -13,6 +13,7 @@ import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.Image;
 import com.github.zyro.crunchbase.service.ClientException;
+import com.github.zyro.crunchbase.util.CrunchBaseLinkify;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.SwipeBackListener;
 import com.googlecode.androidannotations.annotations.*;
@@ -102,11 +103,9 @@ public class CompanyActivity extends BaseActivity {
                         company.getTotal_money_raised() : getString(R.string.unknown)));
 
         final TextView companyOverview = (TextView) findViewById(R.id.companyOverview);
-        final String overview = company.getOverview().replace("href=\"/",
-                "href=\"http://www.crunchbase.com/");
-        companyOverview.setText(Html.fromHtml(overview));
+        companyOverview.setText(CrunchBaseLinkify.htmlLinkify(company.getOverview(), this));
         companyOverview.setMovementMethod(LinkMovementMethod.getInstance());
-        if(!overview.isEmpty()) {
+        if(companyOverview.getText().length() != 0) {
             findViewById(R.id.companyOverviewEmpty).setVisibility(View.GONE);
         }
 
