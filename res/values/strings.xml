@@ -12,7 +12,8 @@
             Refresh failed. Check your connection, then try again.
     </string>
     <string name="no_items">Nothing found. Refresh to retry.</string>
-    <string name="unknown">\u003C\u003C\u003Cunknown\u003E\u003E\u003E</string>
+    <string name="unknown">\u003F</string>
+    <!-- <string name="unknown">\u003C\u003C\u003Cunknown\u003E\u003E\u003E</string> -->
     <string name="more">More</string>
     <string name="less">Less</string>
 
@@ -50,6 +51,7 @@
     <string name="company_founded">Founded:\u0020</string>
     <string name="company_employees">Employees:\u0020</string>
     <string name="company_total_money">Total money raised:\u0020</string>
+    <string name="company_presence">Presence</string>
     <string name="company_overview">Overview</string>
     <string name="company_overview_empty">No overview found.</string>
 </resources>

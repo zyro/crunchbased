@@ -88,6 +88,15 @@
 
             </LinearLayout>
 
+            <TextView android:id="@+id/companyPresenceLabel"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/company_presence"
+                      android:gravity="center"
+                      android:textColor="@android:color/white"
+                      android:background="@color/crunchbase"
+                      android:padding="4dp"/>
+
             <TextView android:id="@+id/companyOverviewLabel"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"

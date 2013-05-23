@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 
 /**
  * A span to replace URLSpan in a TextView to directly launch an activity rather
- * than allow the system to determine the best handler for a link.
+ * than allow the system to determine the best handler for the underlying link.
  */
 @AllArgsConstructor
 public class ActivityLauncherSpan extends ClickableSpan {
@@ -31,7 +31,8 @@ public class ActivityLauncherSpan extends ClickableSpan {
         final Intent intent = new Intent(parentActivity, activityClass);
         intent.setData(Uri.parse(url));
         parentActivity.startActivity(intent);
-        parentActivity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        parentActivity.overridePendingTransition(
+                R.anim.slide_right_in, R.anim.slide_left_out);
     }
 
     /** Override to set custom style elements. */

@@ -1,9 +1,7 @@
 package com.github.zyro.crunchbase.activity;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.View;
@@ -11,16 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
-import com.github.zyro.crunchbase.entity.Image;
 import com.github.zyro.crunchbase.service.ClientException;
-import com.github.zyro.crunchbase.util.CrunchBaseLinkify;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.SwipeBackListener;
 import com.googlecode.androidannotations.annotations.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @EActivity(R.layout.company)
 public class CompanyActivity extends BaseActivity {
@@ -30,8 +24,6 @@ public class CompanyActivity extends BaseActivity {
 
     @ViewById(R.id.companyEmpty)
     protected TextView empty;
-
-    protected Map<Image, Bitmap> images = new HashMap<Image, Bitmap>();
 
     @Override
     public void onCreate(final Bundle saved) {
@@ -54,8 +46,7 @@ public class CompanyActivity extends BaseActivity {
         try {
             final Company company = apiClient.getCompany(permalink);
             if(company.getImage() != null) {
-                Bitmap b = webClient.getLargeImage(company.getImage());
-                images.put(company.getImage(), b);
+                webClient.loadLargeImage(company.getImage());
             }
             refreshCompanyDetailsDone(company);
         }
@@ -75,8 +66,8 @@ public class CompanyActivity extends BaseActivity {
 
     @UiThread
     public void refreshCompanyDetailsDone(final Company company) {
-        ((ImageView) findViewById(R.id.companyImage)).setImageBitmap(images.get(company.getImage()));
-        findViewById(R.id.companyImage).invalidate();
+        ((ImageView) findViewById(R.id.companyImage)).setImageBitmap(
+                company.getImage().getBitmap());
 
         ((TextView) findViewById(R.id.companyName)).setText(company.getName());
 
@@ -103,11 +94,10 @@ public class CompanyActivity extends BaseActivity {
                         company.getTotal_money_raised() : getString(R.string.unknown)));
 
         final TextView companyOverview = (TextView) findViewById(R.id.companyOverview);
-        companyOverview.setText(CrunchBaseLinkify.htmlLinkify(company.getOverview(), this));
+        companyOverview.setText(FormatUtils.htmlLinkify(company.getOverview(), this));
         companyOverview.setMovementMethod(LinkMovementMethod.getInstance());
-        if(companyOverview.getText().length() != 0) {
-            findViewById(R.id.companyOverviewEmpty).setVisibility(View.GONE);
-        }
+        findViewById(R.id.companyOverviewEmpty).setVisibility(
+                companyOverview.getText().length() == 0 ? View.VISIBLE : View.GONE);
 
         ((TextView) findViewById(R.id.companyRaw)).setText(company.toString());
 

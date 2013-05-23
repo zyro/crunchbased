@@ -1,5 +1,6 @@
 package com.github.zyro.crunchbase.entity;
 
+import android.graphics.Bitmap;
 import lombok.Data;
 import java.util.List;
 
@@ -8,6 +9,11 @@ public class Image {
 
     private List<List<Object>> available_sizes;
     private String attribution;
+
+    // Below here are fiends and functions unrelated to the JSON data coming
+    // from the remote API. They are used internally, for convenience purposes.
+
+    private Bitmap bitmap;
 
     public Integer getSmallSizeX() {
         List<Object> size = available_sizes.get(0);
