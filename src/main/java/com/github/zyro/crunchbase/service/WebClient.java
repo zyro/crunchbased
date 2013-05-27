@@ -62,7 +62,8 @@ public class WebClient {
                 item.setNamespace(link[0]);
                 item.setPermalink(link[1].replaceAll("[?].*", ""));
                 item.setPoints(elem.getElementsByTag("img").size());
-                item.setName(elem.getElementsByTag("a").text().trim());
+                item.setName(elem.getElementsByTag("a").text().trim().replace(
+                        "\\u7684CrunchBase\\u7b80\\u4ecb", ""));
 
                 trendingItems.add(item);
             }
