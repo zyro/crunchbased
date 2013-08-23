@@ -1,10 +1,13 @@
 package com.github.zyro.crunchbase.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.github.zyro.crunchbase.R;
@@ -66,6 +69,8 @@ public class CompanyActivity extends BaseActivity {
 
     @UiThread
     public void refreshCompanyDetailsDone(final Company company) {
+        // Header
+
         ((ImageView) findViewById(R.id.companyImage)).setImageBitmap(
                 company.getImage().getBitmap());
 
@@ -93,11 +98,87 @@ public class CompanyActivity extends BaseActivity {
                 (company.getTotal_money_raised() != null ?
                         company.getTotal_money_raised() : getString(R.string.unknown)));
 
+        // Presence
+
+        final Button companyCrunchbaseUrl = (Button) findViewById(R.id.companyCrunchbaseUrl);
+        companyCrunchbaseUrl.setVisibility(company.getCrunchbase_url().isEmpty() ?
+                        TextView.GONE : TextView.VISIBLE);
+        if(companyCrunchbaseUrl.getVisibility() == TextView.VISIBLE) {
+            companyCrunchbaseUrl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(company.getCrunchbase_url())));
+                }
+            });
+        }
+
+        final Button companyBlogUrl = (Button) findViewById(R.id.companyBlogUrl);
+        companyBlogUrl.setVisibility(company.getBlog_url().isEmpty() ?
+                TextView.GONE : TextView.VISIBLE);
+        if(companyBlogUrl.getVisibility() == TextView.VISIBLE) {
+            companyBlogUrl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(company.getBlog_url())));
+                }
+            });
+        }
+
+        final Button companyTwitter = (Button) findViewById(R.id.companyTwitter);
+        companyTwitter.setVisibility(company.getTwitter_username().isEmpty() ?
+                TextView.GONE : TextView.VISIBLE);
+        if(companyTwitter.getVisibility() == TextView.VISIBLE) {
+            companyTwitter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://twitter.com/" + company.getTwitter_username())));
+                }
+            });
+        }
+
+        final Button companyEmail = (Button) findViewById(R.id.companyEmail);
+        companyEmail.setVisibility(company.getEmail_address().isEmpty() ?
+                TextView.GONE : TextView.VISIBLE);
+        if(companyEmail.getVisibility() == TextView.VISIBLE) {
+            companyEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    startActivity(new Intent(Intent.ACTION_SENDTO,
+                            Uri.fromParts("mailto", company.getEmail_address(), null)));
+                }
+            });
+        }
+
+        findViewById(R.id.companyPresenceLabel).setVisibility(
+                companyCrunchbaseUrl.getVisibility() == TextView.GONE &&
+                companyBlogUrl.getVisibility() == TextView.GONE &&
+                companyTwitter.getVisibility() == TextView.GONE &&
+                companyEmail.getVisibility() == TextView.GONE ?
+                        TextView.GONE : TextView.VISIBLE);
+
+        findViewById(R.id.companyPresenceHolder).setVisibility(
+                companyCrunchbaseUrl.getVisibility() == TextView.GONE &&
+                companyBlogUrl.getVisibility() == TextView.GONE &&
+                companyTwitter.getVisibility() == TextView.GONE &&
+                companyEmail.getVisibility() == TextView.GONE ?
+                        TextView.GONE : TextView.VISIBLE);
+
+        // Overview
+
         final TextView companyOverview = (TextView) findViewById(R.id.companyOverview);
-        companyOverview.setText(FormatUtils.htmlLinkify(company.getOverview(), this));
-        companyOverview.setMovementMethod(LinkMovementMethod.getInstance());
-        findViewById(R.id.companyOverviewEmpty).setVisibility(
-                companyOverview.getText().length() == 0 ? View.VISIBLE : View.GONE);
+        companyOverview.setText(company.getOverview() == null || company.getOverview().trim().isEmpty() ?
+                getString(R.string.company_overview_empty) : FormatUtils.htmlLinkify(company.getOverview(), this));
+        if(getString(R.string.company_overview_empty).equals(companyOverview.getText())) {
+            companyOverview.setGravity(Gravity.CENTER);
+        }
+        else {
+            companyOverview.setText(FormatUtils.trim(companyOverview.getText()));
+            companyOverview.setGravity(Gravity.NO_GRAVITY);
+            companyOverview.setMovementMethod(LinkMovementMethod.getInstance());
+        }
 
         ((TextView) findViewById(R.id.companyRaw)).setText(company.toString());
 

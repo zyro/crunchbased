@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.List;
 
+/** Entity used to store home data. */
 @Data
 public class HomeData {
 
@@ -11,6 +12,7 @@ public class HomeData {
     private List<Recent> recent;
     private List<Biggest> biggest;
 
+    /** Trending screen information entity. */
     @Data
     public static class Trending {
 
@@ -21,6 +23,7 @@ public class HomeData {
 
     }
 
+    /** Recent screen information entity. */
     @Data
     public static class Recent {
 
@@ -31,6 +34,7 @@ public class HomeData {
 
     }
 
+    /** Biggest to date screen information entity. */
     @Data
     public static class Biggest {
 
@@ -40,4 +44,5 @@ public class HomeData {
         private String funds;
 
     }
+
 }

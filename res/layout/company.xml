@@ -97,6 +97,58 @@
                       android:background="@color/crunchbase"
                       android:padding="4dp"/>
 
+            <LinearLayout android:id="@+id/companyPresenceHolder"
+                          android:orientation="horizontal"
+                          android:layout_height="wrap_content"
+                          android:layout_width="fill_parent"
+                          android:layout_gravity="center_vertical">
+
+                <Button android:id="@+id/companyCrunchbaseUrl"
+                        android:layout_width="0dp"
+                        android:layout_height="35sp"
+                        android:layout_weight="1"
+                        android:text="@string/company_crunchbase_url"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/crunchbase"
+                        android:shadowColor="@android:color/transparent"
+                        android:background="@android:color/white"/>
+
+                <Button android:id="@+id/companyBlogUrl"
+                        android:layout_width="0dp"
+                        android:layout_height="34sp"
+                        android:layout_weight="1"
+                        android:text="@string/company_blog_url"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/crunchbase"
+                        android:shadowColor="@android:color/transparent"
+                        android:background="@android:color/white"/>
+
+                <Button android:id="@+id/companyTwitter"
+                        android:layout_width="0dp"
+                        android:layout_height="34sp"
+                        android:layout_weight="1"
+                        android:text="@string/company_twitter"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/crunchbase"
+                        android:shadowColor="@android:color/transparent"
+                        android:background="@android:color/white"/>
+
+                <Button android:id="@+id/companyEmail"
+                        android:layout_width="0dp"
+                        android:layout_height="34sp"
+                        android:layout_weight="1"
+                        android:text="@string/company_email"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/crunchbase"
+                        android:shadowColor="@android:color/transparent"
+                        android:background="@android:color/white"/>
+
+            </LinearLayout>
+
             <TextView android:id="@+id/companyOverviewLabel"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
@@ -106,43 +158,12 @@
                       android:background="@color/crunchbase"
                       android:padding="4dp"/>
 
-            <com.github.zyro.crunchbase.util.ExpandablePanel
-                    android:id="@+id/companyOverviewHolder"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    panel:animationDuration="500"
-                    panel:collapsedHeight="75dp"
-                    panel:content="@+id/companyOverview"
-                    panel:handle="@+id/companyOverviewExpand">
-
-                <TextView android:id="@+id/companyOverviewEmpty"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:textColor="@android:color/black"
-                          android:text="@string/company_overview_empty"
-                          android:layout_centerInParent="true"/>
-
-                <TextView android:id="@id/companyOverview"
-                          android:layout_width="fill_parent"
-                          android:layout_height="wrap_content"
-                          android:padding="2dp"
-                          android:layout_alignParentTop="true"/>
-
-                <TextView android:id="@id/companyOverviewExpand"
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:layout_margin="2dp"
-                        android:text="@string/more"
-                        android:gravity="center"
-                        android:background="@color/crunchbase_light_pressed"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"/>
-
-            </com.github.zyro.crunchbase.util.ExpandablePanel>
+            <TextView android:id="@+id/companyOverview"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/company_overview_empty"
+                      android:gravity="center"
+                      android:padding="2dp"/>
 
             <TextView android:id="@+id/companyRawLabel"
                       android:layout_width="fill_parent"

@@ -51,6 +51,27 @@ public class FormatUtils {
     }
 
     /**
+     *
+     *
+     * @param text
+     * @return
+     */
+    public static CharSequence trim(final CharSequence text) {
+        int from = 0;
+        int to = text.length();
+
+        while(from < to && Character.isWhitespace(text.charAt(from))) {
+            from++;
+        }
+
+        while(to > from && Character.isWhitespace(text.charAt(to - 1))) {
+            to--;
+        }
+
+        return text.subSequence(from, to);
+    }
+
+    /**
      * Clean up the text by ensuring links are valid, process it as HTML, then
      * replace any known CrunchBase link URL spans with activity launcher spans.
      *

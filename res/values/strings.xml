@@ -52,6 +52,10 @@
     <string name="company_employees">Employees:\u0020</string>
     <string name="company_total_money">Total money raised:\u0020</string>
     <string name="company_presence">Presence</string>
+    <string name="company_crunchbase_url"><u>Crunchbase</u></string>
+    <string name="company_blog_url"><u>Blog</u></string>
+    <string name="company_twitter"><u>Twitter</u></string>
+    <string name="company_email"><u>Email</u></string>
     <string name="company_overview">Overview</string>
     <string name="company_overview_empty">No overview found.</string>
 </resources>
