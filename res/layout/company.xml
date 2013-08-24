@@ -161,11 +161,23 @@
             <TextView android:id="@+id/companyOverview"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
-                      android:text="@string/company_overview_empty"
-                      android:gravity="center"
                       android:padding="2dp"/>
 
-            <TextView android:id="@+id/companyRawLabel"
+            <TextView android:id="@+id/companyPeopleLabel"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/company_people"
+                      android:gravity="center"
+                      android:textColor="@android:color/white"
+                      android:background="@color/crunchbase"
+                      android:padding="4dp"/>
+
+            <LinearLayout android:id="@+id/companyPeopleHolder"
+                          android:orientation="vertical"
+                          android:layout_height="wrap_content"
+                          android:layout_width="fill_parent"/>
+
+            <!-- <TextView android:id="@+id/companyRawLabel"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:text="Raw Data"
@@ -203,7 +215,7 @@
                           android:layout_alignParentBottom="true"
                           android:layout_alignParentRight="true"/>
 
-            </com.github.zyro.crunchbase.util.ExpandablePanel>
+            </com.github.zyro.crunchbase.util.ExpandablePanel> -->
 
         </LinearLayout>
 

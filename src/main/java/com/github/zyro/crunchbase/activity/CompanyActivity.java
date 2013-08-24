@@ -5,13 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
+import com.github.zyro.crunchbase.entity.PersonShort;
+import com.github.zyro.crunchbase.entity.RelationshipToPerson;
 import com.github.zyro.crunchbase.service.ClientException;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.SwipeBackListener;
@@ -27,6 +27,9 @@ public class CompanyActivity extends BaseActivity {
 
     @ViewById(R.id.companyEmpty)
     protected TextView empty;
+
+    @SystemService
+    protected LayoutInflater layoutInflater;
 
     @Override
     public void onCreate(final Bundle saved) {
@@ -49,7 +52,22 @@ public class CompanyActivity extends BaseActivity {
         try {
             final Company company = apiClient.getCompany(permalink);
             if(company.getImage() != null) {
-                webClient.loadLargeImage(company.getImage());
+                webClient.loadImage(company.getImage(), company.getImage().getLargeAsset());
+            }
+            int count = 0;
+            for(final RelationshipToPerson relationship : company.getRelationships()) {
+                if(relationship.getIs_past()) {
+                    continue;
+                }
+
+                if(relationship.getPerson().getImage() != null) {
+                    webClient.loadImage(relationship.getPerson().getImage(),
+                            relationship.getPerson().getImage().getSmallAsset());
+                }
+                count++;
+                if(count >= 5) {
+                    break;
+                }
             }
             refreshCompanyDetailsDone(company);
         }
@@ -71,8 +89,10 @@ public class CompanyActivity extends BaseActivity {
     public void refreshCompanyDetailsDone(final Company company) {
         // Header
 
-        ((ImageView) findViewById(R.id.companyImage)).setImageBitmap(
-                company.getImage().getBitmap());
+        if(company.getImage() != null) {
+            ((ImageView) findViewById(R.id.companyImage)).setImageBitmap(
+                    company.getImage().getBitmap());
+        }
 
         ((TextView) findViewById(R.id.companyName)).setText(company.getName());
 
@@ -102,8 +122,8 @@ public class CompanyActivity extends BaseActivity {
 
         final Button companyCrunchbaseUrl = (Button) findViewById(R.id.companyCrunchbaseUrl);
         companyCrunchbaseUrl.setVisibility(company.getCrunchbase_url().isEmpty() ?
-                        TextView.GONE : TextView.VISIBLE);
-        if(companyCrunchbaseUrl.getVisibility() == TextView.VISIBLE) {
+                Button.GONE : Button.VISIBLE);
+        if(companyCrunchbaseUrl.getVisibility() == Button.VISIBLE) {
             companyCrunchbaseUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
@@ -115,8 +135,8 @@ public class CompanyActivity extends BaseActivity {
 
         final Button companyBlogUrl = (Button) findViewById(R.id.companyBlogUrl);
         companyBlogUrl.setVisibility(company.getBlog_url().isEmpty() ?
-                TextView.GONE : TextView.VISIBLE);
-        if(companyBlogUrl.getVisibility() == TextView.VISIBLE) {
+                Button.GONE : Button.VISIBLE);
+        if(companyBlogUrl.getVisibility() == Button.VISIBLE) {
             companyBlogUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
@@ -128,8 +148,8 @@ public class CompanyActivity extends BaseActivity {
 
         final Button companyTwitter = (Button) findViewById(R.id.companyTwitter);
         companyTwitter.setVisibility(company.getTwitter_username().isEmpty() ?
-                TextView.GONE : TextView.VISIBLE);
-        if(companyTwitter.getVisibility() == TextView.VISIBLE) {
+                Button.GONE : Button.VISIBLE);
+        if(companyTwitter.getVisibility() == Button.VISIBLE) {
             companyTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
@@ -141,8 +161,8 @@ public class CompanyActivity extends BaseActivity {
 
         final Button companyEmail = (Button) findViewById(R.id.companyEmail);
         companyEmail.setVisibility(company.getEmail_address().isEmpty() ?
-                TextView.GONE : TextView.VISIBLE);
-        if(companyEmail.getVisibility() == TextView.VISIBLE) {
+                Button.GONE : Button.VISIBLE);
+        if(companyEmail.getVisibility() == Button.VISIBLE) {
             companyEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
@@ -169,18 +189,55 @@ public class CompanyActivity extends BaseActivity {
         // Overview
 
         final TextView companyOverview = (TextView) findViewById(R.id.companyOverview);
-        companyOverview.setText(company.getOverview() == null || company.getOverview().trim().isEmpty() ?
-                getString(R.string.company_overview_empty) : FormatUtils.htmlLinkify(company.getOverview(), this));
-        if(getString(R.string.company_overview_empty).equals(companyOverview.getText())) {
-            companyOverview.setGravity(Gravity.CENTER);
+        if(company.getOverview().isEmpty()) {
+            companyOverview.setVisibility(TextView.GONE);
+            findViewById(R.id.companyOverviewLabel).setVisibility(TextView.GONE);
         }
         else {
-            companyOverview.setText(FormatUtils.trim(companyOverview.getText()));
-            companyOverview.setGravity(Gravity.NO_GRAVITY);
+            companyOverview.setText(FormatUtils.trim(FormatUtils.htmlLinkify(company.getOverview(), this)));
             companyOverview.setMovementMethod(LinkMovementMethod.getInstance());
+            companyOverview.setVisibility(TextView.VISIBLE);
+            findViewById(R.id.companyOverviewLabel).setVisibility(TextView.VISIBLE);
         }
 
-        ((TextView) findViewById(R.id.companyRaw)).setText(company.toString());
+        // People
+
+        final LinearLayout peopleHolder = (LinearLayout) findViewById(R.id.companyPeopleHolder);
+        peopleHolder.removeAllViews();
+        for(final RelationshipToPerson relationship : company.getRelationships()) {
+            if(relationship.getIs_past()) {
+                continue;
+            }
+
+            final PersonShort person = relationship.getPerson();
+            final View personItem = layoutInflater.inflate(R.layout.person_item, null);
+            ((TextView) personItem.findViewById(R.id.personName)).setText(
+                    person.getFirst_name() + " " + person.getLast_name());
+            ((TextView) personItem.findViewById(R.id.personTitle)).setText(
+                    relationship.getTitle());
+            if(person.getImage() != null) {
+                ((ImageView) personItem.findViewById(R.id.personImage)).setImageBitmap(
+                        person.getImage().getBitmap());
+            }
+            personItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    Toast.makeText(CompanyActivity.this, person.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            peopleHolder.addView(personItem);
+
+            // Limit the size of the key people list.
+            if(peopleHolder.getChildCount() >= 5) {
+                break;
+            }
+        }
+        peopleHolder.setVisibility(peopleHolder.getChildCount() > 0 ? LinearLayout.VISIBLE : LinearLayout.GONE);
+        findViewById(R.id.companyPeopleLabel).setVisibility(
+                peopleHolder.getChildCount() > 0 ? TextView.VISIBLE : TextView.GONE);
+
+        //((TextView) findViewById(R.id.companyRaw)).setText(company.toString());
 
         setProgressBarIndeterminateVisibility(false);
         invalidateOptionsMenu();

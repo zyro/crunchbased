@@ -118,11 +118,11 @@ public class WebClient {
         }
     }
 
-    /** Get the bitmap associated with the given Image's Large Asset. */
-    public void loadLargeImage(final Image image) throws ClientException {
+    /** Get the bitmap associated with the given Image's specified Asset. */
+    public void loadImage(final Image image, final String asset) throws ClientException {
         try {
             final HttpURLConnection connection = (HttpURLConnection) new URL(
-                    "http://www.crunchbase.com/" + image.getLargeAsset())
+                    "http://www.crunchbase.com/" + asset)
                     .openConnection();
             final InputStream in = new BufferedInputStream(
                     connection.getInputStream());
