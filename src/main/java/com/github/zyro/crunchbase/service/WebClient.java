@@ -11,6 +11,7 @@ import com.github.zyro.crunchbase.util.HomeData;
 import com.google.common.io.CharStreams;
 import com.googlecode.androidannotations.annotations.EBean;
 import com.googlecode.androidannotations.annotations.RootContext;
+import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
 import com.googlecode.androidannotations.api.Scope;
 import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
@@ -34,6 +35,10 @@ public class WebClient {
     /** Context used to look up strings. */
     @RootContext
     protected Context context;
+
+    /** Access to application preferences. */
+    @Pref
+    protected Preferences_ preferences;
 
     /** Get primary home page data elements. */
     public HomeData getHomeData() throws ClientException {
@@ -124,6 +129,10 @@ public class WebClient {
     public void loadImage(final String asset,
                           final AsyncImageLoadListener listener,
                           final ImageView intendedView) throws ClientException {
+        if(!preferences.loadImages().get()) {
+            return;
+        }
+
         try {
             final HttpURLConnection connection = (HttpURLConnection) new URL(
                     "http://www.crunchbase.com/" + asset)

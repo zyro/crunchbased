@@ -86,7 +86,6 @@ public abstract class BaseActivity extends FragmentActivity {
         switch(view.getId()) {
             case R.id.imagesSwitch:
                 preferences.loadImages().put(on);
-                Toast.makeText(this, "Images " + on, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cacheSwitch:
                 preferences.cacheEnabled().put(on);
