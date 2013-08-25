@@ -58,4 +58,17 @@
     <string name="company_email"><u>Email</u></string>
     <string name="company_overview">Overview</string>
     <string name="company_people">Key People</string>
+
+    <!-- Person activity strings -->
+    <string name="person_header">Person</string>
+    <string name="person_image">Person Image</string>
+    <string name="person_born">Born:\u0020</string>
+    <string name="person_affiliation">Affiliation:\u0020</string>
+    <string name="person_presence">Presence</string>
+    <string name="person_crunchbase_url"><u>Crunchbase</u></string>
+    <string name="person_blog_url"><u>Blog</u></string>
+    <string name="person_twitter"><u>Twitter</u></string>
+    <string name="person_facebook"><u>Facebook</u></string>
+    <string name="person_linkedin"><u>LinkedIn</u></string>
+    <string name="person_overview">Overview</string>
 </resources>

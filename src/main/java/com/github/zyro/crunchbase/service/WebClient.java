@@ -3,8 +3,10 @@ package com.github.zyro.crunchbase.service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.ImageView;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Image;
+import com.github.zyro.crunchbase.util.AsyncImageLoadListener;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.google.common.io.CharStreams;
 import com.googlecode.androidannotations.annotations.EBean;
@@ -119,7 +121,9 @@ public class WebClient {
     }
 
     /** Get the bitmap associated with the given Image's specified Asset. */
-    public void loadImage(final Image image, final String asset) throws ClientException {
+    public void loadImage(final String asset,
+                          final AsyncImageLoadListener listener,
+                          final ImageView intendedView) throws ClientException {
         try {
             final HttpURLConnection connection = (HttpURLConnection) new URL(
                     "http://www.crunchbase.com/" + asset)
@@ -130,7 +134,7 @@ public class WebClient {
             in.close();
             connection.disconnect();
 
-            image.setBitmap(bitmap);
+            listener.imageLoadComplete(bitmap, intendedView);
         }
         catch(final IOException e) {
             throw new ClientException(e);

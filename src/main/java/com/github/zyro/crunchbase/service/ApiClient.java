@@ -1,6 +1,7 @@
 package com.github.zyro.crunchbase.service;
 
 import com.github.zyro.crunchbase.entity.Company;
+import com.github.zyro.crunchbase.entity.Person;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.googlecode.androidannotations.annotations.EBean;
@@ -35,8 +36,16 @@ public class ApiClient {
         return gson.fromJson(response, Company.class);
     }
 
-    public String getPerson(final String permalink) throws ClientException {
-        return performGetRequest(permalink, "person");
+    /**
+     * Get from the remote API a person's data, identified by permalink.
+     *
+     * @param permalink The permalink String to get data for.
+     * @return The person's data as a Person object.
+     * @throws ClientException When there is a connection problem.
+     */
+    public Person getPerson(final String permalink) throws ClientException {
+        final String response = performGetRequest(permalink, "person");
+        return gson.fromJson(response, Person.class);
     }
 
     public String getFinancialOrganization(final String permalink)

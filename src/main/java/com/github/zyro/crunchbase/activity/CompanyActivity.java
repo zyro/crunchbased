@@ -1,6 +1,7 @@
 package com.github.zyro.crunchbase.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -10,17 +11,21 @@ import android.view.View;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
+import com.github.zyro.crunchbase.entity.Image;
 import com.github.zyro.crunchbase.entity.PersonShort;
 import com.github.zyro.crunchbase.entity.RelationshipToPerson;
 import com.github.zyro.crunchbase.service.ClientException;
+import com.github.zyro.crunchbase.util.AsyncImageLoadListener;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.SwipeBackListener;
 import com.googlecode.androidannotations.annotations.*;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.util.List;
 
 @EActivity(R.layout.company)
-public class CompanyActivity extends BaseActivity {
+public class CompanyActivity extends BaseActivity implements AsyncImageLoadListener {
 
     /** The permalink of the company being displayed. */
     protected String permalink;
@@ -34,8 +39,8 @@ public class CompanyActivity extends BaseActivity {
     @Override
     public void onCreate(final Bundle saved) {
         super.onCreate(saved);
-        Uri data = getIntent().getData();
-        List<String> params = data.getPathSegments();
+        final Uri data = getIntent().getData();
+        final List<String> params = data.getPathSegments();
         permalink = params.get(params.size() - 1);
     }
 
@@ -51,7 +56,7 @@ public class CompanyActivity extends BaseActivity {
         refreshCompanyDetailsStarted();
         try {
             final Company company = apiClient.getCompany(permalink);
-            if(company.getImage() != null) {
+            /*if(company.getImage() != null) {
                 webClient.loadImage(company.getImage(), company.getImage().getLargeAsset());
             }
             int count = 0;
@@ -68,7 +73,7 @@ public class CompanyActivity extends BaseActivity {
                 if(count >= 5) {
                     break;
                 }
-            }
+            }*/
             refreshCompanyDetailsDone(company);
         }
         catch(final ClientException e) {
@@ -90,8 +95,8 @@ public class CompanyActivity extends BaseActivity {
         // Header
 
         if(company.getImage() != null) {
-            ((ImageView) findViewById(R.id.companyImage)).setImageBitmap(
-                    company.getImage().getBitmap());
+            loadImage(company.getImage().getLargeAsset(),
+                    (ImageView) findViewById(R.id.companyImage));
         }
 
         ((TextView) findViewById(R.id.companyName)).setText(company.getName());
@@ -103,10 +108,7 @@ public class CompanyActivity extends BaseActivity {
 
         ((TextView) findViewById(R.id.companyFounded)).setText(
                 getString(R.string.company_founded) +
-                (company.getFounded_day() != null ? company.getFounded_day() + " " : "")  +
-                (company.getFounded_month() != null ?
-                        FormatUtils.monthNumberToName(company.getFounded_month()) + " " : "") +
-                (company.getFounded_year() != null ? company.getFounded_year() : getString(R.string.unknown)));
+                FormatUtils.extractDateFounded(company, getString(R.string.unknown)));
 
         ((TextView) findViewById(R.id.companyEmployees)).setText(
                 getString(R.string.company_employees) +
@@ -115,14 +117,13 @@ public class CompanyActivity extends BaseActivity {
 
         ((TextView) findViewById(R.id.companyTotalMoneyRaised)).setText(
                 getString(R.string.company_total_money) +
-                (company.getTotal_money_raised() != null ?
-                        company.getTotal_money_raised() : getString(R.string.unknown)));
+                (isBlank(company.getTotal_money_raised()) ?
+                        getString(R.string.unknown) : company.getTotal_money_raised()));
 
         // Presence
 
         final Button companyCrunchbaseUrl = (Button) findViewById(R.id.companyCrunchbaseUrl);
-        companyCrunchbaseUrl.setVisibility(company.getCrunchbase_url().isEmpty() ?
-                Button.GONE : Button.VISIBLE);
+        companyCrunchbaseUrl.setVisibility(isBlank(company.getCrunchbase_url()) ? Button.GONE : Button.VISIBLE);
         if(companyCrunchbaseUrl.getVisibility() == Button.VISIBLE) {
             companyCrunchbaseUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -134,8 +135,7 @@ public class CompanyActivity extends BaseActivity {
         }
 
         final Button companyBlogUrl = (Button) findViewById(R.id.companyBlogUrl);
-        companyBlogUrl.setVisibility(company.getBlog_url().isEmpty() ?
-                Button.GONE : Button.VISIBLE);
+        companyBlogUrl.setVisibility(isBlank(company.getBlog_url()) ? Button.GONE : Button.VISIBLE);
         if(companyBlogUrl.getVisibility() == Button.VISIBLE) {
             companyBlogUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -147,8 +147,7 @@ public class CompanyActivity extends BaseActivity {
         }
 
         final Button companyTwitter = (Button) findViewById(R.id.companyTwitter);
-        companyTwitter.setVisibility(company.getTwitter_username().isEmpty() ?
-                Button.GONE : Button.VISIBLE);
+        companyTwitter.setVisibility(isBlank(company.getTwitter_username()) ? Button.GONE : Button.VISIBLE);
         if(companyTwitter.getVisibility() == Button.VISIBLE) {
             companyTwitter.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -160,8 +159,7 @@ public class CompanyActivity extends BaseActivity {
         }
 
         final Button companyEmail = (Button) findViewById(R.id.companyEmail);
-        companyEmail.setVisibility(company.getEmail_address().isEmpty() ?
-                Button.GONE : Button.VISIBLE);
+        companyEmail.setVisibility(isBlank(company.getEmail_address()) ? Button.GONE : Button.VISIBLE);
         if(companyEmail.getVisibility() == Button.VISIBLE) {
             companyEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,24 +170,10 @@ public class CompanyActivity extends BaseActivity {
             });
         }
 
-        findViewById(R.id.companyPresenceLabel).setVisibility(
-                companyCrunchbaseUrl.getVisibility() == TextView.GONE &&
-                companyBlogUrl.getVisibility() == TextView.GONE &&
-                companyTwitter.getVisibility() == TextView.GONE &&
-                companyEmail.getVisibility() == TextView.GONE ?
-                        TextView.GONE : TextView.VISIBLE);
-
-        findViewById(R.id.companyPresenceHolder).setVisibility(
-                companyCrunchbaseUrl.getVisibility() == TextView.GONE &&
-                companyBlogUrl.getVisibility() == TextView.GONE &&
-                companyTwitter.getVisibility() == TextView.GONE &&
-                companyEmail.getVisibility() == TextView.GONE ?
-                        TextView.GONE : TextView.VISIBLE);
-
         // Overview
 
         final TextView companyOverview = (TextView) findViewById(R.id.companyOverview);
-        if(company.getOverview().isEmpty()) {
+        if(isBlank(company.getOverview())) {
             companyOverview.setVisibility(TextView.GONE);
             findViewById(R.id.companyOverviewLabel).setVisibility(TextView.GONE);
         }
@@ -216,13 +200,19 @@ public class CompanyActivity extends BaseActivity {
             ((TextView) personItem.findViewById(R.id.personTitle)).setText(
                     relationship.getTitle());
             if(person.getImage() != null) {
-                ((ImageView) personItem.findViewById(R.id.personImage)).setImageBitmap(
-                        person.getImage().getBitmap());
+                loadImage(person.getImage().getSmallAsset(),
+                        (ImageView) personItem.findViewById(R.id.personImage));
+                //((ImageView) personItem.findViewById(R.id.personImage)).setImageBitmap(
+                //        person.getImage().getBitmap());
             }
             personItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
-                    Toast.makeText(CompanyActivity.this, person.toString(), Toast.LENGTH_SHORT).show();
+                    final Intent intent = new Intent(CompanyActivity.this, PersonActivity_.class);
+                    intent.setData(Uri.parse("http://www.crunchbase.com/person/" +
+                            person.getPermalink()));
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                 }
             });
 
@@ -236,8 +226,6 @@ public class CompanyActivity extends BaseActivity {
         peopleHolder.setVisibility(peopleHolder.getChildCount() > 0 ? LinearLayout.VISIBLE : LinearLayout.GONE);
         findViewById(R.id.companyPeopleLabel).setVisibility(
                 peopleHolder.getChildCount() > 0 ? TextView.VISIBLE : TextView.GONE);
-
-        //((TextView) findViewById(R.id.companyRaw)).setText(company.toString());
 
         setProgressBarIndeterminateVisibility(false);
         invalidateOptionsMenu();
@@ -263,6 +251,22 @@ public class CompanyActivity extends BaseActivity {
     @OptionsItem(android.R.id.home)
     public void homeButton() {
         super.onBackPressed();
+    }
+
+    @Background
+    protected void loadImage(final String asset, final ImageView view) {
+        try {
+            webClient.loadImage(asset, this, view);
+        }
+        catch(final ClientException e) {} // TODO proper handling
+    }
+
+    @Override
+    @UiThread
+    public void imageLoadComplete(final Bitmap bitmap, final ImageView view) {
+        if(bitmap != null && view != null) {
+            view.setImageBitmap(bitmap);
+        }
     }
 
 }
