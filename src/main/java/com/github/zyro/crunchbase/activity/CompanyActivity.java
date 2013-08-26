@@ -1,7 +1,6 @@
 package com.github.zyro.crunchbase.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -11,11 +10,9 @@ import android.view.View;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
-import com.github.zyro.crunchbase.entity.Image;
 import com.github.zyro.crunchbase.entity.PersonShort;
 import com.github.zyro.crunchbase.entity.RelationshipToPerson;
 import com.github.zyro.crunchbase.service.ClientException;
-import com.github.zyro.crunchbase.util.AsyncImageLoadListener;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.SwipeBackListener;
 import com.googlecode.androidannotations.annotations.*;
@@ -25,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.util.List;
 
 @EActivity(R.layout.company)
-public class CompanyActivity extends BaseActivity implements AsyncImageLoadListener {
+public class CompanyActivity extends BaseActivity {
 
     /** The permalink of the company being displayed. */
     protected String permalink;
@@ -56,24 +53,6 @@ public class CompanyActivity extends BaseActivity implements AsyncImageLoadListe
         refreshCompanyDetailsStarted();
         try {
             final Company company = apiClient.getCompany(permalink);
-            /*if(company.getImage() != null) {
-                webClient.loadImage(company.getImage(), company.getImage().getLargeAsset());
-            }
-            int count = 0;
-            for(final RelationshipToPerson relationship : company.getRelationships()) {
-                if(relationship.getIs_past()) {
-                    continue;
-                }
-
-                if(relationship.getPerson().getImage() != null) {
-                    webClient.loadImage(relationship.getPerson().getImage(),
-                            relationship.getPerson().getImage().getSmallAsset());
-                }
-                count++;
-                if(count >= 5) {
-                    break;
-                }
-            }*/
             refreshCompanyDetailsDone(company);
         }
         catch(final ClientException e) {
@@ -202,8 +181,6 @@ public class CompanyActivity extends BaseActivity implements AsyncImageLoadListe
             if(person.getImage() != null) {
                 loadImage(person.getImage().getSmallAsset(),
                         (ImageView) personItem.findViewById(R.id.personImage));
-                //((ImageView) personItem.findViewById(R.id.personImage)).setImageBitmap(
-                //        person.getImage().getBitmap());
             }
             personItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -251,22 +228,6 @@ public class CompanyActivity extends BaseActivity implements AsyncImageLoadListe
     @OptionsItem(android.R.id.home)
     public void homeButton() {
         super.onBackPressed();
-    }
-
-    @Background
-    protected void loadImage(final String asset, final ImageView view) {
-        try {
-            webClient.loadImage(asset, this, view);
-        }
-        catch(final ClientException e) {} // TODO proper handling
-    }
-
-    @Override
-    @UiThread
-    public void imageLoadComplete(final Bitmap bitmap, final ImageView view) {
-        if(bitmap != null && view != null) {
-            view.setImageBitmap(bitmap);
-        }
     }
 
 }

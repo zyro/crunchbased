@@ -71,4 +71,5 @@
     <string name="person_facebook"><u>Facebook</u></string>
     <string name="person_linkedin"><u>LinkedIn</u></string>
     <string name="person_overview">Overview</string>
+    <string name="person_companies">Key Companies</string>
 </resources>

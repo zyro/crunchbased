@@ -1,6 +1,7 @@
 package com.github.zyro.crunchbase.activity;
 
 import android.app.AlertDialog;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -13,15 +14,17 @@ import android.view.Window;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.service.ApiClient;
+import com.github.zyro.crunchbase.service.ClientException;
 import com.github.zyro.crunchbase.service.Preferences_;
 import com.github.zyro.crunchbase.service.WebClient;
+import com.github.zyro.crunchbase.util.AsyncImageLoadListener;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 /** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
-public abstract class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends FragmentActivity implements AsyncImageLoadListener {
 
     /** Access to remote API request functions. */
     @Bean
@@ -132,6 +135,31 @@ public abstract class BaseActivity extends FragmentActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * Trigger an image fetching process with a required asset and target view
+     * it is intended to be displayed in. Disabling image loading through the
+     * preferences effectively makes this a no-op.
+     */
+    @Background
+    protected void loadImage(final String asset, final ImageView view) {
+        try {
+            webClient.loadImage(asset, this, view);
+        }
+        catch(final ClientException e) {} // TODO proper handling
+    }
+
+    /**
+     * After an image load is complete, this listener method is called to
+     * display the resulting bitmap using the UI thread.
+     */
+    @Override
+    @UiThread
+    public void imageLoadComplete(final Bitmap bitmap, final ImageView view) {
+        if(bitmap != null && view != null) {
+            view.setImageBitmap(bitmap);
+        }
     }
 
 }

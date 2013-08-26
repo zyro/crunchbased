@@ -1,7 +1,6 @@
 package com.github.zyro.crunchbase.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -11,7 +10,6 @@ import android.widget.*;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.*;
 import com.github.zyro.crunchbase.service.ClientException;
-import com.github.zyro.crunchbase.util.AsyncImageLoadListener;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.SwipeBackListener;
 import com.googlecode.androidannotations.annotations.*;
@@ -21,7 +19,7 @@ import java.util.List;
 import static org.apache.commons.lang3.StringUtils.*;
 
 @EActivity(R.layout.person)
-public class PersonActivity extends BaseActivity implements AsyncImageLoadListener {
+public class PersonActivity extends BaseActivity {
 
     /** The permalink of the person being displayed. */
     protected String permalink;
@@ -52,24 +50,6 @@ public class PersonActivity extends BaseActivity implements AsyncImageLoadListen
         refreshPersonDetailsStarted();
         try {
             final Person person = apiClient.getPerson(permalink);
-            /*if(person.getImage() != null) {
-                webClient.loadImage(person.getImage(), person.getImage().getLargeAsset());
-            }
-            int count = 0;
-            for(final RelationshipToPerson relationship : company.getRelationships()) {
-                if(relationship.getIs_past()) {
-                    continue;
-                }
-
-                if(relationship.getPerson().getImage() != null) {
-                    webClient.loadImage(relationship.getPerson().getImage(),
-                            relationship.getPerson().getImage().getSmallAsset());
-                }
-                count++;
-                if(count >= 5) {
-                    break;
-                }
-            }*/
             refreshPersonDetailsDone(person);
         }
         catch(final ClientException e) {
@@ -207,6 +187,53 @@ public class PersonActivity extends BaseActivity implements AsyncImageLoadListen
             findViewById(R.id.personOverviewLabel).setVisibility(TextView.VISIBLE);
         }
 
+        // Companies
+
+        final LinearLayout companiesHolder = (LinearLayout) findViewById(R.id.personCompaniesHolder);
+        companiesHolder.removeAllViews();
+        for(final RelationshipToFirm relationship : person.getRelationships()) {
+            final FirmShort firm = relationship.getFirm();
+            final View companyItem = layoutInflater.inflate(R.layout.company_item, null);
+            ((TextView) companyItem.findViewById(R.id.companyName)).setText(
+                    firm.getName());
+            ((TextView) companyItem.findViewById(R.id.personTitle)).setText(
+                    relationship.getTitle());
+            if(firm.getImage() != null) {
+                loadImage(firm.getImage().getSmallAsset(),
+                        (ImageView) companyItem.findViewById(R.id.companyImage));
+            }
+            if(firm.getType_of_entity().equals("company")) {
+                companyItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View view) {
+                        final Intent intent = new Intent(PersonActivity.this, CompanyActivity_.class);
+                        intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
+                                firm.getPermalink()));
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+                    }
+                });
+            }
+            else if(firm.getType_of_entity().equals("financial_org")) {
+                companyItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View view) {
+                        Toast.makeText(PersonActivity.this, relationship.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            companiesHolder.addView(companyItem);
+
+            // Limit the size of the key people list.
+            if(companiesHolder.getChildCount() >= 5) {
+                break;
+            }
+        }
+        companiesHolder.setVisibility(companiesHolder.getChildCount() > 0 ? LinearLayout.VISIBLE : LinearLayout.GONE);
+        findViewById(R.id.personCompaniesLabel).setVisibility(
+                companiesHolder.getChildCount() > 0 ? TextView.VISIBLE : TextView.GONE);
+
         setProgressBarIndeterminateVisibility(false);
         invalidateOptionsMenu();
 
@@ -231,22 +258,6 @@ public class PersonActivity extends BaseActivity implements AsyncImageLoadListen
     @OptionsItem(android.R.id.home)
     public void homeButton() {
         super.onBackPressed();
-    }
-
-    @Background
-    protected void loadImage(final String asset, final ImageView view) {
-        try {
-            webClient.loadImage(asset, this, view);
-        }
-        catch(final ClientException e) {} // TODO proper handling
-    }
-
-    @Override
-    @UiThread
-    public void imageLoadComplete(final Bitmap bitmap, final ImageView view) {
-        if(bitmap != null && view != null) {
-            view.setImageBitmap(bitmap);
-        }
     }
 
 }
