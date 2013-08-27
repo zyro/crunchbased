@@ -70,17 +70,17 @@
           android:background="@android:color/darker_gray"
           android:layout_below="@id/cacheClearItem"/>
 
-    <Button android:id="@+id/aboutItem"
+    <View android:layout_width="fill_parent"
+          android:layout_height="1dp"
+          android:background="@color/menu_text"
+          android:layout_above="@+id/aboutItem"/>
+
+    <Button android:id="@id/aboutItem"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/menu_aboutItem"
             android:textColor="@color/menu_text"
             android:background="@color/menu_background"
             android:layout_alignParentBottom="true"/>
-
-    <View android:layout_width="fill_parent"
-          android:layout_height="1dp"
-          android:background="@color/menu_text"
-          android:layout_above="@id/aboutItem"/>
 
 </RelativeLayout>

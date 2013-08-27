@@ -94,6 +94,7 @@ public abstract class BaseActivity extends FragmentActivity {
                 break;
             case R.id.cacheImagesSwitch:
                 preferences.cacheImages().put(on);
+                webClient.reloadConfiguration();
                 break;
             case R.id.cacheDataSwitch:
                 preferences.cacheData().put(on);

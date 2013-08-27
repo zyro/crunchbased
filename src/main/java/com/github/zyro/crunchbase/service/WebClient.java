@@ -40,14 +40,33 @@ public class WebClient {
     @Pref
     protected Preferences_ preferences;
 
+    /** Image loading and display options. */
+    protected DisplayImageOptions options;
+
     /** Initialise with correct settings. */
     @AfterInject
     protected void initState() {
+        // Configure image loading functions.
+        reloadConfiguration();
         final ImageLoaderConfiguration config =
                 new ImageLoaderConfiguration.Builder(context)
                         .discCacheSize(20 * 1024 * 1024)
                         .build();
         ImageLoader.getInstance().init(config);
+    }
+
+    /**
+     * Method to be called when some change has occurred in the application
+     * preferences and the web configuration should be reloaded as necessary.
+     */
+    public void reloadConfiguration() {
+        options = new DisplayImageOptions.Builder()
+                        .showStubImage(R.drawable.content_picture)
+                        .showImageForEmptyUri(R.drawable.content_picture)
+                        .showImageOnFail(R.drawable.content_picture)
+                        .displayer(new FadeInBitmapDisplayer(250))
+                        .cacheOnDisc(preferences.cacheImages().get())
+                        .build();
     }
 
     /** Get primary home page data elements. */
@@ -146,14 +165,6 @@ public class WebClient {
             return;
         }
 
-        final DisplayImageOptions options =
-                new DisplayImageOptions.Builder()
-                        .showStubImage(R.drawable.content_picture)
-                        .showImageForEmptyUri(R.drawable.content_picture)
-                        .showImageOnFail(R.drawable.content_picture)
-                        .displayer(new FadeInBitmapDisplayer(250))
-                        .cacheOnDisc(preferences.cacheImages().get())
-                        .build();
         ImageLoader.getInstance().displayImage(
                 "http://www.crunchbase.com/" + asset, view, options);
     }
