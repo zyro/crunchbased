@@ -38,7 +38,7 @@
                           android:layout_width="fill_parent">
 
                 <ImageView android:id="@+id/personImage"
-                           android:src="@drawable/social_person"
+                           android:src="@drawable/content_picture"
                            android:contentDescription="@string/company_image"
                            android:layout_height="110dp"
                            android:layout_width="110dp"

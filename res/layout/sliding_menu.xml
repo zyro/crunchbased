@@ -5,10 +5,10 @@
                 android:orientation="vertical"
                 android:background="@color/menu_background">
 
-    <Switch android:id="@+id/imagesSwitch"
+    <Switch android:id="@+id/loadImagesSwitch"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/menu_imagesSwitch"
+            android:text="@string/menu_loadImagesSwitch"
             android:textColor="@color/menu_text"
             android:padding="10dp"
             android:layout_alignParentTop="true"
@@ -20,12 +20,12 @@
           android:layout_width="fill_parent"
           android:layout_height="1dp"
           android:background="@android:color/darker_gray"
-          android:layout_below="@id/imagesSwitch"/>
+          android:layout_below="@id/loadImagesSwitch"/>
 
-    <Switch android:id="@+id/cacheSwitch"
+    <Switch android:id="@+id/cacheImagesSwitch"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/menu_cacheSwitch"
+            android:text="@string/menu_cacheImagesSwitch"
             android:textColor="@color/menu_text"
             android:padding="10dp"
             android:layout_below="@id/separator1"
@@ -37,7 +37,38 @@
           android:layout_width="fill_parent"
           android:layout_height="1dp"
           android:background="@android:color/darker_gray"
-          android:layout_below="@id/cacheSwitch"/>
+          android:layout_below="@id/cacheImagesSwitch"/>
+
+    <Switch android:id="@+id/cacheDataSwitch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_cacheDataSwitch"
+            android:textColor="@color/menu_text"
+            android:padding="10dp"
+            android:layout_below="@id/separator2"
+            android:onClick="onSwitchClicked"
+            android:thumb="@drawable/switch_inner"
+            android:track="@drawable/switch_track"/>
+
+    <View android:id="@+id/separator3"
+          android:layout_width="fill_parent"
+          android:layout_height="1dp"
+          android:background="@android:color/darker_gray"
+          android:layout_below="@id/cacheDataSwitch"/>
+
+    <Button android:id="@+id/cacheClearItem"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_cacheClearItem"
+            android:textColor="@color/menu_text"
+            android:background="@color/menu_background"
+            android:layout_below="@id/separator3"/>
+
+    <View android:id="@+id/separator4"
+          android:layout_width="fill_parent"
+          android:layout_height="1dp"
+          android:background="@android:color/darker_gray"
+          android:layout_below="@id/cacheClearItem"/>
 
     <Button android:id="@+id/aboutItem"
             android:layout_width="fill_parent"

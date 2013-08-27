@@ -6,7 +6,7 @@
               android:padding="1dp">
 
     <ImageView android:id="@+id/personImage"
-               android:src="@drawable/social_person"
+               android:src="@drawable/content_picture"
                android:contentDescription="@string/details_view"
                android:layout_height="55dp"
                android:layout_width="55dp"

@@ -1,7 +1,8 @@
 package com.github.zyro.crunchbase.activity;
 
 import android.app.AlertDialog;
-import android.graphics.Bitmap;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -14,17 +15,16 @@ import android.view.Window;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.service.ApiClient;
-import com.github.zyro.crunchbase.service.ClientException;
 import com.github.zyro.crunchbase.service.Preferences_;
 import com.github.zyro.crunchbase.service.WebClient;
-import com.github.zyro.crunchbase.util.AsyncImageLoadListener;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
-public abstract class BaseActivity extends FragmentActivity implements AsyncImageLoadListener {
+public abstract class BaseActivity extends FragmentActivity {
 
     /** Access to remote API request functions. */
     @Bean
@@ -71,10 +71,12 @@ public abstract class BaseActivity extends FragmentActivity implements AsyncImag
     @AfterViews
     public void initMenuState() {
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        ((Switch) findViewById(R.id.imagesSwitch))
+        ((Switch) findViewById(R.id.loadImagesSwitch))
                 .setChecked(preferences.loadImages().get());
-        ((Switch) findViewById(R.id.cacheSwitch))
-                .setChecked(preferences.cacheEnabled().get());
+        ((Switch) findViewById(R.id.cacheImagesSwitch))
+                .setChecked(preferences.cacheImages().get());
+        ((Switch) findViewById(R.id.cacheDataSwitch))
+                .setChecked(preferences.cacheData().get());
     }
 
     /** Listener for the action bar search button. */
@@ -87,14 +89,56 @@ public abstract class BaseActivity extends FragmentActivity implements AsyncImag
     public void onSwitchClicked(final View view) {
         final boolean on = ((Switch) view).isChecked();
         switch(view.getId()) {
-            case R.id.imagesSwitch:
+            case R.id.loadImagesSwitch:
                 preferences.loadImages().put(on);
                 break;
-            case R.id.cacheSwitch:
-                preferences.cacheEnabled().put(on);
-                Toast.makeText(this, "Cache " + on, Toast.LENGTH_SHORT).show();
+            case R.id.cacheImagesSwitch:
+                preferences.cacheImages().put(on);
+                break;
+            case R.id.cacheDataSwitch:
+                preferences.cacheData().put(on);
                 break;
         }
+    }
+
+    /** Listener for the sliding menu 'Clear cache' button. */
+    @Click(R.id.cacheClearItem)
+    public void cacheClearItem() {
+        if(slidingMenu.isMenuShowing()) {
+            slidingMenu.toggle();
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.menu_cacheClearItem)
+                .setMessage(R.string.clear_text)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        clearCacheStart();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .setCancelable(true).show();
+    }
+
+    @UiThread
+    protected void clearCacheStart() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.clearing_text));
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        clearCache(progressDialog);
+    }
+
+    @Background
+    protected void clearCache(final ProgressDialog progressDialog) {
+        ImageLoader.getInstance().clearDiscCache();
+        clearCacheDone(progressDialog);
+    }
+
+    @UiThread
+    protected void clearCacheDone(final ProgressDialog progressDialog) {
+        progressDialog.dismiss();
     }
 
     /** Listener for the sliding menu 'About' button. */
@@ -109,8 +153,8 @@ public abstract class BaseActivity extends FragmentActivity implements AsyncImag
         aboutView.setMovementMethod(LinkMovementMethod.getInstance());
         Linkify.addLinks(aboutView, Linkify.WEB_URLS);
         new AlertDialog.Builder(this).setView(aboutView)
-                .setNeutralButton(getString(R.string.about_dismiss), null)
-                .setTitle(getString(R.string.menu_aboutItem)).show();
+                .setNeutralButton(R.string.about_dismiss, null)
+                .setTitle(R.string.menu_aboutItem).show();
     }
 
     /** Back button listener. Close sliding menu if open, call super if not. */
@@ -135,31 +179,6 @@ public abstract class BaseActivity extends FragmentActivity implements AsyncImag
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    /**
-     * Trigger an image fetching process with a required asset and target view
-     * it is intended to be displayed in. Disabling image loading through the
-     * preferences effectively makes this a no-op.
-     */
-    @Background
-    protected void loadImage(final String asset, final ImageView view) {
-        try {
-            webClient.loadImage(asset, this, view);
-        }
-        catch(final ClientException e) {} // TODO proper handling
-    }
-
-    /**
-     * After an image load is complete, this listener method is called to
-     * display the resulting bitmap using the UI thread.
-     */
-    @Override
-    @UiThread
-    public void imageLoadComplete(final Bitmap bitmap, final ImageView view) {
-        if(bitmap != null && view != null) {
-            view.setImageBitmap(bitmap);
-        }
     }
 
 }

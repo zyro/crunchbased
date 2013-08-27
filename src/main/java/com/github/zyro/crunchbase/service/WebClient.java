@@ -1,18 +1,19 @@
 package com.github.zyro.crunchbase.service;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 import com.github.zyro.crunchbase.R;
-import com.github.zyro.crunchbase.entity.Image;
-import com.github.zyro.crunchbase.util.AsyncImageLoadListener;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.google.common.io.CharStreams;
+import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.EBean;
 import com.googlecode.androidannotations.annotations.RootContext;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
 import com.googlecode.androidannotations.api.Scope;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,7 +21,6 @@ import org.jsoup.nodes.Element;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -39,6 +39,16 @@ public class WebClient {
     /** Access to application preferences. */
     @Pref
     protected Preferences_ preferences;
+
+    /** Initialise with correct settings. */
+    @AfterInject
+    protected void initState() {
+        final ImageLoaderConfiguration config =
+                new ImageLoaderConfiguration.Builder(context)
+                        .discCacheSize(20 * 1024 * 1024)
+                        .build();
+        ImageLoader.getInstance().init(config);
+    }
 
     /** Get primary home page data elements. */
     public HomeData getHomeData() throws ClientException {
@@ -64,10 +74,11 @@ public class WebClient {
                     "trending-now").getElementsByTag("li")) {
                 final HomeData.Trending item = new HomeData.Trending();
 
-                final String[] link = elem.getElementsByTag("a").attr("href")
-                        .replace("http://www.crunchbase.com/", "").split("/");
-                item.setNamespace(link[0]);
-                item.setPermalink(link[1].replaceAll("[?].*", ""));
+                final String[] link = elem.getElementsByTag("a").first()
+                        .attr("href").replace("http://www.crunchbase.com/", "")
+                        .split("/");
+                item.setNamespace(link[link.length - 2]);
+                item.setPermalink(link[link.length - 1].replaceAll("[?].*", ""));
                 item.setPoints(elem.getElementsByTag("img").size());
                 item.setName(elem.getElementsByTag("a").text().trim().replace(
                         "\\u7684CrunchBase\\u7b80\\u4ecb", ""));
@@ -125,29 +136,26 @@ public class WebClient {
         }
     }
 
-    /** Get the bitmap associated with the given Image's specified Asset. */
-    public void loadImage(final String asset,
-                          final AsyncImageLoadListener listener,
-                          final ImageView intendedView) throws ClientException {
+    /**
+     * Trigger an image fetching process with a required asset and target view
+     * it is intended to be displayed in. Disabling image loading through the
+     * preferences effectively makes this a no-op.
+     */
+    public void loadImage(final String asset, final ImageView view) {
         if(!preferences.loadImages().get()) {
             return;
         }
 
-        try {
-            final HttpURLConnection connection = (HttpURLConnection) new URL(
-                    "http://www.crunchbase.com/" + asset)
-                    .openConnection();
-            final InputStream in = new BufferedInputStream(
-                    connection.getInputStream());
-            final Bitmap bitmap = BitmapFactory.decodeStream(in);
-            in.close();
-            connection.disconnect();
-
-            listener.imageLoadComplete(bitmap, intendedView);
-        }
-        catch(final IOException e) {
-            throw new ClientException(e);
-        }
+        final DisplayImageOptions options =
+                new DisplayImageOptions.Builder()
+                        .showStubImage(R.drawable.content_picture)
+                        .showImageForEmptyUri(R.drawable.content_picture)
+                        .showImageOnFail(R.drawable.content_picture)
+                        .displayer(new FadeInBitmapDisplayer(250))
+                        .cacheOnDisc(preferences.cacheImages().get())
+                        .build();
+        ImageLoader.getInstance().displayImage(
+                "http://www.crunchbase.com/" + asset, view, options);
     }
 
 }

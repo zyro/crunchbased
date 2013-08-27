@@ -71,7 +71,7 @@ public class PersonActivity extends BaseActivity {
         // Header
 
         if(person.getImage() != null) {
-            loadImage(person.getImage().getLargeAsset(),
+            webClient.loadImage(person.getImage().getLargeAsset(),
                     (ImageView) findViewById(R.id.personImage));
         }
 
@@ -199,7 +199,7 @@ public class PersonActivity extends BaseActivity {
             ((TextView) companyItem.findViewById(R.id.personTitle)).setText(
                     relationship.getTitle());
             if(firm.getImage() != null) {
-                loadImage(firm.getImage().getSmallAsset(),
+                webClient.loadImage(firm.getImage().getSmallAsset(),
                         (ImageView) companyItem.findViewById(R.id.companyImage));
             }
             if(firm.getType_of_entity().equals("company")) {

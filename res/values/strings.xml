@@ -9,17 +9,24 @@
     <string name="refreshing">Refreshing…</string>
     <string name="refreshed">Refreshed\u0020</string>
     <string name="refresh_failed">
-            Refresh failed. Check your connection, then try again.
+        Refresh failed. Check your connection, then try again.
     </string>
     <string name="no_items">Nothing found. Refresh to retry.</string>
     <string name="unknown">\u003F</string>
-    <!-- <string name="unknown">\u003C\u003C\u003Cunknown\u003E\u003E\u003E</string> -->
     <string name="more">More</string>
     <string name="less">Less</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
 
     <!-- Menu strings -->
-    <string name="menu_imagesSwitch">Fetch images</string>
-    <string name="menu_cacheSwitch">Enable caching</string>
+    <string name="menu_loadImagesSwitch">Fetch images</string>
+    <string name="menu_cacheImagesSwitch">Cache images</string>
+    <string name="menu_cacheDataSwitch">Cache data</string>
+    <string name="menu_cacheClearItem">Clear cache</string>
+    <string name="clear_text">
+        Are you sure you want to clear all cache data?
+    </string>
+    <string name="clearing_text">Clearing cache…</string>
     <string name="menu_aboutItem">About</string>
     <string name="about_dismiss">Dismiss</string>
     <string name="about_text">

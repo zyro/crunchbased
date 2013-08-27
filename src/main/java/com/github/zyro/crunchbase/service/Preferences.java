@@ -8,7 +8,10 @@ public interface Preferences {
     @DefaultBoolean(true)
     boolean loadImages();
 
-    @DefaultBoolean(false)
-    boolean cacheEnabled();
+    @DefaultBoolean(true)
+    boolean cacheImages();
+
+    @DefaultBoolean(true)
+    boolean cacheData();
 
 }
