@@ -7,13 +7,11 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import com.github.zyro.crunchbase.R;
-import lombok.AllArgsConstructor;
 
 /**
  * A span to replace URLSpan in a TextView to directly launch an activity rather
  * than allow the system to determine the best handler for the underlying link.
  */
-@AllArgsConstructor
 public class ActivityLauncherSpan extends ClickableSpan {
 
     /** The parent activity that launches the desired activity. */
@@ -24,6 +22,13 @@ public class ActivityLauncherSpan extends ClickableSpan {
 
     /** The launched activity class. */
     protected Class<? extends Activity> activityClass;
+
+    public ActivityLauncherSpan(final Activity parentActivity, final String url,
+                                final Class<? extends Activity> activityClass) {
+        this.parentActivity = parentActivity;
+        this.url = url;
+        this.activityClass = activityClass;
+    }
 
     /** Launch the specified activity when this span is clicked. */
     @Override

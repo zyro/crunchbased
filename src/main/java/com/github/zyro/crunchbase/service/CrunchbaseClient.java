@@ -12,7 +12,6 @@ import com.googlecode.androidannotations.annotations.RootContext;
 import com.googlecode.androidannotations.api.Scope;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @EBean(scope = Scope.Singleton)
-@NoArgsConstructor
 public class CrunchbaseClient {
 
     /** Application root context. */

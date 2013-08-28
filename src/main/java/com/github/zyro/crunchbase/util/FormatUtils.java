@@ -10,8 +10,6 @@ import com.github.zyro.crunchbase.activity.CompanyActivity_;
 import com.github.zyro.crunchbase.activity.PersonActivity_;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.Person;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.DateFormatSymbols;
@@ -19,8 +17,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /** Various static utility methods to format or convert miscellaneous data. */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FormatUtils {
+
+    /** Strictly a static class. */
+    private FormatUtils() {}
 
     // The date/time format to convert timestamps to.
     private static final SimpleDateFormat FORMAT =

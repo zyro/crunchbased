@@ -1,10 +1,12 @@
 package com.github.zyro.crunchbase.service;
 
-import lombok.NoArgsConstructor;
-
 /** Exception to indicate a problem has occurred while retrieving data. */
-@NoArgsConstructor
 public class ClientException extends Exception {
+
+    /** Initialise with no underlying cause. */
+    public ClientException() {
+        super();
+    }
 
     /**
      * Construct with a given cause.
