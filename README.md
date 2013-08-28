@@ -5,6 +5,8 @@ CrunchBase application for Android OS.
 
 Requirements to build and run:
 * Android 4.0.3 (API level 15) or above
-* [Jeremy Feinstein's SlidingMenu](https://github.com/jfeinstein10/SlidingMenu)
+* Support libraries
+* Add Android Annotations generated sources to the project source sets (in IDE such as Android Studio)
+All other dependencies are pulled in via th build system.
 
 Future plans include improving backward compatibility to allow the application to run on older versions of Android.
