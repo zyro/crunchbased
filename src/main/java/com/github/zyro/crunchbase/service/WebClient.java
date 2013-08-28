@@ -150,6 +150,9 @@ public class WebClient {
 
             return data;
         }
+        catch(final NullPointerException e) {
+            throw new ClientException(e);
+        }
         catch(final IOException e) {
             throw new ClientException(e);
         }
