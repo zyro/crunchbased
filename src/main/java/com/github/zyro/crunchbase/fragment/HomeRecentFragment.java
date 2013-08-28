@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.github.zyro.crunchbase.activity.CompanyActivity_;
 import com.github.zyro.crunchbase.activity.HomeActivity;
 import com.github.zyro.crunchbase.R;
-import com.github.zyro.crunchbase.service.WebClient;
+import com.github.zyro.crunchbase.service.CrunchbaseClient;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
 
@@ -24,9 +24,6 @@ public class HomeRecentFragment extends HomeFragment {
 
     @SystemService
     protected LayoutInflater inflater;
-
-    @Bean
-    protected WebClient webClient;
 
     protected Adapter adapter = new Adapter();
 

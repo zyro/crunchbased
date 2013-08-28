@@ -5,7 +5,7 @@
                 android:orientation="vertical"
                 android:background="@color/menu_background">
 
-    <Switch android:id="@+id/loadImagesSwitch"
+    <!-- <Switch android:id="@+id/loadImagesSwitch"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/menu_loadImagesSwitch"
@@ -81,6 +81,6 @@
             android:text="@string/menu_aboutItem"
             android:textColor="@color/menu_text"
             android:background="@color/menu_background"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"/> -->
 
 </RelativeLayout>

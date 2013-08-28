@@ -14,7 +14,6 @@ import com.github.zyro.crunchbase.activity.CompanyActivity_;
 import com.github.zyro.crunchbase.activity.HomeActivity;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.activity.PersonActivity_;
-import com.github.zyro.crunchbase.service.WebClient;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
 import org.apache.commons.lang3.text.WordUtils;
@@ -27,9 +26,6 @@ public class HomeTrendingFragment extends HomeFragment {
 
     @SystemService
     protected LayoutInflater inflater;
-
-    @Bean
-    protected WebClient webClient;
 
     protected Adapter adapter = new Adapter();
 

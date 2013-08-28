@@ -12,17 +12,17 @@ import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.PersonShort;
 import com.github.zyro.crunchbase.entity.RelationshipToPerson;
-import com.github.zyro.crunchbase.service.ClientException;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.SwipeBackListener;
 import com.googlecode.androidannotations.annotations.*;
+import com.koushikdutta.async.future.FutureCallback;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.List;
 
 @EActivity(R.layout.company)
-public class CompanyActivity extends BaseActivity {
+public class CompanyActivity extends BaseActivity implements FutureCallback<Company> {
 
     /** The permalink of the company being displayed. */
     protected String permalink;
@@ -51,13 +51,7 @@ public class CompanyActivity extends BaseActivity {
     @Background
     public void refreshCompanyDetails() {
         refreshCompanyDetailsStarted();
-        try {
-            final Company company = apiClient.getCompany(permalink);
-            refreshCompanyDetailsDone(company);
-        }
-        catch(final ClientException e) {
-            refreshCompanyDetailsFailed();
-        }
+        client.getCompany(permalink, this);
     }
 
     @UiThread
@@ -74,7 +68,7 @@ public class CompanyActivity extends BaseActivity {
         // Header
 
         if(company.getImage() != null) {
-            webClient.loadImage(company.getImage().getLargeAsset(),
+            client.loadImage(company.getImage().getLargeAsset(),
                     (ImageView) findViewById(R.id.companyImage));
         }
 
@@ -179,7 +173,7 @@ public class CompanyActivity extends BaseActivity {
             ((TextView) personItem.findViewById(R.id.personTitle)).setText(
                     relationship.getTitle());
             if(person.getImage() != null) {
-                webClient.loadImage(person.getImage().getSmallAsset(),
+                client.loadImage(person.getImage().getSmallAsset(),
                         (ImageView) personItem.findViewById(R.id.personImage));
             }
             personItem.setOnClickListener(new View.OnClickListener() {
@@ -230,4 +224,13 @@ public class CompanyActivity extends BaseActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public void onCompleted(final Exception e, final Company company) {
+        if(e == null) {
+            refreshCompanyDetailsDone(company);
+        }
+        else {
+            refreshCompanyDetailsFailed();
+        }
+    }
 }

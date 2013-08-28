@@ -9,17 +9,17 @@ import android.view.View;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.*;
-import com.github.zyro.crunchbase.service.ClientException;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.SwipeBackListener;
 import com.googlecode.androidannotations.annotations.*;
+import com.koushikdutta.async.future.FutureCallback;
 
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
 @EActivity(R.layout.person)
-public class PersonActivity extends BaseActivity {
+public class PersonActivity extends BaseActivity implements FutureCallback<Person> {
 
     /** The permalink of the person being displayed. */
     protected String permalink;
@@ -48,13 +48,7 @@ public class PersonActivity extends BaseActivity {
     @Background
     public void refreshPersonDetails() {
         refreshPersonDetailsStarted();
-        try {
-            final Person person = apiClient.getPerson(permalink);
-            refreshPersonDetailsDone(person);
-        }
-        catch(final ClientException e) {
-            refreshPersonDetailsFailed();
-        }
+        client.getPerson(permalink, this);
     }
 
     @UiThread
@@ -71,7 +65,7 @@ public class PersonActivity extends BaseActivity {
         // Header
 
         if(person.getImage() != null) {
-            webClient.loadImage(person.getImage().getLargeAsset(),
+            client.loadImage(person.getImage().getLargeAsset(),
                     (ImageView) findViewById(R.id.personImage));
         }
 
@@ -199,7 +193,7 @@ public class PersonActivity extends BaseActivity {
             ((TextView) companyItem.findViewById(R.id.personTitle)).setText(
                     relationship.getTitle());
             if(firm.getImage() != null) {
-                webClient.loadImage(firm.getImage().getSmallAsset(),
+                client.loadImage(firm.getImage().getSmallAsset(),
                         (ImageView) companyItem.findViewById(R.id.companyImage));
             }
             if(firm.getType_of_entity().equals("company")) {
@@ -260,4 +254,13 @@ public class PersonActivity extends BaseActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public void onCompleted(final Exception e, final Person person) {
+        if(e == null) {
+            refreshPersonDetailsDone(person);
+        }
+        else {
+            refreshPersonDetailsFailed();
+        }
+    }
 }

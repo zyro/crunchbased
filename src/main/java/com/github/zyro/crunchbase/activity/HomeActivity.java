@@ -31,6 +31,7 @@ public class HomeActivity extends BaseActivity {
     @AfterViews
     public void initState() {
         final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         adapter = new HomePagerAdapter(getSupportFragmentManager());
@@ -79,7 +80,7 @@ public class HomeActivity extends BaseActivity {
     public void refreshContents() {
         refreshContentsStarted();
         try {
-            final HomeData data = webClient.getHomeData();
+            final HomeData data = client.getHomeData();
             refreshContentsDone(data);
         }
         catch(final ClientException e) {
@@ -133,10 +134,10 @@ public class HomeActivity extends BaseActivity {
     }
 
     /** Home button handler. */
-    @OptionsItem(android.R.id.home)
+    /*@OptionsItem(android.R.id.home)
     public void homeButton() {
         slidingMenu.toggle();
-    }
+    }*/
 
     /** Adapter for tab fragments on the application home screen. */
     private class HomePagerAdapter extends FragmentPagerAdapter {

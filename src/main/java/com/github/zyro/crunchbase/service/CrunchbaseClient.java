@@ -3,83 +3,43 @@ package com.github.zyro.crunchbase.service;
 import android.content.Context;
 import android.widget.ImageView;
 import com.github.zyro.crunchbase.R;
+import com.github.zyro.crunchbase.entity.Company;
+import com.github.zyro.crunchbase.entity.Person;
 import com.github.zyro.crunchbase.util.HomeData;
-import com.google.common.io.CharStreams;
-import com.googlecode.androidannotations.annotations.AfterInject;
+import com.google.gson.reflect.TypeToken;
 import com.googlecode.androidannotations.annotations.EBean;
 import com.googlecode.androidannotations.annotations.RootContext;
-import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
 import com.googlecode.androidannotations.api.Scope;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-/** Functions to retrieve data from main site. */
 @EBean(scope = Scope.Singleton)
 @NoArgsConstructor
-public class WebClient {
+public class CrunchbaseClient {
 
-    /** Context used to look up strings. */
+    /** Application root context. */
     @RootContext
     protected Context context;
 
-    /** Access to application preferences. */
-    @Pref
-    protected Preferences_ preferences;
-
-    /** Image loading and display options. */
-    protected DisplayImageOptions options;
-
-    /** Initialise with correct settings. */
-    @AfterInject
-    protected void initState() {
-        // Configure image loading functions.
-        reloadConfiguration();
-        final ImageLoaderConfiguration config =
-                new ImageLoaderConfiguration.Builder(context)
-                        .discCacheSize(20 * 1024 * 1024)
-                        .build();
-        ImageLoader.getInstance().init(config);
-    }
-
-    /**
-     * Method to be called when some change has occurred in the application
-     * preferences and the web configuration should be reloaded as necessary.
-     */
-    public void reloadConfiguration() {
-        options = new DisplayImageOptions.Builder()
-                        .showStubImage(R.drawable.content_picture)
-                        .showImageForEmptyUri(R.drawable.content_picture)
-                        .showImageOnFail(R.drawable.content_picture)
-                        .displayer(new FadeInBitmapDisplayer(250))
-                        .cacheOnDisc(preferences.cacheImages().get())
-                        .build();
-    }
+    /** Crunchbase API key. */
+    protected static final String API_KEY = "api_key=9za7pzrvfch6quf3vgwp2dja";
 
     /** Get primary home page data elements. */
     public HomeData getHomeData() throws ClientException {
         try {
             // Open a connection and pull data.
-            final HttpURLConnection connection = (HttpURLConnection) new URL(
-                    "http://www.crunchbase.com/").openConnection();
-            final InputStreamReader in = new InputStreamReader(
-                    new BufferedInputStream(connection.getInputStream()));
-            final String response = CharStreams.toString(in);
-            in.close();
-            connection.disconnect();
+            final String response =
+                    Ion.with(context, "http://www.crunchbase.com/").asString().get();
 
             final HomeData data = new HomeData();
 
@@ -119,8 +79,8 @@ public class WebClient {
                 item.setSubtext(elem.getElementsByTag("strong").size() > 1 ?
                         elem.getElementsByTag("strong").last().text().trim() :
                         elem.getElementsByTag("span").size() > 0 ?
-                            elem.getElementsByTag("span").last().text().trim() :
-                            context.getString(R.string.unknown));
+                                elem.getElementsByTag("span").last().text().trim() :
+                                context.getString(R.string.unknown));
                 item.setFunds(elem.getElementsByClass("horizbar").text().trim());
 
                 recentItems.add(item);
@@ -140,8 +100,8 @@ public class WebClient {
                 item.setSubtext(elem.getElementsByTag("strong").size() > 1 ?
                         elem.getElementsByTag("strong").last().text().trim() :
                         elem.getElementsByTag("span").size() > 0 ?
-                            elem.getElementsByTag("span").last().text().trim() :
-                            context.getString(R.string.unknown));
+                                elem.getElementsByTag("span").last().text().trim() :
+                                context.getString(R.string.unknown));
                 item.setFunds(elem.getElementsByClass("horizbar").text().trim());
 
                 biggestItems.add(item);
@@ -153,7 +113,10 @@ public class WebClient {
         catch(final NullPointerException e) {
             throw new ClientException(e);
         }
-        catch(final IOException e) {
+        catch(final InterruptedException e) {
+            throw new ClientException(e);
+        }
+        catch(final ExecutionException e) {
             throw new ClientException(e);
         }
     }
@@ -164,12 +127,57 @@ public class WebClient {
      * preferences effectively makes this a no-op.
      */
     public void loadImage(final String asset, final ImageView view) {
-        if(!preferences.loadImages().get()) {
-            return;
-        }
+        //if(!preferences.loadImages().get()) {
+        //    return;
+        //}
 
-        ImageLoader.getInstance().displayImage(
-                "http://www.crunchbase.com/" + asset, view, options);
+        Ion.with(view).error(R.drawable.content_picture)
+                .load("http://www.crunchbase.com/" + asset);
+    }
+
+    /** */
+    public void getCompany(final String permalink,
+                           final FutureCallback<Company> callback) {
+        try {
+            Ion.with(context, "http://api.crunchbase.com/v/1/company/" +
+                    URLEncoder.encode(permalink.toLowerCase(), "UTF-8") +
+                    ".js?" + API_KEY)
+                .as(new TypeToken<Company>() {})
+                .setCallback(callback);
+        }
+        catch(final UnsupportedEncodingException e) {
+            callback.onCompleted(e, null);
+        }
+    }
+
+    /** */
+    public void getPerson(final String permalink,
+                          final FutureCallback<Person> callback) {
+        try {
+            Ion.with(context, "http://api.crunchbase.com/v/1/person/" +
+                        URLEncoder.encode(permalink.toLowerCase(), "UTF-8") +
+                        ".js?" + API_KEY)
+                    .as(new TypeToken<Person>(){})
+                    .setCallback(callback);
+        }
+        catch(final UnsupportedEncodingException e) {
+            callback.onCompleted(e, null);
+        }
+    }
+
+    public String getFinancialOrganization(final String permalink) {
+        throw new UnsupportedOperationException();
+        //return performGetRequest(permalink, "financial-organization");
+    }
+
+    public String getProduct(final String permalink) {
+        throw new UnsupportedOperationException();
+        //return performGetRequest(permalink, "product");
+    }
+
+    public String getServiceProvider(final String permalink) {
+        throw new UnsupportedOperationException();
+        //return performGetRequest(permalink, "service-provider");
     }
 
 }

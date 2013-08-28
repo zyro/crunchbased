@@ -1,45 +1,30 @@
 package com.github.zyro.crunchbase.activity;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
-import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.View;
 import android.view.Window;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
-import com.github.zyro.crunchbase.service.ApiClient;
+import com.github.zyro.crunchbase.service.CrunchbaseClient;
 import com.github.zyro.crunchbase.service.Preferences_;
-import com.github.zyro.crunchbase.service.WebClient;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 /** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
 public abstract class BaseActivity extends FragmentActivity {
 
-    /** Access to remote API request functions. */
+    /** Access to remote data. */
     @Bean
-    protected ApiClient apiClient;
-
-    /** Access to remote Web Page request functions. */
-    @Bean
-    protected WebClient webClient;
+    protected CrunchbaseClient client;
 
     /** Access to application preferences. */
     @Pref
     protected Preferences_ preferences;
 
     /** Reference to the sliding menu to bind open/close actions to. */
-    protected SlidingMenu slidingMenu;
+    //protected SlidingMenu slidingMenu;
 
     /** Reference to the options menu. Initialized when menu is inflated. */
     protected Menu menu;
@@ -50,13 +35,13 @@ public abstract class BaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
-        slidingMenu = new SlidingMenu(this);
+        /*slidingMenu = new SlidingMenu(this);
         slidingMenu.setMode(SlidingMenu.LEFT);
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
         slidingMenu.setBehindOffsetRes(R.dimen.layer_offset);
         slidingMenu.setFadeDegree(0.35f);
         slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
-        slidingMenu.setMenu(R.layout.sliding_menu);
+        slidingMenu.setMenu(R.layout.sliding_menu);*/
     }
 
     /** Create the options menu, store a reference to it for later use. */
@@ -71,12 +56,12 @@ public abstract class BaseActivity extends FragmentActivity {
     @AfterViews
     public void initMenuState() {
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        ((Switch) findViewById(R.id.loadImagesSwitch))
+        /*((Switch) findViewById(R.id.loadImagesSwitch))
                 .setChecked(preferences.loadImages().get());
         ((Switch) findViewById(R.id.cacheImagesSwitch))
                 .setChecked(preferences.cacheImages().get());
         ((Switch) findViewById(R.id.cacheDataSwitch))
-                .setChecked(preferences.cacheData().get());
+                .setChecked(preferences.cacheData().get());*/
     }
 
     /** Listener for the action bar search button. */
@@ -86,7 +71,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
     /** Listener for sliding menu Switch items. */
-    public void onSwitchClicked(final View view) {
+    /*public void onSwitchClicked(final View view) {
         final boolean on = ((Switch) view).isChecked();
         switch(view.getId()) {
             case R.id.loadImagesSwitch:
@@ -100,10 +85,10 @@ public abstract class BaseActivity extends FragmentActivity {
                 preferences.cacheData().put(on);
                 break;
         }
-    }
+    }*/
 
     /** Listener for the sliding menu 'Clear cache' button. */
-    @Click(R.id.cacheClearItem)
+    /*@Click(R.id.cacheClearItem)
     public void cacheClearItem() {
         if(slidingMenu.isMenuShowing()) {
             slidingMenu.toggle();
@@ -119,9 +104,9 @@ public abstract class BaseActivity extends FragmentActivity {
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .setCancelable(true).show();
-    }
+    }*/
 
-    @UiThread
+    /*@UiThread
     protected void clearCacheStart() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.clearing_text));
@@ -140,10 +125,10 @@ public abstract class BaseActivity extends FragmentActivity {
     @UiThread
     protected void clearCacheDone(final ProgressDialog progressDialog) {
         progressDialog.dismiss();
-    }
+    }*/
 
     /** Listener for the sliding menu 'About' button. */
-    @Click(R.id.aboutItem)
+    /*@Click(R.id.aboutItem)
     public void aboutItem() {
         if(slidingMenu.isMenuShowing()) {
             slidingMenu.toggle();
@@ -156,10 +141,10 @@ public abstract class BaseActivity extends FragmentActivity {
         new AlertDialog.Builder(this).setView(aboutView)
                 .setNeutralButton(R.string.about_dismiss, null)
                 .setTitle(R.string.menu_aboutItem).show();
-    }
+    }*/
 
     /** Back button listener. Close sliding menu if open, call super if not. */
-    @Override
+    /*@Override
     public void onBackPressed() {
         if(slidingMenu.isMenuShowing()) {
             slidingMenu.toggle();
@@ -170,16 +155,16 @@ public abstract class BaseActivity extends FragmentActivity {
             //    overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             //}
         }
-    }
+    }*/
 
     /** Key listener specifically for Menu button. Toggles the sliding menu. */
-    @Override
+    /*@Override
     public boolean onKeyDown(final int keyCode, final KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_MENU) {
             slidingMenu.toggle();
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
+    }*/
 
 }
