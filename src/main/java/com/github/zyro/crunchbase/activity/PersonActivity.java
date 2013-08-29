@@ -239,6 +239,9 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
     public void refreshFailed() {
         empty.setText(R.string.no_items);
         onRefreshCompleted();
+
+        Toast.makeText(this, getString(R.string.refresh_failed),
+                Toast.LENGTH_SHORT).show();
     }
 
     @OptionsItem(android.R.id.home)

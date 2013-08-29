@@ -107,10 +107,6 @@ public class HomeActivity extends BaseActivity {
         }
 
         onRefreshCompleted();
-
-        Toast.makeText(this, getString(R.string.refreshed) +
-                FormatUtils.formatTimestamp(System.currentTimeMillis()),
-                Toast.LENGTH_SHORT).show();
     }
 
     /** Refresh failed action. */
