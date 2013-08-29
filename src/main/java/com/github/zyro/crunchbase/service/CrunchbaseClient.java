@@ -129,7 +129,7 @@ public class CrunchbaseClient {
         //    return;
         //}
 
-        Ion.with(view).error(R.drawable.content_picture)
+        Ion.with(view).error(R.drawable.no_image_placeholder)
                 .load("http://www.crunchbase.com/" + asset);
     }
 
