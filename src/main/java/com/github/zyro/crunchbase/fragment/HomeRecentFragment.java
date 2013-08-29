@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.github.zyro.crunchbase.activity.CompanyActivity_;
 import com.github.zyro.crunchbase.activity.HomeActivity;
 import com.github.zyro.crunchbase.R;
-import com.github.zyro.crunchbase.service.CrunchbaseClient;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
 
@@ -40,7 +39,9 @@ public class HomeRecentFragment extends HomeFragment {
             activity = (HomeActivity) getActivity();
         }
 
-        ((ListView) activity.findViewById(R.id.recentList)).setAdapter(adapter);
+        final ListView list = (ListView) activity.findViewById(R.id.recentList);
+        list.setAdapter(adapter);
+        activity.addRefreshableView(list);
     }
 
     @Override

@@ -21,6 +21,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+
 @EActivity(R.layout.company)
 public class CompanyActivity extends BaseActivity implements FutureCallback<Company> {
 
@@ -43,28 +45,28 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
 
     @AfterViews
     public void initState() {
+        ((PullToRefreshLayout) findViewById(R.id.companyPtr))
+                .setPullToRefreshAttacher(attacher, this);
+
         findViewById(R.id.companyContents).setOnTouchListener(
                 new SwipeBackListener(this));
-        refreshCompanyDetails();
+        refreshButton();
     }
 
+    @Override
     @Background
-    public void refreshCompanyDetails() {
-        refreshCompanyDetailsStarted();
+    public void refresh() {
+        refreshStarted();
         client.getCompany(permalink, this);
     }
 
     @UiThread
-    public void refreshCompanyDetailsStarted() {
-        invalidateOptionsMenu();
-        menu.findItem(R.id.refreshButton).setVisible(false);
-        setProgressBarIndeterminateVisibility(true);
-
+    public void refreshStarted() {
         empty.setText(R.string.refreshing);
     }
 
     @UiThread
-    public void refreshCompanyDetailsDone(final Company company) {
+    public void refreshDone(final Company company) {
         // Header
 
         if(company.getImage() != null) {
@@ -198,25 +200,15 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
         findViewById(R.id.companyPeopleLabel).setVisibility(
                 peopleHolder.getChildCount() > 0 ? TextView.VISIBLE : TextView.GONE);
 
-        setProgressBarIndeterminateVisibility(false);
-        invalidateOptionsMenu();
-
         empty.setVisibility(View.GONE);
         findViewById(R.id.companyContents).setVisibility(View.VISIBLE);
+        onRefreshCompleted();
     }
 
     @UiThread
-    public void refreshCompanyDetailsFailed() {
-        invalidateOptionsMenu();
-        menu.findItem(R.id.refreshButton).setVisible(false);
-        setProgressBarIndeterminateVisibility(true);
-
+    public void refreshFailed() {
         empty.setText(R.string.no_items);
-    }
-
-    @OptionsItem(R.id.refreshButton)
-    public void refreshButton() {
-        refreshCompanyDetails();
+        onRefreshCompleted();
     }
 
     @OptionsItem(android.R.id.home)
@@ -227,10 +219,11 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
     @Override
     public void onCompleted(final Exception e, final Company company) {
         if(e == null) {
-            refreshCompanyDetailsDone(company);
+            refreshDone(company);
         }
         else {
-            refreshCompanyDetailsFailed();
+            refreshFailed();
         }
     }
+
 }

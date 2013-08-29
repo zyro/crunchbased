@@ -12,171 +12,179 @@
               android:textSize="18sp"
               android:layout_centerInParent="true"/>
 
-    <ScrollView android:id="@+id/personContents"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentTop="true"
-                android:background="@android:color/white"
-                android:visibility="gone">
+    <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/personPtr"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-        <LinearLayout android:orientation="vertical"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content">
+        <ScrollView android:id="@+id/personContents"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/white"
+                    android:visibility="gone">
 
-            <TextView android:id="@+id/personHeaderLabel"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:text="@string/person_header"
-                      android:gravity="center"
-                      android:textColor="@android:color/white"
-                      android:background="@color/crunchbase"
-                      android:padding="4dp"/>
+            <LinearLayout android:orientation="vertical"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content">
 
-            <LinearLayout android:id="@+id/personHeader"
-                          android:orientation="horizontal"
+                <TextView android:id="@+id/personHeaderLabel"
+                          android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
-                          android:layout_width="fill_parent">
+                          android:text="@string/person_header"
+                          android:gravity="center"
+                          android:textColor="@android:color/white"
+                          android:background="@color/crunchbase"
+                          android:padding="4dp"/>
 
-                <ImageView android:id="@+id/personImage"
-                           android:src="@drawable/no_image_placeholder"
-                           android:contentDescription="@string/company_image"
-                           android:layout_height="110dp"
-                           android:layout_width="110dp"
-                           android:padding="2dp"
-                           android:paddingRight="8dp"
-                           android:scaleType="centerInside"/>
-
-                <LinearLayout android:orientation="vertical"
+                <LinearLayout android:id="@+id/personHeader"
+                              android:orientation="horizontal"
                               android:layout_height="wrap_content"
-                              android:layout_width="fill_parent"
-                              android:padding="4dp"
-                              android:layout_gravity="center_vertical">
+                              android:layout_width="fill_parent">
 
-                    <TextView android:id="@+id/personName"
-                              android:layout_width="fill_parent"
-                              android:layout_height="wrap_content"
-                              android:textSize="15sp"
-                              android:paddingBottom="4dp"
-                              android:textColor="@android:color/black"/>
+                    <ImageView android:id="@+id/personImage"
+                               android:src="@drawable/no_image_placeholder"
+                               android:contentDescription="@string/person_image"
+                               android:layout_height="110dp"
+                               android:layout_width="110dp"
+                               android:padding="2dp"
+                               android:paddingRight="8dp"
+                               android:scaleType="centerInside"/>
 
-                    <TextView android:id="@+id/personBorn"
-                              android:layout_width="fill_parent"
-                              android:layout_height="wrap_content"
-                              android:textSize="12sp"
-                              android:textColor="@android:color/darker_gray"/>
+                    <LinearLayout android:orientation="vertical"
+                                  android:layout_height="wrap_content"
+                                  android:layout_width="fill_parent"
+                                  android:padding="4dp"
+                                  android:layout_gravity="center_vertical">
 
-                    <TextView android:id="@+id/personAffiliation"
-                              android:layout_width="fill_parent"
-                              android:layout_height="wrap_content"
-                              android:textSize="12sp"
-                              android:textColor="@android:color/darker_gray"/>
+                        <TextView android:id="@+id/personName"
+                                  android:layout_width="fill_parent"
+                                  android:layout_height="wrap_content"
+                                  android:textSize="15sp"
+                                  android:paddingBottom="4dp"
+                                  android:textColor="@android:color/black"/>
+
+                        <TextView android:id="@+id/personBorn"
+                                  android:layout_width="fill_parent"
+                                  android:layout_height="wrap_content"
+                                  android:textSize="12sp"
+                                  android:textColor="@android:color/darker_gray"/>
+
+                        <TextView android:id="@+id/personAffiliation"
+                                  android:layout_width="fill_parent"
+                                  android:layout_height="wrap_content"
+                                  android:textSize="12sp"
+                                  android:textColor="@android:color/darker_gray"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <TextView android:id="@+id/personPresenceLabel"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:text="@string/person_presence"
-                      android:gravity="center"
-                      android:textColor="@android:color/white"
-                      android:background="@color/crunchbase"
-                      android:padding="4dp"/>
-
-            <LinearLayout android:id="@+id/personPresenceHolder"
-                          android:orientation="horizontal"
-                          android:layout_height="wrap_content"
+                <TextView android:id="@+id/personPresenceLabel"
                           android:layout_width="fill_parent"
-                          android:layout_gravity="center_vertical">
+                          android:layout_height="wrap_content"
+                          android:text="@string/person_presence"
+                          android:gravity="center"
+                          android:textColor="@android:color/white"
+                          android:background="@color/crunchbase"
+                          android:padding="4dp"/>
 
-                <Button android:id="@+id/personCrunchbaseUrl"
-                        android:layout_width="0dp"
-                        android:layout_height="34sp"
-                        android:layout_weight="1"
-                        android:text="@string/person_crunchbase_url"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/crunchbase"
-                        android:shadowColor="@android:color/transparent"
-                        android:background="@android:color/white"/>
+                <LinearLayout android:id="@+id/personPresenceHolder"
+                              android:orientation="horizontal"
+                              android:layout_height="wrap_content"
+                              android:layout_width="fill_parent"
+                              android:layout_gravity="center_vertical">
 
-                <Button android:id="@+id/personBlogUrl"
-                        android:layout_width="0dp"
-                        android:layout_height="34sp"
-                        android:layout_weight="1"
-                        android:text="@string/person_blog_url"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/crunchbase"
-                        android:shadowColor="@android:color/transparent"
-                        android:background="@android:color/white"/>
+                    <Button android:id="@+id/personCrunchbaseUrl"
+                            android:layout_width="0dp"
+                            android:layout_height="34sp"
+                            android:layout_weight="1"
+                            android:text="@string/person_crunchbase_url"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/crunchbase"
+                            android:shadowColor="@android:color/transparent"
+                            android:background="@android:color/white"/>
 
-                <Button android:id="@+id/personTwitter"
-                        android:layout_width="0dp"
-                        android:layout_height="34sp"
-                        android:layout_weight="1"
-                        android:text="@string/person_twitter"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/crunchbase"
-                        android:shadowColor="@android:color/transparent"
-                        android:background="@android:color/white"/>
+                    <Button android:id="@+id/personBlogUrl"
+                            android:layout_width="0dp"
+                            android:layout_height="34sp"
+                            android:layout_weight="1"
+                            android:text="@string/person_blog_url"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/crunchbase"
+                            android:shadowColor="@android:color/transparent"
+                            android:background="@android:color/white"/>
 
-                <Button android:id="@+id/personFacebook"
-                        android:layout_width="0dp"
-                        android:layout_height="34sp"
-                        android:layout_weight="1"
-                        android:text="@string/person_facebook"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/crunchbase"
-                        android:shadowColor="@android:color/transparent"
-                        android:background="@android:color/white"/>
+                    <Button android:id="@+id/personTwitter"
+                            android:layout_width="0dp"
+                            android:layout_height="34sp"
+                            android:layout_weight="1"
+                            android:text="@string/person_twitter"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/crunchbase"
+                            android:shadowColor="@android:color/transparent"
+                            android:background="@android:color/white"/>
 
-                <Button android:id="@+id/personLinkedIn"
-                        android:layout_width="0dp"
-                        android:layout_height="34sp"
-                        android:layout_weight="1"
-                        android:text="@string/person_linkedin"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/crunchbase"
-                        android:shadowColor="@android:color/transparent"
-                        android:background="@android:color/white"/>
+                    <Button android:id="@+id/personFacebook"
+                            android:layout_width="0dp"
+                            android:layout_height="34sp"
+                            android:layout_weight="1"
+                            android:text="@string/person_facebook"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/crunchbase"
+                            android:shadowColor="@android:color/transparent"
+                            android:background="@android:color/white"/>
+
+                    <Button android:id="@+id/personLinkedIn"
+                            android:layout_width="0dp"
+                            android:layout_height="34sp"
+                            android:layout_weight="1"
+                            android:text="@string/person_linkedin"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/crunchbase"
+                            android:shadowColor="@android:color/transparent"
+                            android:background="@android:color/white"/>
+
+                </LinearLayout>
+
+                <TextView android:id="@+id/personOverviewLabel"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:text="@string/person_overview"
+                          android:gravity="center"
+                          android:textColor="@android:color/white"
+                          android:background="@color/crunchbase"
+                          android:padding="4dp"/>
+
+                <TextView android:id="@+id/personOverview"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:padding="2dp"/>
+
+                <TextView android:id="@+id/personCompaniesLabel"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:text="@string/person_companies"
+                          android:gravity="center"
+                          android:textColor="@android:color/white"
+                          android:background="@color/crunchbase"
+                          android:padding="4dp"/>
+
+                <LinearLayout android:id="@+id/personCompaniesHolder"
+                              android:orientation="vertical"
+                              android:layout_height="wrap_content"
+                              android:layout_width="fill_parent"/>
 
             </LinearLayout>
 
-            <TextView android:id="@+id/personOverviewLabel"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:text="@string/person_overview"
-                      android:gravity="center"
-                      android:textColor="@android:color/white"
-                      android:background="@color/crunchbase"
-                      android:padding="4dp"/>
+        </ScrollView>
 
-            <TextView android:id="@+id/personOverview"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:padding="2dp"/>
-
-            <TextView android:id="@+id/personCompaniesLabel"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:text="@string/person_companies"
-                      android:gravity="center"
-                      android:textColor="@android:color/white"
-                      android:background="@color/crunchbase"
-                      android:padding="4dp"/>
-
-            <LinearLayout android:id="@+id/personCompaniesHolder"
-                          android:orientation="vertical"
-                          android:layout_height="wrap_content"
-                          android:layout_width="fill_parent"/>
-
-        </LinearLayout>
-
-    </ScrollView>
+    </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
 
 </RelativeLayout>

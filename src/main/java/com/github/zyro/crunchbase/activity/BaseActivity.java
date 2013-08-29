@@ -3,17 +3,21 @@ package com.github.zyro.crunchbase.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
-import android.view.Window;
+import android.view.View;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.service.CrunchbaseClient;
 import com.github.zyro.crunchbase.service.Preferences_;
+import com.github.zyro.crunchbase.util.HeaderTransformer;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+
 /** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
-public abstract class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends FragmentActivity
+        implements PullToRefreshAttacher.OnRefreshListener{
 
     /** Access to remote data. */
     @Bean
@@ -23,8 +27,7 @@ public abstract class BaseActivity extends FragmentActivity {
     @Pref
     protected Preferences_ preferences;
 
-    /** Reference to the sliding menu to bind open/close actions to. */
-    //protected SlidingMenu slidingMenu;
+    protected PullToRefreshAttacher attacher;
 
     /** Reference to the options menu. Initialized when menu is inflated. */
     protected Menu menu;
@@ -33,15 +36,11 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
-        /*slidingMenu = new SlidingMenu(this);
-        slidingMenu.setMode(SlidingMenu.LEFT);
-        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
-        slidingMenu.setBehindOffsetRes(R.dimen.layer_offset);
-        slidingMenu.setFadeDegree(0.35f);
-        slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
-        slidingMenu.setMenu(R.layout.sliding_menu);*/
+        final PullToRefreshAttacher.Options options =
+                new PullToRefreshAttacher.Options();
+        options.headerTransformer = new HeaderTransformer();
+        attacher = PullToRefreshAttacher.get(this, options);
     }
 
     /** Create the options menu, store a reference to it for later use. */
@@ -64,107 +63,31 @@ public abstract class BaseActivity extends FragmentActivity {
                 .setChecked(preferences.cacheData().get());*/
     }
 
+    public void addRefreshableView(final View view) {
+        attacher.addRefreshableView(view, this);
+    }
+
+    @Override
+    public void onRefreshStarted(final View view) {
+        refreshButton();
+    }
+
+    public void onRefreshCompleted() {
+        attacher.setRefreshComplete();
+    }
+
+    public abstract void refresh();
+
+    @OptionsItem(R.id.refreshButton)
+    public void refreshButton() {
+        attacher.setRefreshing(true);
+        refresh();
+    }
+
     /** Listener for the action bar search button. */
     @OptionsItem(R.id.searchButton)
     public void searchButton() {
         Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
     }
-
-    /** Listener for sliding menu Switch items. */
-    /*public void onSwitchClicked(final View view) {
-        final boolean on = ((Switch) view).isChecked();
-        switch(view.getId()) {
-            case R.id.loadImagesSwitch:
-                preferences.loadImages().put(on);
-                break;
-            case R.id.cacheImagesSwitch:
-                preferences.cacheImages().put(on);
-                webClient.reloadConfiguration();
-                break;
-            case R.id.cacheDataSwitch:
-                preferences.cacheData().put(on);
-                break;
-        }
-    }*/
-
-    /** Listener for the sliding menu 'Clear cache' button. */
-    /*@Click(R.id.cacheClearItem)
-    public void cacheClearItem() {
-        if(slidingMenu.isMenuShowing()) {
-            slidingMenu.toggle();
-        }
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.menu_cacheClearItem)
-                .setMessage(R.string.clear_text)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        clearCacheStart();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .setCancelable(true).show();
-    }*/
-
-    /*@UiThread
-    protected void clearCacheStart() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.clearing_text));
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        clearCache(progressDialog);
-    }
-
-    @Background
-    protected void clearCache(final ProgressDialog progressDialog) {
-        ImageLoader.getInstance().clearDiscCache();
-        clearCacheDone(progressDialog);
-    }
-
-    @UiThread
-    protected void clearCacheDone(final ProgressDialog progressDialog) {
-        progressDialog.dismiss();
-    }*/
-
-    /** Listener for the sliding menu 'About' button. */
-    /*@Click(R.id.aboutItem)
-    public void aboutItem() {
-        if(slidingMenu.isMenuShowing()) {
-            slidingMenu.toggle();
-        }
-        final TextView aboutView = new TextView(this);
-        aboutView.setText(R.string.about_text);
-        aboutView.setHighlightColor(Color.alpha(0));
-        aboutView.setMovementMethod(LinkMovementMethod.getInstance());
-        Linkify.addLinks(aboutView, Linkify.WEB_URLS);
-        new AlertDialog.Builder(this).setView(aboutView)
-                .setNeutralButton(R.string.about_dismiss, null)
-                .setTitle(R.string.menu_aboutItem).show();
-    }*/
-
-    /** Back button listener. Close sliding menu if open, call super if not. */
-    /*@Override
-    public void onBackPressed() {
-        if(slidingMenu.isMenuShowing()) {
-            slidingMenu.toggle();
-        }
-        else {
-            super.onBackPressed();
-            //if(!isTaskRoot()) {
-            //    overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
-            //}
-        }
-    }*/
-
-    /** Key listener specifically for Menu button. Toggles the sliding menu. */
-    /*@Override
-    public boolean onKeyDown(final int keyCode, final KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_MENU) {
-            slidingMenu.toggle();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
 
 }

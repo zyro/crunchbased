@@ -16,6 +16,8 @@ import com.koushikdutta.async.future.FutureCallback;
 
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+
 import static org.apache.commons.lang3.StringUtils.*;
 
 @EActivity(R.layout.person)
@@ -40,28 +42,28 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
 
     @AfterViews
     public void initState() {
+        ((PullToRefreshLayout) findViewById(R.id.personPtr))
+                .setPullToRefreshAttacher(attacher, this);
+
         findViewById(R.id.personContents).setOnTouchListener(
                 new SwipeBackListener(this));
-        refreshPersonDetails();
+        refreshButton();
     }
 
+    @Override
     @Background
-    public void refreshPersonDetails() {
-        refreshPersonDetailsStarted();
+    public void refresh() {
+        refreshStarted();
         client.getPerson(permalink, this);
     }
 
     @UiThread
-    public void refreshPersonDetailsStarted() {
-        invalidateOptionsMenu();
-        menu.findItem(R.id.refreshButton).setVisible(false);
-        setProgressBarIndeterminateVisibility(true);
-
+    public void refreshStarted() {
         empty.setText(R.string.refreshing);
     }
 
     @UiThread
-    public void refreshPersonDetailsDone(final Person person) {
+    public void refreshDone(final Person person) {
         // Header
 
         if(person.getImage() != null) {
@@ -228,25 +230,15 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
         findViewById(R.id.personCompaniesLabel).setVisibility(
                 companiesHolder.getChildCount() > 0 ? TextView.VISIBLE : TextView.GONE);
 
-        setProgressBarIndeterminateVisibility(false);
-        invalidateOptionsMenu();
-
         empty.setVisibility(View.GONE);
         findViewById(R.id.personContents).setVisibility(View.VISIBLE);
+        onRefreshCompleted();
     }
 
     @UiThread
-    public void refreshPersonDetailsFailed() {
-        invalidateOptionsMenu();
-        menu.findItem(R.id.refreshButton).setVisible(false);
-        setProgressBarIndeterminateVisibility(true);
-
+    public void refreshFailed() {
         empty.setText(R.string.no_items);
-    }
-
-    @OptionsItem(R.id.refreshButton)
-    public void refreshButton() {
-        refreshPersonDetails();
+        onRefreshCompleted();
     }
 
     @OptionsItem(android.R.id.home)
@@ -257,10 +249,11 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
     @Override
     public void onCompleted(final Exception e, final Person person) {
         if(e == null) {
-            refreshPersonDetailsDone(person);
+            refreshDone(person);
         }
         else {
-            refreshPersonDetailsFailed();
+            refreshFailed();
         }
     }
+
 }

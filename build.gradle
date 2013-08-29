@@ -3,14 +3,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
+        classpath 'com.android.tools.build:gradle:0.5.6'
     }
 }
 
 apply plugin: 'android'
 apply plugin: 'idea'
-
-version = '1.0.0'
 
 idea {
     module {
@@ -18,7 +16,6 @@ idea {
         downloadSources = true
     }
 }
-
 
 repositories {
     mavenCentral()
@@ -28,33 +25,36 @@ configurations {
     apt
 }
 
-sourceSets {
-    main { compileClasspath += configurations.apt }
-}
-
 dependencies {
-    compile 'com.android.support:support-v4:18.0.+'
+    compile 'com.android.support:support-v4:18.0.0'
 
     apt 'com.googlecode.androidannotations:androidannotations:2.7.1'
     compile 'com.googlecode.androidannotations:androidannotations-api:2.7.1'
     
     compile 'com.koushikdutta.ion:ion:1.1.7'
+    compile 'com.github.chrisbanes.actionbarpulltorefresh:library:0.7.1'
     compile 'org.jsoup:jsoup:1.7.2'
     compile 'org.apache.commons:commons-lang3:3.1'
 }
 
 android {
-    compileSdkVersion 15
+    compileSdkVersion 18
     buildToolsVersion "18.0.1"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 15
+        targetSdkVersion 18
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'build/source/apt_generated']
+        }
     }
 }
 
 android.applicationVariants.all { variant ->
-    aptOutput = file("${project.buildDir}/source/apt_generated/${variant.dirName}")
+    aptOutput = file("${project.buildDir}/source/apt_generated")
     variant.javaCompile.doFirst {
         aptOutput.mkdirs()
         variant.javaCompile.options.compilerArgs += [
@@ -62,5 +62,6 @@ android.applicationVariants.all { variant ->
                 '-AandroidManifestFile=' + variant.processResources.manifestFile,
                 '-s', aptOutput
         ]
+        android.sourceSets.main.java.srcDirs = ['src']
     }
 }

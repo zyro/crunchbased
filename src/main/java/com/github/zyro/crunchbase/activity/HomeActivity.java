@@ -72,30 +72,27 @@ public class HomeActivity extends BaseActivity {
                 .setTabListener(tabListener);
         actionBar.addTab(biggestTab);
 
-        refreshContents();
+        refreshButton();
     }
 
     /** Begin a data refresh attempt. */
+    @Override
     @Background
-    public void refreshContents() {
-        refreshContentsStarted();
+    public void refresh() {
+        refreshStarted();
         try {
             final HomeData data = client.getHomeData();
-            refreshContentsDone(data);
+            refreshDone(data);
         }
         catch(final ClientException e) {
             Log.e("", "FAIL", e);
-            refreshContentsFailed();
+            refreshFailed();
         }
     }
 
     /** Refresh started action. */
     @UiThread
-    public void refreshContentsStarted() {
-        invalidateOptionsMenu();
-        menu.findItem(R.id.refreshButton).setVisible(false);
-        setProgressBarIndeterminateVisibility(true);
-
+    public void refreshStarted() {
         for(final HomeFragment fragment : adapter.getAll()) {
             fragment.refreshStarted();
         }
@@ -103,14 +100,13 @@ public class HomeActivity extends BaseActivity {
 
     /** Refresh complete action. */
     @UiThread
-    public void refreshContentsDone(final HomeData data) {
+    public void refreshDone(final HomeData data) {
         for(final HomeFragment fragment : adapter.getAll()) {
             fragment.refreshContents(data);
             fragment.refreshDone();
         }
 
-        setProgressBarIndeterminateVisibility(false);
-        invalidateOptionsMenu();
+        onRefreshCompleted();
 
         Toast.makeText(this, getString(R.string.refreshed) +
                 FormatUtils.formatTimestamp(System.currentTimeMillis()),
@@ -119,25 +115,12 @@ public class HomeActivity extends BaseActivity {
 
     /** Refresh failed action. */
     @UiThread
-    public void refreshContentsFailed() {
-        setProgressBarIndeterminateVisibility(false);
-        invalidateOptionsMenu();
+    public void refreshFailed() {
+        onRefreshCompleted();
 
         Toast.makeText(this, getString(R.string.refresh_failed),
                 Toast.LENGTH_SHORT).show();
     }
-
-    /** Refresh button handler. */
-    @OptionsItem(R.id.refreshButton)
-    public void refreshButton() {
-        refreshContents();
-    }
-
-    /** Home button handler. */
-    /*@OptionsItem(android.R.id.home)
-    public void homeButton() {
-        slidingMenu.toggle();
-    }*/
 
     /** Adapter for tab fragments on the application home screen. */
     private class HomePagerAdapter extends FragmentPagerAdapter {

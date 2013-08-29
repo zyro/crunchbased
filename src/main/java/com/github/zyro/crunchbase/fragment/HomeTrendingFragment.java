@@ -42,7 +42,9 @@ public class HomeTrendingFragment extends HomeFragment {
             activity = (HomeActivity) getActivity();
         }
 
-        ((ListView) activity.findViewById(R.id.trendingList)).setAdapter(adapter);
+        final ListView list = (ListView) activity.findViewById(R.id.trendingList);
+        list.setAdapter(adapter);
+        activity.addRefreshableView(list);
     }
 
     @Override
