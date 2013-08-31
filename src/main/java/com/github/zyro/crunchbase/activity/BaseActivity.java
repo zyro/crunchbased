@@ -2,7 +2,6 @@ package com.github.zyro.crunchbase.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.Menu;
 import android.view.View;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
@@ -16,6 +15,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
+@OptionsMenu(R.menu.actionbar_menu)
 public abstract class BaseActivity extends FragmentActivity
         implements PullToRefreshAttacher.OnRefreshListener{
 
@@ -29,9 +29,6 @@ public abstract class BaseActivity extends FragmentActivity
 
     protected PullToRefreshAttacher attacher;
 
-    /** Reference to the options menu. Initialized when menu is inflated. */
-    protected Menu menu;
-
     /** Request common window features, BaseActivity has no view of its own. */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -41,14 +38,6 @@ public abstract class BaseActivity extends FragmentActivity
                 new PullToRefreshAttacher.Options();
         options.headerTransformer = new HeaderTransformer();
         attacher = PullToRefreshAttacher.get(this, options);
-    }
-
-    /** Create the options menu, store a reference to it for later use. */
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
-        this.menu = menu;
-        return true;
     }
 
     /** Initialize the state of the options menu items based on stored prefs. */

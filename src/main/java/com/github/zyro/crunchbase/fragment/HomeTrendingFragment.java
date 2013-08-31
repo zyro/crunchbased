@@ -29,9 +29,6 @@ public class HomeTrendingFragment extends HomeFragment {
 
     protected Adapter adapter = new Adapter();
 
-    @ViewById(R.id.trendingEmpty)
-    protected TextView empty;
-
     protected HomeActivity activity;
 
     @Override
@@ -48,12 +45,7 @@ public class HomeTrendingFragment extends HomeFragment {
     }
 
     @Override
-    public void refreshStarted() {
-        if(empty != null) {
-            empty.setText(R.string.refreshing);
-            empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
-        }
-    }
+    public void refreshStarted() {}
 
     @Override
     public void refreshContents(final HomeData data) {
@@ -66,12 +58,7 @@ public class HomeTrendingFragment extends HomeFragment {
     }
 
     @Override
-    public void refreshDone() {
-        if(empty != null) {
-            empty.setText(R.string.no_items);
-            empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
-        }
-    }
+    public void refreshDone() {}
 
     @ItemClick(R.id.trendingList)
     public void handleTrendingListItemClick(final HomeData.Trending item) {

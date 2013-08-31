@@ -7,14 +7,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.github.zyro.crunchbase.fragment.HomeBiggestFragment_;
 import com.github.zyro.crunchbase.fragment.HomeRecentFragment_;
 import com.github.zyro.crunchbase.fragment.HomeTrendingFragment_;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.fragment.HomeFragment;
 import com.github.zyro.crunchbase.service.ClientException;
-import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
 
@@ -117,6 +117,7 @@ public class HomeActivity extends BaseActivity {
         for(final HomeFragment fragment : adapter.getAll()) {
             fragment.refreshStarted();
         }
+        RefreshMessage.hideRefreshFailed(this);
     }
 
     /** Refresh complete action. */
@@ -128,15 +129,14 @@ public class HomeActivity extends BaseActivity {
         }
 
         onRefreshCompleted();
+        RefreshMessage.hideRefreshFailed(this);
     }
 
     /** Refresh failed action. */
     @UiThread
     public void refreshFailed() {
         onRefreshCompleted();
-
-        Toast.makeText(this, getString(R.string.refresh_failed),
-                Toast.LENGTH_SHORT).show();
+        RefreshMessage.showRefreshFailed(this);
     }
 
     /** Adapter for tab fragments on the application home screen. */

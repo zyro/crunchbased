@@ -26,9 +26,6 @@ public class HomeRecentFragment extends HomeFragment {
 
     protected Adapter adapter = new Adapter();
 
-    @ViewById(R.id.recentEmpty)
-    protected TextView empty;
-
     protected HomeActivity activity;
 
     @Override
@@ -45,12 +42,7 @@ public class HomeRecentFragment extends HomeFragment {
     }
 
     @Override
-    public void refreshStarted() {
-        if(empty != null) {
-            empty.setText(R.string.refreshing);
-            empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
-        }
-    }
+    public void refreshStarted() {}
 
     @Override
     public void refreshContents(final HomeData data) {
@@ -63,12 +55,7 @@ public class HomeRecentFragment extends HomeFragment {
     }
 
     @Override
-    public void refreshDone() {
-        if(empty != null) {
-            empty.setText(R.string.no_items);
-            empty.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
-        }
-    }
+    public void refreshDone() {}
 
     @ItemClick(R.id.recentList)
     public void handleRecentListItemClick(final HomeData.Recent item) {

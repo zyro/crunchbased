@@ -4,14 +4,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
-    <TextView android:id="@+id/personEmpty"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:textColor="@android:color/black"
-              android:text="@string/refreshing"
-              android:textSize="18sp"
-              android:layout_centerInParent="true"/>
-
     <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
         android:id="@+id/personPtr"
         android:layout_width="fill_parent"

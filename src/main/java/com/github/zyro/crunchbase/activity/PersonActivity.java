@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
+import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.github.zyro.crunchbase.entity.*;
 import com.github.zyro.crunchbase.util.FormatUtils;
-import com.github.zyro.crunchbase.util.SwipeBackListener;
 import com.googlecode.androidannotations.annotations.*;
 import com.koushikdutta.async.future.FutureCallback;
 
@@ -23,14 +23,11 @@ import static org.apache.commons.lang3.StringUtils.*;
 @EActivity(R.layout.person)
 public class PersonActivity extends BaseActivity implements FutureCallback<Person> {
 
-    /** The permalink of the person being displayed. */
-    protected String permalink;
-
-    @ViewById(R.id.personEmpty)
-    protected TextView empty;
-
     @SystemService
     protected LayoutInflater layoutInflater;
+
+    /** The permalink of the person being displayed. */
+    protected String permalink;
 
     @Override
     public void onCreate(final Bundle saved) {
@@ -47,8 +44,8 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
         ((PullToRefreshLayout) findViewById(R.id.personPtr))
                 .setPullToRefreshAttacher(attacher, this);
 
-        findViewById(R.id.personContents).setOnTouchListener(
-                new SwipeBackListener(this));
+        //findViewById(R.id.personContents).setOnTouchListener(
+        //        new SwipeBackListener(this));
         refreshButton();
     }
 
@@ -61,7 +58,7 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
 
     @UiThread
     public void refreshStarted() {
-        empty.setText(R.string.refreshing);
+        RefreshMessage.hideRefreshFailed(this);
     }
 
     @UiThread
@@ -232,18 +229,15 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
         findViewById(R.id.personCompaniesLabel).setVisibility(
                 companiesHolder.getChildCount() > 0 ? TextView.VISIBLE : TextView.GONE);
 
-        empty.setVisibility(View.GONE);
         findViewById(R.id.personContents).setVisibility(View.VISIBLE);
         onRefreshCompleted();
+        RefreshMessage.hideRefreshFailed(this);
     }
 
     @UiThread
     public void refreshFailed() {
-        empty.setText(R.string.no_items);
         onRefreshCompleted();
-
-        Toast.makeText(this, getString(R.string.refresh_failed),
-                Toast.LENGTH_SHORT).show();
+        RefreshMessage.showRefreshFailed(this);
     }
 
     @OptionsItem(android.R.id.home)
