@@ -11,8 +11,7 @@
                android:layout_height="55dp"
                android:layout_width="55dp"
                android:layout_gravity="center"
-               android:scaleType="centerInside"
-               android:adjustViewBounds="true"/>
+               android:scaleType="centerInside"/>
 
     <LinearLayout android:orientation="vertical"
                   android:layout_height="wrap_content"

@@ -42,6 +42,8 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
 
     @AfterViews
     public void initState() {
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         ((PullToRefreshLayout) findViewById(R.id.personPtr))
                 .setPullToRefreshAttacher(attacher, this);
 

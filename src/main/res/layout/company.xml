@@ -29,14 +29,14 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content">
 
-                <TextView android:id="@+id/companyHeaderLabel"
+                <!-- <TextView android:id="@+id/companyHeaderLabel"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
                           android:text="@string/company_header"
                           android:gravity="center"
                           android:textColor="@android:color/white"
                           android:background="@color/crunchbase"
-                          android:padding="4dp"/>
+                          android:padding="4dp"/> -->
 
                 <LinearLayout android:id="@+id/companyHeader"
                               android:orientation="horizontal"
@@ -100,7 +100,7 @@
                           android:gravity="center"
                           android:textColor="@android:color/white"
                           android:background="@color/crunchbase"
-                          android:padding="4dp"/>
+                          android:padding="1dp"/>
 
                 <LinearLayout android:id="@+id/companyPresenceHolder"
                               android:orientation="horizontal"
@@ -113,7 +113,7 @@
                             android:layout_height="34sp"
                             android:layout_weight="1"
                             android:text="@string/company_crunchbase_url"
-                            android:textSize="15sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/crunchbase"
                             android:shadowColor="@android:color/transparent"
@@ -161,7 +161,7 @@
                           android:gravity="center"
                           android:textColor="@android:color/white"
                           android:background="@color/crunchbase"
-                          android:padding="4dp"/>
+                          android:padding="1dp"/>
 
                 <TextView android:id="@+id/companyOverview"
                           android:layout_width="fill_parent"
@@ -175,7 +175,7 @@
                           android:gravity="center"
                           android:textColor="@android:color/white"
                           android:background="@color/crunchbase"
-                          android:padding="4dp"/>
+                          android:padding="1dp"/>
 
                 <LinearLayout android:id="@+id/companyPeopleHolder"
                               android:orientation="vertical"

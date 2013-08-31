@@ -54,7 +54,8 @@ public abstract class BaseActivity extends FragmentActivity
     /** Initialize the state of the options menu items based on stored prefs. */
     @AfterViews
     public void initMenuState() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayShowTitleEnabled(false);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
         /*((Switch) findViewById(R.id.loadImagesSwitch))
                 .setChecked(preferences.loadImages().get());
         ((Switch) findViewById(R.id.cacheImagesSwitch))

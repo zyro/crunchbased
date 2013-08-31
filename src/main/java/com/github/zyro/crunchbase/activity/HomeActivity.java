@@ -2,6 +2,7 @@ package com.github.zyro.crunchbase.activity;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.res.Configuration;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,6 +18,7 @@ import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +29,31 @@ public class HomeActivity extends BaseActivity {
     /** Pager adapter for home page tabs. */
     protected HomePagerAdapter adapter;
 
+    /** Perform additional custom configuration. */
+    @Override
+    public void onConfigurationChanged(final Configuration config) {
+        super.onConfigurationChanged(config);
+        forceTabs();
+    }
+
+    /** Force tabs embedded in action bar regardless of screen orientation. */
+    public void forceTabs() {
+        try {
+            final ActionBar actionBar = getActionBar();
+            final Method setHasEmbeddedTabsMethod = actionBar.getClass()
+                    .getDeclaredMethod("setHasEmbeddedTabs", boolean.class);
+            setHasEmbeddedTabsMethod.setAccessible(true);
+            setHasEmbeddedTabsMethod.invoke(actionBar, true);
+        }
+        catch(final Exception e) {} // Don't care if it doesn't work.
+    }
+
     /** Initialize tabs and associated view pager. */
     @AfterViews
     public void initState() {
         final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        forceTabs();
 
         adapter = new HomePagerAdapter(getSupportFragmentManager());
 
