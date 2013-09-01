@@ -59,7 +59,7 @@ public class RefreshMessage {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
         view.startAnimation(AnimationUtils.loadAnimation(activity,
-                android.R.anim.fade_in));
+                R.anim.slide_top_in));
     }
 
     /**
@@ -71,7 +71,7 @@ public class RefreshMessage {
     protected static void removeMessage(final BaseActivity activity,
                                         final View view) {
         view.startAnimation(AnimationUtils.loadAnimation(activity,
-                android.R.anim.fade_out));
+                R.anim.slide_top_out));
         ((ViewGroup) view.getParent()).removeView(view);
     }
 

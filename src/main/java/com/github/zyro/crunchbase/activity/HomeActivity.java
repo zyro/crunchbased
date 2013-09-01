@@ -106,7 +106,7 @@ public class HomeActivity extends BaseActivity {
             refreshDone(data);
         }
         catch(final ClientException e) {
-            Log.e("", "FAIL", e);
+            Log.e("HomeData", "FAIL", e);
             refreshFailed();
         }
     }
