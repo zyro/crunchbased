@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.Person;
+import com.github.zyro.crunchbase.entity.Search;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.google.gson.reflect.TypeToken;
 import com.googlecode.androidannotations.annotations.EBean;
@@ -17,10 +18,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import static java.net.URLEncoder.encode;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @EBean(scope = Scope.Singleton)
 public class CrunchbaseClient {
@@ -146,8 +149,7 @@ public class CrunchbaseClient {
                            final FutureCallback<Company> callback) {
         try {
             Ion.with(context, "http://api.crunchbase.com/v/1/company/" +
-                    URLEncoder.encode(permalink.toLowerCase(), "UTF-8") +
-                    ".js?" + API_KEY)
+                    encode(permalink.toLowerCase(), "UTF-8") + ".js?" + API_KEY)
                 .as(new TypeToken<Company>() {})
                 .setCallback(callback);
         }
@@ -161,10 +163,9 @@ public class CrunchbaseClient {
                           final FutureCallback<Person> callback) {
         try {
             Ion.with(context, "http://api.crunchbase.com/v/1/person/" +
-                        URLEncoder.encode(permalink.toLowerCase(), "UTF-8") +
-                        ".js?" + API_KEY)
-                    .as(new TypeToken<Person>(){})
-                    .setCallback(callback);
+                    encode(permalink.toLowerCase(), "UTF-8") + ".js?" + API_KEY)
+                .as(new TypeToken<Person>(){})
+                .setCallback(callback);
         }
         catch(final UnsupportedEncodingException e) {
             callback.onCompleted(e, null);
@@ -184,6 +185,31 @@ public class CrunchbaseClient {
     public String getServiceProvider(final String permalink) {
         throw new UnsupportedOperationException();
         //return performGetRequest(permalink, "service-provider");
+    }
+
+    public void getSearchResults(final String query, final int page,
+                                 final String entity, final String field,
+                                 final FutureCallback<Search> callback) {
+        try {
+            String url = "http://api.crunchbase.com/v/1/search.js?query=" +
+                    encode(query.toLowerCase(), "UTF-8");
+            if(page > 1) {
+                url += "&page=" + page;
+            }
+            if(isNotBlank(entity)) {
+                url += "&entity=" + encode(entity.toLowerCase(), "UTF-8");
+            }
+            if(isNotBlank(field)) {
+                url += "&field=" + encode(field.toLowerCase(), "UTF-8");
+            }
+
+            Ion.with(context, url + "&" + API_KEY)
+                    .as(new TypeToken<Search>(){})
+                    .setCallback(callback);
+        }
+        catch(final UnsupportedEncodingException e) {
+            callback.onCompleted(e, null);
+        }
     }
 
 }
