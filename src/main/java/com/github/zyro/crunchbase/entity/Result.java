@@ -5,6 +5,8 @@ import java.util.List;
 public class Result {
 
     private String name;
+    private String first_name;
+    private String last_name;
     private String category_code;
     private String description;
     private String permalink;
@@ -21,6 +23,22 @@ public class Result {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getCategory_code() {
@@ -99,6 +117,8 @@ public class Result {
     public String toString() {
         return "Result{" +
                 "name='" + name + '\'' +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
                 ", category_code='" + category_code + '\'' +
                 ", description='" + description + '\'' +
                 ", permalink='" + permalink + '\'' +

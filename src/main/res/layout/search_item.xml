@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+
+    <ImageView android:id="@+id/searchImage"
+               android:src="@drawable/no_image_placeholder"
+               android:contentDescription="@string/details_view"
+               android:layout_height="70dp"
+               android:layout_width="70dp"
+               android:layout_gravity="center"
+               android:scaleType="centerInside"/>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_height="wrap_content"
+                  android:layout_width="0dp"
+                  android:layout_weight="9">
+
+        <TextView android:id="@+id/searchName"
+                  android:layout_width="wrap_content"
+                  android:layout_height="fill_parent"
+                  android:textColor="@android:color/black"
+                  android:textSize="18sp"
+                  android:paddingTop="5dp"
+                  android:paddingLeft="5dp"
+                  android:paddingBottom="2dp"/>
+
+        <TextView android:id="@+id/searchType"
+                  android:layout_width="wrap_content"
+                  android:layout_height="fill_parent"
+                  android:textColor="@android:color/darker_gray"
+                  android:textSize="15sp"
+                  android:paddingTop="2dp"
+                  android:paddingLeft="5dp"
+                  android:paddingBottom="5dp"/>
+
+    </LinearLayout>
+
+    <ImageView android:src="@drawable/navigation_next_item"
+               android:contentDescription="@string/details_view"
+               android:layout_height="wrap_content"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:layout_gravity="center"/>
+
+</LinearLayout>

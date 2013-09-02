@@ -68,6 +68,11 @@ public abstract class BaseActivity extends FragmentActivity
 
     public abstract void refresh();
 
+    @OptionsItem(android.R.id.home)
+    public void homeButton() {
+        super.onBackPressed();
+    }
+
     @OptionsItem(R.id.refreshButton)
     public void refreshButton() {
         attacher.setRefreshing(true);

@@ -240,11 +240,6 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
         RefreshMessage.showRefreshFailed(this);
     }
 
-    @OptionsItem(android.R.id.home)
-    public void homeButton() {
-        super.onBackPressed();
-    }
-
     @Override
     public void onCompleted(final Exception e, final Person person) {
         if(e == null) {

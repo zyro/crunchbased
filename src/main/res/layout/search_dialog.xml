@@ -18,7 +18,10 @@
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:padding="10dp">
+                  android:paddingTop="10dp"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:paddingBottom="4dp">
 
         <TextView android:id="@+id/searchEntityFilters"
                   android:layout_height="wrap_content"
@@ -39,7 +42,10 @@
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:padding="10dp">
+                  android:paddingTop="4dp"
+                  android:paddingLeft="10dp"
+                  android:paddingRight="10dp"
+                  android:paddingBottom="10dp">
 
         <TextView android:id="@+id/searchFieldFilters"
                   android:layout_height="wrap_content"

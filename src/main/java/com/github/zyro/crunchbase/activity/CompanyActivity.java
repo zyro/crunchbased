@@ -210,11 +210,6 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
         RefreshMessage.showRefreshFailed(this);
     }
 
-    @OptionsItem(android.R.id.home)
-    public void homeButton() {
-        super.onBackPressed();
-    }
-
     @Override
     public void onCompleted(final Exception e, final Company company) {
         if(e == null) {
