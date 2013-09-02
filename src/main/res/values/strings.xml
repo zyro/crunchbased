@@ -44,6 +44,27 @@
         \n
     </string>
 
+    <!-- Search dialog strings -->
+    <string name="search_title">Search</string>
+    <string name="search_hint">Enter a search term…</string>
+    <string name="search_entity_filters">Entity type:</string>
+    <string-array name="search_entity">
+        <item>All</item>
+        <item>Companies</item>
+        <item>People</item>
+        <item>Products</item>
+        <item>Financial Organizations</item>
+        <item>Providers</item>
+    </string-array>
+    <string name="search_field_filters">Field:</string>
+    <string-array name="search_field">
+        <item>All</item>
+        <item>Name</item>
+        <item>Overview</item>
+        <item>Homepage URL</item>
+        <item>Tag List</item>
+    </string-array>
+
     <!-- Home activity strings -->
     <string name="trending_header">Trending</string>
     <string name="recent_header">Recent</string>

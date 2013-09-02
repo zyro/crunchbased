@@ -1,9 +1,13 @@
 package com.github.zyro.crunchbase.activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
+import android.view.WindowManager;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.service.CrunchbaseClient;
 import com.github.zyro.crunchbase.service.Preferences_;
@@ -15,7 +19,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
-@OptionsMenu(R.menu.actionbar_menu)
+@OptionsMenu(R.menu.menu)
 public abstract class BaseActivity extends FragmentActivity
         implements PullToRefreshAttacher.OnRefreshListener{
 
@@ -77,7 +81,42 @@ public abstract class BaseActivity extends FragmentActivity
     /** Listener for the action bar search button. */
     @OptionsItem(R.id.searchButton)
     public void searchButton() {
-        Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+        final LayoutInflater inflater = (LayoutInflater)
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View view = inflater.inflate(R.layout.search_dialog, null);
+
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_action_search_dark)
+                .setTitle(R.string.search_title)
+                .setView(view)
+                .setPositiveButton(R.string.search,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog,
+                                                final int whichButton) {
+                                dialog.dismiss();
+                            }
+                })
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog,
+                                                final int whichButton) {
+                                dialog.dismiss();
+                            }
+                }).create();
+
+        view.findViewById(R.id.searchQuery).setOnFocusChangeListener(
+                new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(final View view,
+                                              final boolean hasFocus) {
+                        if(hasFocus) {
+                            dialog.getWindow().setSoftInputMode(WindowManager.
+                                LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        }
+                    }
+                });
+
+        dialog.show();
     }
 
 }
