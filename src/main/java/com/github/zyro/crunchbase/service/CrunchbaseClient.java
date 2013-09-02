@@ -32,7 +32,15 @@ public class CrunchbaseClient {
     /** Crunchbase API key. */
     protected static final String API_KEY = "api_key=9za7pzrvfch6quf3vgwp2dja";
 
-    /** Get primary home page data elements. */
+    /**
+     * Get primary home page data elements. Page scraping isn't pretty but the
+     * API does not provide any lookup functions that would constitute a decent
+     * application landing space.
+     *
+     * @return A HomeData instance containing current trending, recent and top.
+     * @throws ClientException when a failure occurs while retrieving the data
+     *         or parsing the response.
+     */
     public HomeData getHomeData() throws ClientException {
         try {
             // Open a connection and pull data.

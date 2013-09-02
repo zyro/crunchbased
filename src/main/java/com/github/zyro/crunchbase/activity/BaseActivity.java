@@ -50,11 +50,7 @@ public abstract class BaseActivity extends FragmentActivity
         getActionBar().setDisplayShowTitleEnabled(false);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         /*((Switch) findViewById(R.id.loadImagesSwitch))
-                .setChecked(preferences.loadImages().get());
-        ((Switch) findViewById(R.id.cacheImagesSwitch))
-                .setChecked(preferences.cacheImages().get());
-        ((Switch) findViewById(R.id.cacheDataSwitch))
-                .setChecked(preferences.cacheData().get());*/
+                .setChecked(preferences.loadImages().get());*/
     }
 
     public void addRefreshableView(final View view) {

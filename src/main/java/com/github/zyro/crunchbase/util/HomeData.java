@@ -2,7 +2,7 @@ package com.github.zyro.crunchbase.util;
 
 import java.util.List;
 
-/** Entity used to store home data. */
+/** Entity used to store home activity data. */
 public class HomeData {
 
     private List<Trending> trending;

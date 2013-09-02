@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item android:id="@+id/refreshButton"
           android:icon="@drawable/ic_action_refresh"
           android:title="@string/refresh"
           android:showAsAction="never"/>
+
     <item android:id="@+id/searchButton"
           android:icon="@drawable/ic_action_search"
           android:title="@string/search"
           android:showAsAction="ifRoom"/>
+
 </menu>
