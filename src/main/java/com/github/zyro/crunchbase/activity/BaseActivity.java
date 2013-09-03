@@ -3,17 +3,25 @@ package com.github.zyro.crunchbase.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.service.CrunchbaseClient;
 import com.github.zyro.crunchbase.service.Preferences_;
 import com.github.zyro.crunchbase.util.HeaderTransformer;
+import com.github.zyro.crunchbase.util.SearchDialog;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
+
+import org.apache.commons.lang3.StringUtils;
 
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
@@ -82,42 +90,7 @@ public abstract class BaseActivity extends FragmentActivity
     /** Listener for the action bar search button. */
     @OptionsItem(R.id.searchButton)
     public void searchButton() {
-        final LayoutInflater inflater = (LayoutInflater)
-                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View view = inflater.inflate(R.layout.search_dialog, null);
-
-        final AlertDialog dialog = new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_action_search_dark)
-                .setTitle(R.string.search_title)
-                .setView(view)
-                .setPositiveButton(R.string.search,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog,
-                                                final int whichButton) {
-                                dialog.dismiss();
-                            }
-                })
-                .setNegativeButton(R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog,
-                                                final int whichButton) {
-                                dialog.dismiss();
-                            }
-                }).create();
-
-        view.findViewById(R.id.searchQuery).setOnFocusChangeListener(
-                new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(final View view,
-                                              final boolean hasFocus) {
-                        if(hasFocus) {
-                            dialog.getWindow().setSoftInputMode(WindowManager.
-                                LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                        }
-                    }
-                });
-
-        dialog.show();
+        SearchDialog.showSearchDialog(this);
     }
 
 }

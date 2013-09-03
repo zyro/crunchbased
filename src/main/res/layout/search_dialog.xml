@@ -30,7 +30,7 @@
                   android:textSize="16sp"
                   android:text="@string/search_entity_filters"/>
 
-        <Spinner android:id="@+id/searchEntitySpinner"
+        <Spinner android:id="@+id/searchEntity"
                  android:layout_height="wrap_content"
                  android:layout_width="0dp"
                  android:layout_weight="2"
@@ -54,7 +54,7 @@
                   android:textSize="16sp"
                   android:text="@string/search_field_filters"/>
 
-        <Spinner android:id="@+id/searchFieldSpinner"
+        <Spinner android:id="@+id/searchField"
                  android:layout_height="wrap_content"
                  android:layout_width="0dp"
                  android:layout_weight="2"

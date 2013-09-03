@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="fill_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:padding="2dp">
 
     <ImageView android:id="@+id/searchImage"
                android:src="@drawable/no_image_placeholder"
@@ -15,13 +16,14 @@
     <LinearLayout android:orientation="vertical"
                   android:layout_height="wrap_content"
                   android:layout_width="0dp"
-                  android:layout_weight="9">
+                  android:layout_weight="9"
+                  android:layout_gravity="center">
 
         <TextView android:id="@+id/searchName"
                   android:layout_width="wrap_content"
                   android:layout_height="fill_parent"
                   android:textColor="@android:color/black"
-                  android:textSize="18sp"
+                  android:textSize="15sp"
                   android:paddingTop="5dp"
                   android:paddingLeft="5dp"
                   android:paddingBottom="2dp"/>
@@ -30,7 +32,7 @@
                   android:layout_width="wrap_content"
                   android:layout_height="fill_parent"
                   android:textColor="@android:color/darker_gray"
-                  android:textSize="15sp"
+                  android:textSize="12sp"
                   android:paddingTop="2dp"
                   android:paddingLeft="5dp"
                   android:paddingBottom="5dp"/>
