@@ -1,5 +1,7 @@
 package com.github.zyro.crunchbase.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,14 +10,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Result;
 import com.github.zyro.crunchbase.entity.Search;
+import com.github.zyro.crunchbase.util.HomeData;
+import com.github.zyro.crunchbase.util.LoadMoreListener;
+import com.github.zyro.crunchbase.util.LoadMoreScrollListener;
 import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.ItemClick;
 import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.koushikdutta.async.future.FutureCallback;
@@ -26,7 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EActivity(R.layout.search)
-public class SearchActivity extends BaseActivity implements FutureCallback<Search> {
+public class SearchActivity extends BaseActivity
+        implements FutureCallback<Search>, LoadMoreListener {
 
     @SystemService
     protected LayoutInflater inflater;
@@ -44,6 +52,10 @@ public class SearchActivity extends BaseActivity implements FutureCallback<Searc
 
     /** The currently visible page. */
     protected int page = 0;
+
+    protected int results = 0;
+
+    protected boolean loading = false;
 
     @Override
     public void onCreate(final Bundle saved) {
@@ -98,6 +110,7 @@ public class SearchActivity extends BaseActivity implements FutureCallback<Searc
 
         final ListView list = (ListView) findViewById(R.id.searchList);
         list.setAdapter(adapter);
+        list.setOnScrollListener(new LoadMoreScrollListener(this));
         addRefreshableView(list);
         //((PullToRefreshLayout) findViewById(R.id.companyPtr))
         //        .setPullToRefreshAttacher(attacher, this);
@@ -116,6 +129,7 @@ public class SearchActivity extends BaseActivity implements FutureCallback<Searc
 
     @UiThread
     public void refreshStarted() {
+        loading = true;
         RefreshMessage.hideRefreshFailed(this);
     }
 
@@ -126,17 +140,20 @@ public class SearchActivity extends BaseActivity implements FutureCallback<Searc
         }
 
         page = search.getPage();
+        results = search.getTotal();
 
         for(final Result item : search.getResults()) {
             adapter.addItem(item);
         }
 
+        loading = false;
         onRefreshCompleted();
         RefreshMessage.hideRefreshFailed(this);
     }
 
     @UiThread
     public void refreshFailed() {
+        loading = false;
         onRefreshCompleted();
         RefreshMessage.showRefreshFailed(this);
     }
@@ -148,6 +165,36 @@ public class SearchActivity extends BaseActivity implements FutureCallback<Searc
         }
         else {
             refreshFailed();
+        }
+    }
+
+    @Override
+    public void loadMore() {
+        if(!loading && results / 10.0 > page) {
+            loading = true;
+            attacher.setRefreshing(true);
+            client.getSearchResults(query, page + 1, entity, field, this);
+        }
+    }
+
+    @ItemClick(R.id.searchList)
+    public void handleTrendingListItemClick(final Result item) {
+        if(item.getNamespace().equals("company")) {
+            final Intent intent = new Intent(this, CompanyActivity_.class);
+            intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
+                    item.getPermalink()));
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        }
+        else if(item.getNamespace().equals("person")) {
+            final Intent intent = new Intent(this, PersonActivity_.class);
+            intent.setData(Uri.parse("http://www.crunchbase.com/person/" +
+                    item.getPermalink()));
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        }
+        else {
+            Toast.makeText(this, item.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -183,12 +230,18 @@ public class SearchActivity extends BaseActivity implements FutureCallback<Searc
             final Result item = getItem(position);
 
             ((TextView) conView.findViewById(R.id.searchName)).setText(
-                    item.getName());
+                    "person".equalsIgnoreCase(item.getNamespace()) ?
+                            item.getFirst_name() + " " + item.getLast_name() :
+                            item.getName());
             ((TextView) conView.findViewById(R.id.searchType)).setText(
                     WordUtils.capitalize(item.getNamespace().replace("-", " ")));
             if(item.getImage() != null) {
                 client.loadImage(item.getImage().getMediumAsset(),
                         (ImageView) conView.findViewById(R.id.searchImage));
+            }
+            else {
+                ((ImageView) conView.findViewById(R.id.searchImage))
+                        .setImageResource(R.drawable.no_image_placeholder);
             }
 
             return conView;
