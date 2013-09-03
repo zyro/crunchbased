@@ -1,17 +1,8 @@
 package com.github.zyro.crunchbase.activity;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.service.CrunchbaseClient;
@@ -20,8 +11,6 @@ import com.github.zyro.crunchbase.util.HeaderTransformer;
 import com.github.zyro.crunchbase.util.SearchDialog;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
-
-import org.apache.commons.lang3.StringUtils;
 
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
