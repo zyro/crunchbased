@@ -46,7 +46,7 @@
 
     <!-- Search dialog strings -->
     <string name="search_title">Search</string>
-    <string name="search_hint">Enter a search term…</string>
+    <string name="search_hint">I\'m looking for…</string>
     <string name="search_entity_filters">Entity type:</string>
     <string-array name="search_entity">
         <item>All</item>

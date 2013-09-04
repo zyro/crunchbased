@@ -163,7 +163,7 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
         final LinearLayout peopleHolder = (LinearLayout) findViewById(R.id.companyPeopleHolder);
         peopleHolder.removeAllViews();
         for(final RelationshipToPerson relationship : company.getRelationships()) {
-            if(relationship.getIs_past()) {
+            if(relationship.getIs_past() != null && relationship.getIs_past()) {
                 continue;
             }
 
