@@ -65,6 +65,11 @@
         <item>Tag List</item>
     </string-array>
 
+    <!-- Search activity strings -->
+    <string name="search_loading_more">Loading more…</string>
+    <string name="search_no_more">No more results.</string>
+    <string name="search_retry">Failed to get next page. Tap to retry.</string>
+
     <!-- Home activity strings -->
     <string name="trending_header">Trending</string>
     <string name="recent_header">Recent</string>

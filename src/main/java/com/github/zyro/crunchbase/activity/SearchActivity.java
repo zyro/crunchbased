@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Result;
 import com.github.zyro.crunchbase.entity.Search;
-import com.github.zyro.crunchbase.util.HomeData;
 import com.github.zyro.crunchbase.util.LoadMoreListener;
 import com.github.zyro.crunchbase.util.LoadMoreScrollListener;
 import com.github.zyro.crunchbase.util.RefreshMessage;
@@ -56,6 +55,7 @@ public class SearchActivity extends BaseActivity
     protected int results = 0;
 
     protected boolean loading = false;
+    protected View footer;
 
     @Override
     public void onCreate(final Bundle saved) {
@@ -108,7 +108,10 @@ public class SearchActivity extends BaseActivity
     public void initState() {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        footer = inflater.inflate(R.layout.search_footer, null);
+
         final ListView list = (ListView) findViewById(R.id.searchList);
+        list.addFooterView(footer);
         list.setAdapter(adapter);
         list.setOnScrollListener(new LoadMoreScrollListener(this));
         addRefreshableView(list);
@@ -131,6 +134,7 @@ public class SearchActivity extends BaseActivity
     public void refreshStarted() {
         loading = true;
         RefreshMessage.hideRefreshFailed(this);
+        attacher.setRefreshing(true);
     }
 
     @UiThread
@@ -169,10 +173,10 @@ public class SearchActivity extends BaseActivity
     }
 
     @Override
+    @Background
     public void loadMore() {
         if(!loading && results / 10.0 > page) {
-            loading = true;
-            attacher.setRefreshing(true);
+            refreshStarted();
             client.getSearchResults(query, page + 1, entity, field, this);
         }
     }

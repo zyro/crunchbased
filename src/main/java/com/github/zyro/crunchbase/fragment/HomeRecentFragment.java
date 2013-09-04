@@ -113,7 +113,7 @@ public class HomeRecentFragment extends HomeFragment {
             return data.size();
         }
 
-        /** Get an item at a specific position*/
+        /** Get an item at a specific position. */
         @Override
         public HomeData.Recent getItem(final int position) {
             return data.get(position);
