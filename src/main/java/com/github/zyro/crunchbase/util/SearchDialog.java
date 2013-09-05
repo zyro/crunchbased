@@ -35,8 +35,8 @@ public class SearchDialog {
         final View view = inflater.inflate(R.layout.search_dialog, null);
 
         final AlertDialog dialog = new AlertDialog.Builder(activity)
-                .setIcon(R.drawable.ic_action_search_dark)
-                .setTitle(R.string.search_title)
+                //.setIcon(R.drawable.ic_action_search_dark)
+                //.setTitle(R.string.search_title)
                 .setView(view)
                 .setPositiveButton(R.string.search,
                         new DialogInterface.OnClickListener() {
@@ -90,6 +90,12 @@ public class SearchDialog {
                 });
 
         dialog.show();
+
+        // dialog.getButton() returns null if called before dialog.show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundResource(
+                R.drawable.button_selector);
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundResource(
+                R.drawable.button_selector);
     }
 
 }

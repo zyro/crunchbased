@@ -13,6 +13,8 @@ import com.googlecode.androidannotations.annotations.RootContext;
 import com.googlecode.androidannotations.api.Scope;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -68,8 +70,10 @@ public class CrunchbaseClient {
                 item.setNamespace(link[link.length - 2]);
                 item.setPermalink(link[link.length - 1].replaceAll("[?].*", ""));
                 item.setPoints(elem.getElementsByTag("img").size());
-                item.setName(elem.getElementsByTag("a").text().trim().replace(
-                        "\\u7684CrunchBase\\u7b80\\u4ecb", ""));
+                item.setName(StringEscapeUtils.unescapeJava(
+                        elem.getElementsByTag("a").text().trim()));
+                        //.replace("\\u7684CrunchBase\\u7b80\\u4ecb", "")
+                        //.replace("\\u00b0", ""));
 
                 trendingItems.add(item);
             }
