@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
+import com.github.zyro.crunchbase.entity.FundingRound;
 import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.PersonShort;
@@ -17,8 +18,12 @@ import com.github.zyro.crunchbase.util.FormatUtils;
 import com.googlecode.androidannotations.annotations.*;
 import com.koushikdutta.async.future.FutureCallback;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.List;
 
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
@@ -169,10 +174,13 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
 
             final PersonShort person = relationship.getPerson();
             final View personItem = layoutInflater.inflate(R.layout.person_item, null);
+
             ((TextView) personItem.findViewById(R.id.personName)).setText(
                     person.getFirst_name() + " " + person.getLast_name());
+
             ((TextView) personItem.findViewById(R.id.personTitle)).setText(
                     relationship.getTitle());
+
             if(person.getImage() != null) {
                 client.loadImage(person.getImage().getSmallAsset(),
                         (ImageView) personItem.findViewById(R.id.personImage));
@@ -198,6 +206,32 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
         peopleHolder.setVisibility(peopleHolder.getChildCount() > 0 ? LinearLayout.VISIBLE : LinearLayout.GONE);
         findViewById(R.id.companyPeopleLabel).setVisibility(
                 peopleHolder.getChildCount() > 0 ? TextView.VISIBLE : TextView.GONE);
+
+        // Funding Rounds
+
+        final LinearLayout fundingHolder = (LinearLayout) findViewById(R.id.companyFundingHolder);
+        fundingHolder.removeAllViews();
+        for(final FundingRound fundingRound : company.getFunding_rounds()) {
+            final View fundingItem = layoutInflater.inflate(R.layout.funding_item, null);
+
+            ((TextView) fundingItem.findViewById(R.id.roundName)).setText(
+                    WordUtils.capitalize(fundingRound.getRound_code().replace("_", " ")) +
+                    getString(R.string.company_round));
+
+            ((TextView) fundingItem.findViewById(R.id.roundDate)).setText(
+                    FormatUtils.extractDateFunded(fundingRound, ""));
+
+            final NumberFormat formatter = NumberFormat.getCurrencyInstance();
+            formatter.setCurrency(Currency.getInstance(
+                    fundingRound.getRaised_currency_code()));
+            ((TextView) fundingItem.findViewById(R.id.roundAmount)).setText(
+                    formatter.format(fundingRound.getRaised_amount()));
+
+            fundingHolder.addView(fundingItem);
+        }
+        fundingHolder.setVisibility(fundingHolder.getChildCount() > 0 ? LinearLayout.VISIBLE : LinearLayout.GONE);
+        findViewById(R.id.companyFundingLabel).setVisibility(
+                fundingHolder.getChildCount() > 0 ? TextView.VISIBLE : TextView.GONE);
 
         findViewById(R.id.companyContents).setVisibility(View.VISIBLE);
         onRefreshCompleted();

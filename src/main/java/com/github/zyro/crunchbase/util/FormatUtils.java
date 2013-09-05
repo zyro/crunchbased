@@ -9,6 +9,7 @@ import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.activity.CompanyActivity_;
 import com.github.zyro.crunchbase.activity.PersonActivity_;
 import com.github.zyro.crunchbase.entity.Company;
+import com.github.zyro.crunchbase.entity.FundingRound;
 import com.github.zyro.crunchbase.entity.Person;
 import org.apache.commons.lang3.StringUtils;
 
@@ -84,6 +85,22 @@ public class FormatUtils {
                                 person.getBorn_month(),
                                 person.getBorn_year(),
                                 fallback);
+    }
+
+    /**
+     * Attempt to extract a human-readable date of funding from a FundingRound.
+     *
+     * @param person The FundingRound to extract the date of funding from.
+     * @param fallback The fallback String to return if date extraction fails.
+     * @return A String representing the date of funding of the round, or the
+     *         fallback string if it cannot be determined.
+     */
+    public static String extractDateFunded(final FundingRound fundingRound,
+                                           final String fallback) {
+        return prettyFormatDate(fundingRound.getFunded_day(),
+                fundingRound.getFunded_month(),
+                fundingRound.getFunded_year(),
+                fallback);
     }
 
     /**

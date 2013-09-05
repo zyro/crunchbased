@@ -91,6 +91,8 @@
     <string name="company_email"><u>Email</u></string>
     <string name="company_overview">Overview</string>
     <string name="company_people">Key People</string>
+    <string name="company_funding">Funding Rounds</string>
+    <string name="company_round">\u0020Round</string>
 
     <!-- Person activity strings -->
     <string name="person_header">Person</string>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:padding="1dp">
+
+    <TextView android:id="@+id/roundName"
+              android:layout_width="wrap_content"
+              android:layout_height="fill_parent"
+              android:textColor="@android:color/black"
+              android:textSize="15sp"
+              android:padding="5dp"
+              android:gravity="center_vertical"/>
+
+    <TextView android:id="@+id/roundDate"
+              android:layout_width="wrap_content"
+              android:layout_height="fill_parent"
+              android:textColor="@android:color/darker_gray"
+              android:textSize="12sp"
+              android:padding="5dp"
+              android:gravity="center_vertical"/>
+
+    <TextView android:id="@+id/roundAmount"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:textColor="@color/crunchbase"
+              android:textSize="15sp"
+              android:padding="5dp"
+              android:gravity="right|center_vertical"/>
+
+</LinearLayout>
