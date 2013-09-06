@@ -21,6 +21,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import org.apache.commons.lang3.text.WordUtils;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.text.NumberFormat;
 import java.util.Collections;
@@ -225,11 +226,18 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
             ((TextView) fundingItem.findViewById(R.id.roundDate)).setText(
                     FormatUtils.extractDateFunded(fundingRound, ""));
 
-            final NumberFormat formatter = NumberFormat.getCurrencyInstance();
-            formatter.setCurrency(Currency.getInstance(
-                    fundingRound.getRaised_currency_code()));
-            ((TextView) fundingItem.findViewById(R.id.roundAmount)).setText(
-                    formatter.format(fundingRound.getRaised_amount()));
+            if(isNotBlank(fundingRound.getRaised_currency_code()) &&
+                    fundingRound.getRaised_amount() != null) {
+                final NumberFormat format = NumberFormat.getCurrencyInstance();
+                format.setCurrency(Currency.getInstance(
+                        fundingRound.getRaised_currency_code()));
+                ((TextView) fundingItem.findViewById(R.id.roundAmount)).setText(
+                        format.format(fundingRound.getRaised_amount()));
+            }
+            else {
+                ((TextView) fundingItem.findViewById(R.id.roundAmount)).setText(
+                        getString(R.string.unknown));
+            }
 
             fundingHolder.addView(fundingItem);
         }
