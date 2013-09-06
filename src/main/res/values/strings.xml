@@ -92,7 +92,7 @@
     <string name="company_overview">Overview</string>
     <string name="company_people">Key People</string>
     <string name="company_funding">Funding Rounds</string>
-    <string name="company_round">\u0020Round</string>
+    <string name="company_round">Round\u0020</string>
 
     <!-- Person activity strings -->
     <string name="person_header">Person</string>

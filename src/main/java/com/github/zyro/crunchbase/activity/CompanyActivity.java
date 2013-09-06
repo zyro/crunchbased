@@ -23,6 +23,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 
@@ -211,12 +212,15 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
 
         final LinearLayout fundingHolder = (LinearLayout) findViewById(R.id.companyFundingHolder);
         fundingHolder.removeAllViews();
+        Collections.sort(company.getFunding_rounds());
         for(final FundingRound fundingRound : company.getFunding_rounds()) {
             final View fundingItem = layoutInflater.inflate(R.layout.funding_item, null);
 
             ((TextView) fundingItem.findViewById(R.id.roundName)).setText(
-                    WordUtils.capitalize(fundingRound.getRound_code().replace("_", " ")) +
-                    getString(R.string.company_round));
+                    (fundingRound.getRound_code().length() == 1 ?
+                            getString(R.string.company_round) : "") +
+                    WordUtils.capitalize(fundingRound.getRound_code()
+                            .replace("_", " ")));
 
             ((TextView) fundingItem.findViewById(R.id.roundDate)).setText(
                     FormatUtils.extractDateFunded(fundingRound, ""));
