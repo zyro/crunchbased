@@ -3,6 +3,7 @@ package com.github.zyro.crunchbase.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.service.CrunchbaseClient;
@@ -11,6 +12,8 @@ import com.github.zyro.crunchbase.util.HeaderTransformer;
 import com.github.zyro.crunchbase.util.SearchDialog;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
+
+import java.lang.reflect.Field;
 
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
@@ -35,15 +38,27 @@ public abstract class BaseActivity extends FragmentActivity
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Force the overflow menu even if there is a physical menu button.
+        try {
+            final ViewConfiguration config = ViewConfiguration.get(this);
+            final Field menuKeyField = ViewConfiguration.class
+                    .getDeclaredField("sHasPermanentMenuKey");
+            if(menuKeyField != null) {
+                menuKeyField.setAccessible(true);
+                menuKeyField.setBoolean(config, false);
+            }
+        }
+        catch(final Exception e) {} // Don't care if it doesn't work.
+
         final PullToRefreshAttacher.Options options =
                 new PullToRefreshAttacher.Options();
         options.headerTransformer = new HeaderTransformer();
         attacher = PullToRefreshAttacher.get(this, options);
     }
 
-    /** Initialize the state of the options menu items based on stored prefs. */
+    /** Initialize common state elements. */
     @AfterViews
-    public void initMenuState() {
+    public void initBaseState() {
         getActionBar().setDisplayShowTitleEnabled(false);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         /*((Switch) findViewById(R.id.loadImagesSwitch))
