@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
+import com.github.zyro.crunchbase.entity.FinancialOrganization;
 import com.github.zyro.crunchbase.entity.Person;
 import com.github.zyro.crunchbase.entity.Search;
 import com.github.zyro.crunchbase.util.HomeData;
@@ -138,6 +139,9 @@ public class CrunchbaseClient {
      * Trigger an image fetching process with a required asset and target view
      * it is intended to be displayed in. Disabling image loading through the
      * preferences effectively makes this a no-op.
+     *
+     * @param asset The asset sub-URL to load.
+     * @param view The ImageView to display the loaded image in.
      */
     public void loadImage(final String asset, final ImageView view) {
         //if(!preferences.loadImages().get()) {
@@ -148,7 +152,14 @@ public class CrunchbaseClient {
                 .load("http://www.crunchbase.com/" + asset);
     }
 
-    /** */
+    /**
+     * Perform a company API call and return the data to the given callback in
+     * the form of a Company entity instance.
+     *
+     * @param permalink The permalink identifier of the company.
+     * @param callback The callback to pass the data back to, or to notify of a
+     *                 failure during the loading or mapping process.
+     */
     public void getCompany(final String permalink,
                            final FutureCallback<Company> callback) {
         try {
@@ -162,7 +173,14 @@ public class CrunchbaseClient {
         }
     }
 
-    /** */
+    /**
+     * Perform a person API call and return the data to the given callback in
+     * the form of a Person entity instance.
+     *
+     * @param permalink The permalink identifier of the person.
+     * @param callback The callback to pass the data back to, or to notify of a
+     *                 failure during the loading or mapping process.
+     */
     public void getPerson(final String permalink,
                           final FutureCallback<Person> callback) {
         try {
@@ -176,9 +194,26 @@ public class CrunchbaseClient {
         }
     }
 
-    public String getFinancialOrganization(final String permalink) {
-        throw new UnsupportedOperationException();
-        //return performGetRequest(permalink, "financial-organization");
+    /**
+     * Perform a financial organization API call and return the data to the
+     * given callback in the form of a FinancialOrganization entity instance.
+     *
+     * @param permalink The permalink identifier of the financial organization.
+     * @param callback The callback to pass the data back to, or to notify of a
+     *                 failure during the loading or mapping process.
+     */
+    public void getFinancialOrganization(final String permalink,
+                         final FutureCallback<FinancialOrganization> callback) {
+        try {
+            Ion.with(context,
+                    "http://api.crunchbase.com/v/1/financial-organization/" +
+                    encode(permalink.toLowerCase(), "UTF-8") + ".js?" + API_KEY)
+                    .as(new TypeToken<FinancialOrganization>(){})
+                    .setCallback(callback);
+        }
+        catch(final UnsupportedEncodingException e) {
+            callback.onCompleted(e, null);
+        }
     }
 
     public String getProduct(final String permalink) {
