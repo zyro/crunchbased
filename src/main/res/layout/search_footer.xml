@@ -3,14 +3,40 @@
               android:orientation="horizontal"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:padding="5dp">
+              android:padding="5dp"
+              android:id="@+id/searchFooter"
+              android:background="@color/crunchbase_light">
 
     <TextView android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+              android:background="@color/crunchbase_light"
               android:textColor="@android:color/black"
               android:textSize="15sp"
               android:padding="5dp"
-              android:layout_gravity="center"
-              android:text="@string/search_loading_more"/>
+              android:gravity="center"
+              android:text="@string/search_loading_more"
+              android:id="@+id/searchFooterLoading"/>
+
+    <TextView android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@color/crunchbase_light"
+              android:textColor="@android:color/black"
+              android:textSize="15sp"
+              android:padding="5dp"
+              android:gravity="center"
+              android:text="@string/search_no_more"
+              android:id="@+id/searchFooterNoMore"
+              android:visibility="gone"/>
+
+    <TextView android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@color/crunchbase_light"
+              android:textColor="@android:color/black"
+              android:textSize="15sp"
+              android:padding="5dp"
+              android:gravity="center"
+              android:text="@string/search_retry"
+              android:id="@+id/searchFooterFailed"
+              android:visibility="gone"/>
 
 </LinearLayout>

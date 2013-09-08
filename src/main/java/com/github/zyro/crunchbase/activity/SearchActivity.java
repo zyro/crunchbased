@@ -52,9 +52,13 @@ public class SearchActivity extends BaseActivity
     /** The currently visible page. */
     protected int page = 0;
 
+    /** The total number of results available for this search request. */
     protected int results = 0;
 
+    /** Whether the activity is currently loading more data. */
     protected boolean loading = false;
+
+    /** The search results list footer. */
     protected View footer;
 
     @Override
@@ -135,6 +139,9 @@ public class SearchActivity extends BaseActivity
         loading = true;
         RefreshMessage.hideRefreshFailed(this);
         attacher.setRefreshing(true);
+        footer.findViewById(R.id.searchFooterLoading).setVisibility(View.VISIBLE);
+        footer.findViewById(R.id.searchFooterNoMore).setVisibility(View.GONE);
+        footer.findViewById(R.id.searchFooterFailed).setVisibility(View.GONE);
     }
 
     @UiThread
@@ -153,6 +160,11 @@ public class SearchActivity extends BaseActivity
         loading = false;
         onRefreshCompleted();
         RefreshMessage.hideRefreshFailed(this);
+        footer.findViewById(R.id.searchFooterLoading).setVisibility(
+                results / 10.0 > page ? View.VISIBLE : View.GONE);
+        footer.findViewById(R.id.searchFooterNoMore).setVisibility(
+                results / 10.0 <= page ? View.VISIBLE : View.GONE);
+        footer.findViewById(R.id.searchFooterFailed).setVisibility(View.GONE);
     }
 
     @UiThread
@@ -160,6 +172,9 @@ public class SearchActivity extends BaseActivity
         loading = false;
         onRefreshCompleted();
         RefreshMessage.showRefreshFailed(this);
+        footer.findViewById(R.id.searchFooterLoading).setVisibility(View.GONE);
+        footer.findViewById(R.id.searchFooterNoMore).setVisibility(View.GONE);
+        footer.findViewById(R.id.searchFooterFailed).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -182,8 +197,21 @@ public class SearchActivity extends BaseActivity
     }
 
     @ItemClick(R.id.searchList)
-    public void handleTrendingListItemClick(final Result item) {
-        if(item.getNamespace().equals("company")) {
+    public void handleSearchListItemClick(final Result item) {
+        // Only search list footer will never have a result.
+        if(item == null) {
+            if(loading) {
+                return;
+            }
+
+            if(adapter.isEmpty()) {
+                refreshButton();
+            }
+            else {
+                loadMore();
+            }
+        }
+        else if(item.getNamespace().equals("company")) {
             final Intent intent = new Intent(this, CompanyActivity_.class);
             intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
                     item.getPermalink()));

@@ -9,6 +9,14 @@ public class LoadMoreScrollListener implements AbsListView.OnScrollListener {
     protected LoadMoreListener listener;
 
     /**
+     * Since onScroll() fires constantly, to avoid flooding the listener with
+     * requests this value holds a threshold number, so load requests are not
+     * fired again until either the list expands and can scroll further, or the
+     * user scrolls up then back down.
+     */
+    protected int threshold = -1;
+
+    /**
      * Initialise the listener with a LoadMoreListener instance that should be
      * notified when a 'load more' action is required.
      *
@@ -37,6 +45,10 @@ public class LoadMoreScrollListener implements AbsListView.OnScrollListener {
     public void onScroll(final AbsListView view, final int firstVisibleItem,
                          final int visibleItemCount, final int totalItemCount) {
         final int lastInScreen = firstVisibleItem + visibleItemCount;
+        if(lastInScreen == threshold) { // Avoid rapidly triggering requests.
+            return;
+        }
+        threshold = lastInScreen;
         if(lastInScreen == totalItemCount) {
             listener.loadMore();
         }
