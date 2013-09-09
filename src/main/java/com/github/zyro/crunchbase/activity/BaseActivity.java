@@ -59,7 +59,7 @@ public abstract class BaseActivity extends FragmentActivity
     /** Initialize common state elements. */
     @AfterViews
     public void initBaseState() {
-        getActionBar().setDisplayShowTitleEnabled(false);
+        //getActionBar().setDisplayShowTitleEnabled(false);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         /*((Switch) findViewById(R.id.loadImagesSwitch))
                 .setChecked(preferences.loadImages().get());*/

@@ -2,7 +2,7 @@ package com.github.zyro.crunchbase.entity;
 
 import java.math.BigDecimal;
 
-public class Fund {
+public class Fund implements Comparable<Fund> {
 
     private String name;
     private Integer funded_year;
@@ -89,6 +89,22 @@ public class Fund {
                 ", source_url='" + source_url + '\'' +
                 ", source_description='" + source_description + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(final Fund another) {
+        if(another != null) {
+            final int year = funded_year.compareTo(another.funded_year);
+            if(year != 0) {
+                return year;
+            }
+            final int month = funded_month.compareTo(another.funded_month);
+            if(month != 0) {
+                return month;
+            }
+            return funded_day.compareTo(another.funded_day);
+        }
+        return 0;
     }
 
 }

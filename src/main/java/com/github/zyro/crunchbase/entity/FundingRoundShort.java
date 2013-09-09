@@ -2,7 +2,7 @@ package com.github.zyro.crunchbase.entity;
 
 import java.math.BigDecimal;
 
-public class FundingRoundShort {
+public class FundingRoundShort implements Comparable<FundingRoundShort> {
 
     private String round_code;
     private String source_url;
@@ -99,6 +99,31 @@ public class FundingRoundShort {
                 ", funded_day=" + funded_day +
                 ", company=" + company +
                 '}';
+    }
+
+    @Override
+    public int compareTo(final FundingRoundShort another) {
+        if(another != null) {
+            if(funded_year != null && another.getFunded_year() != null) {
+                final int year = funded_year.compareTo(another.getFunded_year());
+                if(year != 0) {
+                    return year;
+                }
+            }
+
+            if(funded_month != null && another.getFunded_month() != null) {
+                final int month = funded_month.compareTo(another.getFunded_month());
+                if(month != 0) {
+                    return month;
+                }
+            }
+
+            if(funded_day == null || another.getFunded_day() == null) {
+                return 0;
+            }
+            return funded_day.compareTo(another.getFunded_day());
+        }
+        return 0;
     }
 
 }

@@ -6,11 +6,7 @@
     <string name="splash_bottom">Unofficial CrunchBase app for Android</string>
     <string name="refresh">Refresh</string>
     <string name="search">Search</string>
-    <string name="refreshing">Refreshing…</string>
-    <string name="refreshed">Refreshed\u0020</string>
-    <string name="refresh_failed">
-        Refresh failed. Tap to retry.
-    </string>
+    <string name="refresh_failed">Refresh failed. Tap to retry.</string>
     <string name="no_items">Nothing found. Refresh to retry.</string>
     <string name="unknown">\u003F</string>
     <string name="more">More</string>
@@ -66,6 +62,8 @@
     </string-array>
 
     <!-- Search activity strings -->
+    <string name="search_results_plural">\u0020results</string>
+    <string name="search_results_singular">\u0020result</string>
     <string name="search_loading_more">Loading more…</string>
     <string name="search_no_more">No more results.</string>
     <string name="search_retry">Failed to get next page. Tap to retry.</string>
@@ -79,7 +77,6 @@
     <string name="trending_points_singular">point</string>
 
     <!-- Company activity strings -->
-    <string name="company_header">Company</string>
     <string name="company_image">Company Image</string>
     <string name="company_founded">Founded:\u0020</string>
     <string name="company_employees">Employees:\u0020</string>
@@ -95,7 +92,6 @@
     <string name="company_round">Round\u0020</string>
 
     <!-- Person activity strings -->
-    <string name="person_header">Person</string>
     <string name="person_image">Person Image</string>
     <string name="person_born">Born:\u0020</string>
     <string name="person_affiliation">Affiliation:\u0020</string>
@@ -107,4 +103,19 @@
     <string name="person_linkedin"><u>LinkedIn</u></string>
     <string name="person_overview">Overview</string>
     <string name="person_companies">Key Companies</string>
+
+    <!-- Financial Organization activity strings -->
+    <string name="financial_org_image">Financial Organization Image</string>
+    <string name="financial_org_founded">Founded:\u0020</string>
+    <string name="financial_org_employees">Employees:\u0020</string>
+    <string name="financial_org_presence">Presence</string>
+    <string name="financial_org_crunchbase_url"><u>Crunchbase</u></string>
+    <string name="financial_org_blog_url"><u>Blog</u></string>
+    <string name="financial_org_twitter"><u>Twitter</u></string>
+    <string name="financial_org_email"><u>Email</u></string>
+    <string name="financial_org_overview">Overview</string>
+    <string name="financial_org_people">Key People</string>
+    <string name="financial_org_funds">Funds</string>
+    <string name="financial_org_recent">Most Recent Investments</string>
+    <string name="financial_org_round">Round\u0020</string>
 </resources>

@@ -111,6 +111,8 @@ public class SearchActivity extends BaseActivity
     @AfterViews
     public void initState() {
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayShowTitleEnabled(true);
+        getActionBar().setTitle(query);
 
         footer = inflater.inflate(R.layout.search_footer, null);
 
@@ -165,6 +167,10 @@ public class SearchActivity extends BaseActivity
         footer.findViewById(R.id.searchFooterNoMore).setVisibility(
                 results / 10.0 <= page ? View.VISIBLE : View.GONE);
         footer.findViewById(R.id.searchFooterFailed).setVisibility(View.GONE);
+
+        getActionBar().setSubtitle(results + (results == 1 ?
+                getString(R.string.search_results_singular) :
+                getString(R.string.search_results_plural)));
     }
 
     @UiThread
@@ -214,6 +220,13 @@ public class SearchActivity extends BaseActivity
         else if(item.getNamespace().equals("company")) {
             final Intent intent = new Intent(this, CompanyActivity_.class);
             intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
+                    item.getPermalink()));
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        }
+        else if(item.getNamespace().equals("financial-organization")) {
+            final Intent intent = new Intent(this, FinancialOrganizationActivity_.class);
+            intent.setData(Uri.parse("http://www.crunchbase.com/financial-organization/" +
                     item.getPermalink()));
             startActivity(intent);
             this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);

@@ -1,6 +1,6 @@
 package com.github.zyro.crunchbase.entity;
 
-public class Investment {
+public class Investment implements Comparable<Investment> {
 
     private FundingRoundShort funding_round;
 
@@ -17,6 +17,11 @@ public class Investment {
         return "Investment{" +
                 "funding_round=" + funding_round +
                 '}';
+    }
+
+    @Override
+    public int compareTo(final Investment another) {
+        return another.getFunding_round().compareTo(funding_round);
     }
 
 }

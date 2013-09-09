@@ -7,9 +7,13 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.activity.CompanyActivity_;
+import com.github.zyro.crunchbase.activity.FinancialOrganizationActivity_;
 import com.github.zyro.crunchbase.activity.PersonActivity_;
 import com.github.zyro.crunchbase.entity.Company;
+import com.github.zyro.crunchbase.entity.FinancialOrganization;
+import com.github.zyro.crunchbase.entity.Fund;
 import com.github.zyro.crunchbase.entity.FundingRound;
+import com.github.zyro.crunchbase.entity.FundingRoundShort;
 import com.github.zyro.crunchbase.entity.Person;
 import org.apache.commons.lang3.StringUtils;
 
@@ -72,6 +76,25 @@ public class FormatUtils {
     }
 
     /**
+     * Attempt to extract a human-readable date of founding from a Financial
+     * Organization.
+     *
+     * @param financialOrganization The Financial Organization to extract the
+     *                              date founded from.
+     * @param fallback The fallback String to return if date extraction fails.
+     * @return A String representing the date founded of the financial
+     *         organization, or the fallback string if it cannot be determined.
+     */
+    public static String extractDateFounded(
+            final FinancialOrganization financialOrganization,
+            final String fallback) {
+        return prettyFormatDate(financialOrganization.getFounded_day(),
+                financialOrganization.getFounded_month(),
+                financialOrganization.getFounded_year(),
+                fallback);
+    }
+
+    /**
      * Attempt to extract a human-readable date of birth from a Person.
      *
      * @param person The Person to extract the date of birth from.
@@ -90,7 +113,7 @@ public class FormatUtils {
     /**
      * Attempt to extract a human-readable date of funding from a FundingRound.
      *
-     * @param person The FundingRound to extract the date of funding from.
+     * @param fundingRound The FundingRound to extract the date of funding from.
      * @param fallback The fallback String to return if date extraction fails.
      * @return A String representing the date of funding of the round, or the
      *         fallback string if it cannot be determined.
@@ -100,6 +123,40 @@ public class FormatUtils {
         return prettyFormatDate(fundingRound.getFunded_day(),
                 fundingRound.getFunded_month(),
                 fundingRound.getFunded_year(),
+                fallback);
+    }
+
+    /**
+     * Attempt to extract a human-readable date of funding from a
+     * FundingRoundShort.
+     *
+     * @param fundingRoundShort The FundingRoundShort to extract the date of
+     *                          funding from.
+     * @param fallback The fallback String to return if date extraction fails.
+     * @return A String representing the date of funding of the round, or the
+     *         fallback string if it cannot be determined.
+     */
+    public static String extractDateFunded(
+            final FundingRoundShort fundingRoundShort, final String fallback) {
+        return prettyFormatDate(fundingRoundShort.getFunded_day(),
+                fundingRoundShort.getFunded_month(),
+                fundingRoundShort.getFunded_year(),
+                fallback);
+    }
+
+    /**
+     * Attempt to extract a human-readable date of funding from a Fund.
+     *
+     * @param fund The Fund to extract the date of funding from.
+     * @param fallback The fallback String to return if date extraction fails.
+     * @return A String representing the date of funding of the fund, or the
+     *         fallback string if it cannot be determined.
+     */
+    public static String extractDateFunded(final Fund fund,
+                                           final String fallback) {
+        return prettyFormatDate(fund.getFunded_day(),
+                fund.getFunded_month(),
+                fund.getFunded_year(),
                 fallback);
     }
 
@@ -171,6 +228,9 @@ public class FormatUtils {
             final Class<? extends Activity> activityClassToLaunch;
             if(span.getURL().contains("www.crunchbase.com/company/")) {
                 activityClassToLaunch = CompanyActivity_.class;
+            }
+            else if(span.getURL().contains("www.crunchbase.com/financial-organization/")) {
+                activityClassToLaunch = FinancialOrganizationActivity_.class;
             }
             else if(span.getURL().contains("www.crunchbase.com/person/")) {
                 activityClassToLaunch = PersonActivity_.class;

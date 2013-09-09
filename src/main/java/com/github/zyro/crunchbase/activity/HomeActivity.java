@@ -52,6 +52,7 @@ public class HomeActivity extends BaseActivity {
     @AfterViews
     public void initState() {
         final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         forceTabs();
 

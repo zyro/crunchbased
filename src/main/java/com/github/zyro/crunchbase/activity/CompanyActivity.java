@@ -49,6 +49,7 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
 
     @AfterViews
     public void initState() {
+        getActionBar().setDisplayShowTitleEnabled(false);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         ((PullToRefreshLayout) findViewById(R.id.companyPtr))

@@ -117,4 +117,5 @@ public class FundingRound implements Comparable<FundingRound> {
         }
         return 0;
     }
+
 }

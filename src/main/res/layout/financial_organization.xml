@@ -5,11 +5,12 @@
                 android:layout_height="fill_parent">
 
     <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
-        android:id="@+id/personPtr"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/financialOrganizationPtr"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <ScrollView android:id="@+id/personContents"
+        <ScrollView android:id="@+id/financialOrganizationContents"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_alignParentTop="true"
@@ -20,14 +21,14 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content">
 
-                <LinearLayout android:id="@+id/personHeader"
+                <LinearLayout android:id="@+id/financialOrganizationHeader"
                               android:orientation="horizontal"
                               android:layout_height="wrap_content"
                               android:layout_width="fill_parent">
 
-                    <ImageView android:id="@+id/personImage"
+                    <ImageView android:id="@+id/financialOrganizationImage"
                                android:src="@drawable/no_image_placeholder"
-                               android:contentDescription="@string/person_image"
+                               android:contentDescription="@string/financial_org_image"
                                android:layout_height="110dp"
                                android:layout_width="110dp"
                                android:padding="2dp"
@@ -40,20 +41,26 @@
                                   android:padding="4dp"
                                   android:layout_gravity="center_vertical">
 
-                        <TextView android:id="@+id/personName"
+                        <TextView android:id="@+id/financialOrganizationName"
                                   android:layout_width="fill_parent"
                                   android:layout_height="wrap_content"
                                   android:textSize="15sp"
                                   android:paddingBottom="4dp"
                                   android:textColor="@android:color/black"/>
 
-                        <TextView android:id="@+id/personBorn"
+                        <TextView android:id="@+id/financialOrganizationUrl"
                                   android:layout_width="fill_parent"
                                   android:layout_height="wrap_content"
                                   android:textSize="12sp"
                                   android:textColor="@android:color/darker_gray"/>
 
-                        <TextView android:id="@+id/personAffiliation"
+                        <TextView android:id="@+id/financialOrganizationFounded"
+                                  android:layout_width="fill_parent"
+                                  android:layout_height="wrap_content"
+                                  android:textSize="12sp"
+                                  android:textColor="@android:color/darker_gray"/>
+
+                        <TextView android:id="@+id/financialOrganizationEmployees"
                                   android:layout_width="fill_parent"
                                   android:layout_height="wrap_content"
                                   android:textSize="12sp"
@@ -63,70 +70,59 @@
 
                 </LinearLayout>
 
-                <TextView android:id="@+id/personPresenceLabel"
+                <TextView android:id="@+id/financialOrganizationPresenceLabel"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
-                          android:text="@string/person_presence"
+                          android:text="@string/financial_org_presence"
                           android:gravity="center"
                           android:textColor="@android:color/white"
                           android:background="@color/crunchbase"
                           android:padding="1dp"/>
 
-                <LinearLayout android:id="@+id/personPresenceHolder"
+                <LinearLayout android:id="@+id/financialOrganizationPresenceHolder"
                               android:orientation="horizontal"
                               android:layout_height="wrap_content"
                               android:layout_width="fill_parent"
                               android:layout_gravity="center_vertical">
 
-                    <Button android:id="@+id/personCrunchbaseUrl"
+                    <Button android:id="@+id/financialOrganizationCrunchbaseUrl"
                             android:layout_width="0dp"
                             android:layout_height="34sp"
                             android:layout_weight="1"
-                            android:text="@string/person_crunchbase_url"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/crunchbase"
-                            android:shadowColor="@android:color/transparent"
-                            android:background="@android:color/white"/>
-
-                    <Button android:id="@+id/personBlogUrl"
-                            android:layout_width="0dp"
-                            android:layout_height="34sp"
-                            android:layout_weight="1"
-                            android:text="@string/person_blog_url"
+                            android:text="@string/financial_org_crunchbase_url"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/crunchbase"
                             android:shadowColor="@android:color/transparent"
                             android:background="@android:color/white"/>
 
-                    <Button android:id="@+id/personTwitter"
+                    <Button android:id="@+id/financialOrganizationBlogUrl"
                             android:layout_width="0dp"
                             android:layout_height="34sp"
                             android:layout_weight="1"
-                            android:text="@string/person_twitter"
+                            android:text="@string/financial_org_blog_url"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/crunchbase"
                             android:shadowColor="@android:color/transparent"
                             android:background="@android:color/white"/>
 
-                    <Button android:id="@+id/personFacebook"
+                    <Button android:id="@+id/financialOrganizationTwitter"
                             android:layout_width="0dp"
                             android:layout_height="34sp"
                             android:layout_weight="1"
-                            android:text="@string/person_facebook"
+                            android:text="@string/financial_org_twitter"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/crunchbase"
                             android:shadowColor="@android:color/transparent"
                             android:background="@android:color/white"/>
 
-                    <Button android:id="@+id/personLinkedIn"
+                    <Button android:id="@+id/financialOrganizationEmail"
                             android:layout_width="0dp"
                             android:layout_height="34sp"
                             android:layout_weight="1"
-                            android:text="@string/person_linkedin"
+                            android:text="@string/financial_org_email"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/crunchbase"
@@ -135,30 +131,58 @@
 
                 </LinearLayout>
 
-                <TextView android:id="@+id/personOverviewLabel"
+                <TextView android:id="@+id/financialOrganizationOverviewLabel"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
-                          android:text="@string/person_overview"
+                          android:text="@string/financial_org_overview"
                           android:gravity="center"
                           android:textColor="@android:color/white"
                           android:background="@color/crunchbase"
                           android:padding="1dp"/>
 
-                <TextView android:id="@+id/personOverview"
+                <TextView android:id="@+id/financialOrganizationOverview"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
                           android:padding="2dp"/>
 
-                <TextView android:id="@+id/personCompaniesLabel"
+                <TextView android:id="@+id/financialOrganizationPeopleLabel"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
-                          android:text="@string/person_companies"
+                          android:text="@string/financial_org_people"
                           android:gravity="center"
                           android:textColor="@android:color/white"
                           android:background="@color/crunchbase"
                           android:padding="1dp"/>
 
-                <LinearLayout android:id="@+id/personCompaniesHolder"
+                <LinearLayout android:id="@+id/financialOrganizationPeopleHolder"
+                              android:orientation="vertical"
+                              android:layout_height="wrap_content"
+                              android:layout_width="fill_parent"/>
+
+                <TextView android:id="@+id/financialOrganizationFundsLabel"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:text="@string/financial_org_funds"
+                          android:gravity="center"
+                          android:textColor="@android:color/white"
+                          android:background="@color/crunchbase"
+                          android:padding="1dp"/>
+
+                <LinearLayout android:id="@+id/financialOrganizationFundsHolder"
+                              android:orientation="vertical"
+                              android:layout_height="wrap_content"
+                              android:layout_width="fill_parent"/>
+
+                <TextView android:id="@+id/financialOrganizationRecentLabel"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:text="@string/financial_org_recent"
+                          android:gravity="center"
+                          android:textColor="@android:color/white"
+                          android:background="@color/crunchbase"
+                          android:padding="1dp"/>
+
+                <LinearLayout android:id="@+id/financialOrganizationRecentHolder"
                               android:orientation="vertical"
                               android:layout_height="wrap_content"
                               android:layout_width="fill_parent"/>
