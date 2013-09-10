@@ -6,6 +6,7 @@ import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.FinancialOrganization;
 import com.github.zyro.crunchbase.entity.Person;
+import com.github.zyro.crunchbase.entity.Product;
 import com.github.zyro.crunchbase.entity.Search;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.google.gson.reflect.TypeToken;
@@ -216,9 +217,26 @@ public class CrunchbaseClient {
         }
     }
 
-    public String getProduct(final String permalink) {
-        throw new UnsupportedOperationException();
-        //return performGetRequest(permalink, "product");
+    /**
+     * Perform a product API call and return the data to the given callback in
+     * the form of a Product entity instance.
+     *
+     * @param permalink The permalink identifier of the product.
+     * @param callback The callback to pass the data back to, or to notify of a
+     *                 failure during the loading or mapping process.
+     */
+    public void getProduct(final String permalink,
+                           final FutureCallback<Product> callback) {
+        try {
+            Ion.with(context,
+                    "http://api.crunchbase.com/v/1/product/" +
+                    encode(permalink.toLowerCase(), "UTF-8") + ".js?" + API_KEY)
+                    .as(new TypeToken<Product>(){})
+                    .setCallback(callback);
+        }
+        catch(final UnsupportedEncodingException e) {
+            callback.onCompleted(e, null);
+        }
     }
 
     public String getServiceProvider(final String permalink) {
@@ -226,6 +244,19 @@ public class CrunchbaseClient {
         //return performGetRequest(permalink, "service-provider");
     }
 
+    /**
+     * Perform a search API call with the given parameters and optional filters
+     * and return the result to the callback in the form of a Search entity
+     * instance.
+     *
+     * @param query The query string to search for.
+     * @param page The result page number to request. May fail if higher than
+     *             the number of available pages - use with care.
+     * @param entity The entity type to limit the search to.
+     * @param field The field within the entity to limit the search to.
+     * @param callback The callback to pass the data back to, or to notify of a
+     *                 failure during the loading or mapping process.
+     */
     public void getSearchResults(final String query, final int page,
                                  final String entity, final String field,
                                  final FutureCallback<Search> callback) {
