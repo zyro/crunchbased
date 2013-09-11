@@ -1,5 +1,6 @@
 package com.github.zyro.crunchbase.activity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -32,6 +33,13 @@ public abstract class BaseActivity extends FragmentActivity
     protected Preferences_ preferences;
 
     protected PullToRefreshAttacher attacher;
+
+    /** Perform additional custom configuration. */
+    @Override
+    public void onConfigurationChanged(final Configuration config) {
+        super.onConfigurationChanged(config);
+        attacher.getHeaderTransformer().onViewCreated(this, attacher.getHeaderView());
+    }
 
     /** Request common window features, BaseActivity has no view of its own. */
     @Override

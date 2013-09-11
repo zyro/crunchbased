@@ -44,7 +44,7 @@
                 <data android:scheme="http"
                       android:host="crunchbase.com"
                       android:pathPrefix="/company/"/>
-                <data android:scheme="https"
+                <data android:scheme="http"
                       android:host="www.crunchbase.com"
                       android:pathPrefix="/company/"/>
             </intent-filter>
@@ -60,7 +60,7 @@
                 <data android:scheme="http"
                       android:host="crunchbase.com"
                       android:pathPrefix="/financial-organization/"/>
-                <data android:scheme="https"
+                <data android:scheme="http"
                       android:host="www.crunchbase.com"
                       android:pathPrefix="/financial-organization/"/>
             </intent-filter>
@@ -76,7 +76,7 @@
                 <data android:scheme="http"
                       android:host="crunchbase.com"
                       android:pathPrefix="/person/"/>
-                <data android:scheme="https"
+                <data android:scheme="http"
                       android:host="www.crunchbase.com"
                       android:pathPrefix="/person/"/>
             </intent-filter>
