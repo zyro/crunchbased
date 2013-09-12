@@ -214,7 +214,11 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
                 companyItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View view) {
-                        Toast.makeText(PersonActivity.this, relationship.toString(), Toast.LENGTH_SHORT).show();
+                        final Intent intent = new Intent(PersonActivity.this, FinancialOrganizationActivity_.class);
+                        intent.setData(Uri.parse("http://www.crunchbase.com/financial-organization/" +
+                                firm.getPermalink()));
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
                     }
                 });
             }
