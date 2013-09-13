@@ -19,6 +19,7 @@ import com.github.zyro.crunchbase.entity.FundingRoundShort;
 import com.github.zyro.crunchbase.entity.Investment;
 import com.github.zyro.crunchbase.entity.PersonShort;
 import com.github.zyro.crunchbase.entity.RelationshipToPerson;
+import com.github.zyro.crunchbase.util.ActivityLauncherListener;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.googlecode.androidannotations.annotations.AfterViews;
@@ -102,7 +103,10 @@ public class FinancialOrganizationActivity extends BaseActivity
 
         ((TextView) findViewById(R.id.financialOrganizationFounded)).setText(
                 getString(R.string.financial_org_founded) +
-                FormatUtils.extractDateFounded(financialOrganization, getString(R.string.unknown)));
+                FormatUtils.formatDate(financialOrganization.getFounded_day(),
+                        financialOrganization.getFounded_month(),
+                        financialOrganization.getFounded_year(),
+                        getString(R.string.unknown)));
 
         ((TextView) findViewById(R.id.financialOrganizationEmployees)).setText(
                 getString(R.string.financial_org_employees) +
@@ -207,16 +211,8 @@ public class FinancialOrganizationActivity extends BaseActivity
                 client.loadImage(person.getImage().getSmallAsset(),
                         (ImageView) personItem.findViewById(R.id.personImage));
             }
-            personItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View view) {
-                    final Intent intent = new Intent(FinancialOrganizationActivity.this, PersonActivity_.class);
-                    intent.setData(Uri.parse("http://www.crunchbase.com/person/" +
-                            person.getPermalink()));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                }
-            });
+            personItem.setOnClickListener(new ActivityLauncherListener(
+                    this, "person", person.getPermalink()));
 
             peopleHolder.addView(personItem);
 
@@ -241,7 +237,8 @@ public class FinancialOrganizationActivity extends BaseActivity
                     fund.getName());
 
             ((TextView) fundItem.findViewById(R.id.fundDate)).setText(
-                    FormatUtils.extractDateFunded(fund, ""));
+                    FormatUtils.formatDate(fund.getFunded_day(),
+                            fund.getFunded_month(), fund.getFunded_year(), ""));
 
             if(isNotBlank(fund.getRaised_currency_code()) &&
                     fund.getRaised_amount() != null) {
@@ -283,7 +280,9 @@ public class FinancialOrganizationActivity extends BaseActivity
                                     .replace("_", " ")));
 
             ((TextView) recentItem.findViewById(R.id.recentDate)).setText(
-                    FormatUtils.extractDateFunded(round, getString(R.string.unknown)));
+                    FormatUtils.formatDate(round.getFunded_day(),
+                            round.getFunded_month(), round.getFunded_year(),
+                            getString(R.string.unknown)));
 
             if(isNotBlank(round.getRaised_currency_code()) &&
                     round.getRaised_amount() != null) {
@@ -302,17 +301,8 @@ public class FinancialOrganizationActivity extends BaseActivity
                 client.loadImage(round.getCompany().getImage().getSmallAsset(),
                         (ImageView) recentItem.findViewById(R.id.recentImage));
             }
-            recentItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View view) {
-                    final Intent intent = new Intent(
-                            FinancialOrganizationActivity.this, CompanyActivity_.class);
-                    intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
-                            round.getCompany().getPermalink()));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                }
-            });
+            recentItem.setOnClickListener(new ActivityLauncherListener(
+                    this, "company", round.getCompany().getPermalink()));
 
             recentHolder.addView(recentItem);
 

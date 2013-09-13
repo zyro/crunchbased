@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.FundingRound;
+import com.github.zyro.crunchbase.util.ActivityLauncherListener;
 import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.PersonShort;
@@ -90,7 +91,9 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
 
         ((TextView) findViewById(R.id.companyFounded)).setText(
                 getString(R.string.company_founded) +
-                FormatUtils.extractDateFounded(company, getString(R.string.unknown)));
+                FormatUtils.formatDate(company.getFounded_day(),
+                        company.getFounded_month(), company.getFounded_year(),
+                        getString(R.string.unknown)));
 
         ((TextView) findViewById(R.id.companyEmployees)).setText(
                 getString(R.string.company_employees) +
@@ -188,16 +191,8 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
                 client.loadImage(person.getImage().getSmallAsset(),
                         (ImageView) personItem.findViewById(R.id.personImage));
             }
-            personItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View view) {
-                    final Intent intent = new Intent(CompanyActivity.this, PersonActivity_.class);
-                    intent.setData(Uri.parse("http://www.crunchbase.com/person/" +
-                            person.getPermalink()));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                }
-            });
+            personItem.setOnClickListener(new ActivityLauncherListener(
+                    this, "person", person.getPermalink()));
 
             peopleHolder.addView(personItem);
 
@@ -225,7 +220,9 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
                             .replace("_", " ")));
 
             ((TextView) fundingItem.findViewById(R.id.roundDate)).setText(
-                    FormatUtils.extractDateFunded(fundingRound, ""));
+                    FormatUtils.formatDate(fundingRound.getFunded_day(),
+                            fundingRound.getFunded_month(),
+                            fundingRound.getFunded_year(), ""));
 
             if(isNotBlank(fundingRound.getRaised_currency_code()) &&
                     fundingRound.getRaised_amount() != null) {

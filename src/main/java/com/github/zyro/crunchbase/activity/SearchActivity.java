@@ -1,7 +1,5 @@
 package com.github.zyro.crunchbase.activity;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.entity.Result;
 import com.github.zyro.crunchbase.entity.Search;
+import com.github.zyro.crunchbase.util.ActivityLauncherListener;
 import com.github.zyro.crunchbase.util.LoadMoreListener;
 import com.github.zyro.crunchbase.util.LoadMoreScrollListener;
 import com.github.zyro.crunchbase.util.RefreshMessage;
@@ -217,29 +215,8 @@ public class SearchActivity extends BaseActivity
                 loadMore();
             }
         }
-        else if(item.getNamespace().equals("company")) {
-            final Intent intent = new Intent(this, CompanyActivity_.class);
-            intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
-                    item.getPermalink()));
-            startActivity(intent);
-            this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-        }
-        else if(item.getNamespace().equals("financial-organization")) {
-            final Intent intent = new Intent(this, FinancialOrganizationActivity_.class);
-            intent.setData(Uri.parse("http://www.crunchbase.com/financial-organization/" +
-                    item.getPermalink()));
-            startActivity(intent);
-            this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-        }
-        else if(item.getNamespace().equals("person")) {
-            final Intent intent = new Intent(this, PersonActivity_.class);
-            intent.setData(Uri.parse("http://www.crunchbase.com/person/" +
-                    item.getPermalink()));
-            startActivity(intent);
-            this.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-        }
         else {
-            Toast.makeText(this, item.toString(), Toast.LENGTH_SHORT).show();
+            new ActivityLauncherListener(this, item.getNamespace(), item.getPermalink()).launchNow();
         }
     }
 

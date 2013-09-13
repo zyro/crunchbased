@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.github.zyro.crunchbase.R;
+import com.github.zyro.crunchbase.util.ActivityLauncherListener;
 import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.github.zyro.crunchbase.entity.*;
 import com.github.zyro.crunchbase.util.FormatUtils;
@@ -76,7 +77,9 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
 
         ((TextView) findViewById(R.id.personBorn)).setText(
                 getString(R.string.person_born) +
-                FormatUtils.extractDateBorn(person, getString(R.string.unknown)));
+                FormatUtils.formatDate(person.getBorn_day(),
+                        person.getBorn_month(), person.getBorn_year(),
+                        getString(R.string.unknown)));
 
         ((TextView) findViewById(R.id.personAffiliation)).setText(
                 getString(R.string.person_affiliation) +
@@ -198,30 +201,8 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
                 client.loadImage(firm.getImage().getSmallAsset(),
                         (ImageView) companyItem.findViewById(R.id.companyImage));
             }
-            if(firm.getType_of_entity().equals("company")) {
-                companyItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(final View view) {
-                        final Intent intent = new Intent(PersonActivity.this, CompanyActivity_.class);
-                        intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
-                                firm.getPermalink()));
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                    }
-                });
-            }
-            else if(firm.getType_of_entity().equals("financial_org")) {
-                companyItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(final View view) {
-                        final Intent intent = new Intent(PersonActivity.this, FinancialOrganizationActivity_.class);
-                        intent.setData(Uri.parse("http://www.crunchbase.com/financial-organization/" +
-                                firm.getPermalink()));
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-                    }
-                });
-            }
+            companyItem.setOnClickListener(new ActivityLauncherListener(
+                    this, firm.getType_of_entity(), firm.getPermalink()));
 
             companiesHolder.addView(companyItem);
 

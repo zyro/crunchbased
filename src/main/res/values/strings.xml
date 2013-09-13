@@ -118,4 +118,16 @@
     <string name="financial_org_funds">Funds</string>
     <string name="financial_org_recent">Most Recent Investments</string>
     <string name="financial_org_round">Round\u0020</string>
+
+    <!-- Product activity strings -->
+    <string name="product_image">Product Image</string>
+    <string name="product_launched">Launched:\u0020</string>
+    <string name="product_stage">Stage:\u0020</string>
+    <string name="product_share">Share:\u0020</string>
+    <string name="product_presence">Presence</string>
+    <string name="product_crunchbase_url"><u>Crunchbase</u></string>
+    <string name="product_blog_url"><u>Blog</u></string>
+    <string name="product_twitter"><u>Twitter</u></string>
+    <string name="product_overview">Overview</string>
+    <string name="product_company">Made By</string>
 </resources>

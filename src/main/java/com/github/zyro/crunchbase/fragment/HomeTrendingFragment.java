@@ -1,7 +1,5 @@
 package com.github.zyro.crunchbase.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.github.zyro.crunchbase.activity.CompanyActivity_;
-import com.github.zyro.crunchbase.activity.FinancialOrganizationActivity_;
 import com.github.zyro.crunchbase.activity.HomeActivity;
 import com.github.zyro.crunchbase.R;
-import com.github.zyro.crunchbase.activity.PersonActivity_;
-import com.github.zyro.crunchbase.entity.FinancialOrganization;
+import com.github.zyro.crunchbase.util.ActivityLauncherListener;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
 import org.apache.commons.lang3.text.WordUtils;
@@ -64,30 +58,7 @@ public class HomeTrendingFragment extends HomeFragment {
 
     @ItemClick(R.id.trendingList)
     public void handleTrendingListItemClick(final HomeData.Trending item) {
-        if(item.getNamespace().equals("company")) {
-            final Intent intent = new Intent(activity, CompanyActivity_.class);
-            intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
-                    item.getPermalink()));
-            startActivity(intent);
-            activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-        }
-        else if(item.getNamespace().equals("financial-organization")) {
-            final Intent intent = new Intent(activity, FinancialOrganizationActivity_.class);
-            intent.setData(Uri.parse("http://www.crunchbase.com/financial-organization/" +
-                    item.getPermalink()));
-            startActivity(intent);
-            activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-        }
-        else if(item.getNamespace().equals("person")) {
-            final Intent intent = new Intent(activity, PersonActivity_.class);
-            intent.setData(Uri.parse("http://www.crunchbase.com/person/" +
-                    item.getPermalink()));
-            startActivity(intent);
-            activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
-        }
-        else {
-            Toast.makeText(activity, item.toString(), Toast.LENGTH_SHORT).show();
-        }
+        new ActivityLauncherListener(activity, item.getNamespace(), item.getPermalink()).launchNow();
     }
 
     private class Adapter extends BaseAdapter {

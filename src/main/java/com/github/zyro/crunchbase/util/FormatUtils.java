@@ -9,6 +9,7 @@ import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.activity.CompanyActivity_;
 import com.github.zyro.crunchbase.activity.FinancialOrganizationActivity_;
 import com.github.zyro.crunchbase.activity.PersonActivity_;
+import com.github.zyro.crunchbase.activity.ProductActivity_;
 import com.github.zyro.crunchbase.entity.Company;
 import com.github.zyro.crunchbase.entity.FinancialOrganization;
 import com.github.zyro.crunchbase.entity.Fund;
@@ -60,107 +61,6 @@ public class FormatUtils {
     }
 
     /**
-     * Attempt to extract a human-readable date of founding from a Company.
-     *
-     * @param company The Company to extract the date founded from.
-     * @param fallback The fallback String to return if date extraction fails.
-     * @return A String representing the date founded of the company, or the
-     *         fallback string if it cannot be determined.
-     */
-    public static String extractDateFounded(final Company company,
-                                            final String fallback) {
-        return prettyFormatDate(company.getFounded_day(),
-                                company.getFounded_month(),
-                                company.getFounded_year(),
-                                fallback);
-    }
-
-    /**
-     * Attempt to extract a human-readable date of founding from a Financial
-     * Organization.
-     *
-     * @param financialOrganization The Financial Organization to extract the
-     *                              date founded from.
-     * @param fallback The fallback String to return if date extraction fails.
-     * @return A String representing the date founded of the financial
-     *         organization, or the fallback string if it cannot be determined.
-     */
-    public static String extractDateFounded(
-            final FinancialOrganization financialOrganization,
-            final String fallback) {
-        return prettyFormatDate(financialOrganization.getFounded_day(),
-                financialOrganization.getFounded_month(),
-                financialOrganization.getFounded_year(),
-                fallback);
-    }
-
-    /**
-     * Attempt to extract a human-readable date of birth from a Person.
-     *
-     * @param person The Person to extract the date of birth from.
-     * @param fallback The fallback String to return if date extraction fails.
-     * @return A String representing the date of birth of the person, or the
-     *         fallback string if it cannot be determined.
-     */
-    public static String extractDateBorn(final Person person,
-                                         final String fallback) {
-        return prettyFormatDate(person.getBorn_day(),
-                                person.getBorn_month(),
-                                person.getBorn_year(),
-                                fallback);
-    }
-
-    /**
-     * Attempt to extract a human-readable date of funding from a FundingRound.
-     *
-     * @param fundingRound The FundingRound to extract the date of funding from.
-     * @param fallback The fallback String to return if date extraction fails.
-     * @return A String representing the date of funding of the round, or the
-     *         fallback string if it cannot be determined.
-     */
-    public static String extractDateFunded(final FundingRound fundingRound,
-                                           final String fallback) {
-        return prettyFormatDate(fundingRound.getFunded_day(),
-                fundingRound.getFunded_month(),
-                fundingRound.getFunded_year(),
-                fallback);
-    }
-
-    /**
-     * Attempt to extract a human-readable date of funding from a
-     * FundingRoundShort.
-     *
-     * @param fundingRoundShort The FundingRoundShort to extract the date of
-     *                          funding from.
-     * @param fallback The fallback String to return if date extraction fails.
-     * @return A String representing the date of funding of the round, or the
-     *         fallback string if it cannot be determined.
-     */
-    public static String extractDateFunded(
-            final FundingRoundShort fundingRoundShort, final String fallback) {
-        return prettyFormatDate(fundingRoundShort.getFunded_day(),
-                fundingRoundShort.getFunded_month(),
-                fundingRoundShort.getFunded_year(),
-                fallback);
-    }
-
-    /**
-     * Attempt to extract a human-readable date of funding from a Fund.
-     *
-     * @param fund The Fund to extract the date of funding from.
-     * @param fallback The fallback String to return if date extraction fails.
-     * @return A String representing the date of funding of the fund, or the
-     *         fallback string if it cannot be determined.
-     */
-    public static String extractDateFunded(final Fund fund,
-                                           final String fallback) {
-        return prettyFormatDate(fund.getFunded_day(),
-                fund.getFunded_month(),
-                fund.getFunded_year(),
-                fallback);
-    }
-
-    /**
      * Create a pretty string representation of a given day/month/year date.
      * Will NOT validate the parameters to ensure they form a sensible date.
      *
@@ -171,10 +71,8 @@ public class FormatUtils {
      * @return A String representing the desired date, or the fallback string if
      *         it cannot be determined.
      */
-    public static String prettyFormatDate(final Integer day,
-                                          final Integer month,
-                                          final Integer year,
-                                          final String fallback) {
+    public static String formatDate(final Integer day, final Integer month,
+                                    final Integer year, final String fallback) {
         String date = "";
         date += day != null ? day + " " : "";
         date += month != null ? monthNumberToName(month) + " " : "";
@@ -234,6 +132,9 @@ public class FormatUtils {
             }
             else if(span.getURL().contains("www.crunchbase.com/person/")) {
                 activityClassToLaunch = PersonActivity_.class;
+            }
+            else if(span.getURL().contains("www.crunchbase.com/product/")) {
+                activityClassToLaunch = ProductActivity_.class;
             }
             else {
                 // Ignore any span that can stay as it is.

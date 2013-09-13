@@ -1,7 +1,5 @@
 package com.github.zyro.crunchbase.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.github.zyro.crunchbase.activity.CompanyActivity_;
 import com.github.zyro.crunchbase.activity.HomeActivity;
 import com.github.zyro.crunchbase.R;
+import com.github.zyro.crunchbase.util.ActivityLauncherListener;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
 
@@ -59,11 +57,7 @@ public class HomeBiggestFragment extends HomeFragment {
 
     @ItemClick(R.id.biggestList)
     public void handleBiggestListItemClick(final HomeData.Biggest item) {
-        final Intent intent = new Intent(activity, CompanyActivity_.class);
-        intent.setData(Uri.parse("http://www.crunchbase.com/company/" +
-                item.getPermalink()));
-        startActivity(intent);
-        activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        new ActivityLauncherListener(activity, "company", item.getPermalink()).launchNow();
     }
 
     /** Adapter for Biggest-type fragments. */

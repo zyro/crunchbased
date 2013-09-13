@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.github.zyro.crunchbase.fragment.HomeBiggestFragment_;
@@ -107,7 +106,6 @@ public class HomeActivity extends BaseActivity {
             refreshDone(data);
         }
         catch(final ClientException e) {
-            Log.e("HomeData", "FAIL", e);
             refreshFailed();
         }
     }
