@@ -22,7 +22,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 @EActivity
 @OptionsMenu(R.menu.menu)
 public abstract class BaseActivity extends FragmentActivity
-        implements PullToRefreshAttacher.OnRefreshListener{
+        implements PullToRefreshAttacher.OnRefreshListener {
 
     /** Access to remote data. */
     @Bean

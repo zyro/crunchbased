@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static java.net.URLEncoder.encode;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @EBean(scope = Scope.Singleton)
@@ -50,9 +51,9 @@ public class CrunchbaseClient {
      */
     public HomeData getHomeData() throws ClientException {
         try {
-            // Open a connection and pull data.
-            final String response =
-                    Ion.with(context, "http://www.crunchbase.com/").asString().get();
+            // Open a connection and pull data. Blocking operation.
+            final String response = Ion.with(
+                    context, "http://www.crunchbase.com/").asString().get();
 
             final HomeData data = new HomeData();
 
@@ -74,8 +75,9 @@ public class CrunchbaseClient {
                 item.setPoints(elem.getElementsByTag("img").size());
                 item.setName(StringEscapeUtils.unescapeJava(
                         elem.getElementsByTag("a").text().trim()));
-                        //.replace("\\u7684CrunchBase\\u7b80\\u4ecb", "")
-                        //.replace("\\u00b0", ""));
+                if(isBlank(item.getName())) {
+                    item.setName(context.getString(R.string.unknown));
+                }
 
                 trendingItems.add(item);
             }
@@ -239,9 +241,18 @@ public class CrunchbaseClient {
         }
     }
 
-    public String getServiceProvider(final String permalink) {
-        throw new UnsupportedOperationException();
-        //return performGetRequest(permalink, "service-provider");
+    public void getServiceProvider(final String permalink,
+                                   final FutureCallback<Object> callback) {
+        try {
+            Ion.with(context,
+                    "http://api.crunchbase.com/v/1/service-provider/" +
+                    encode(permalink.toLowerCase(), "UTF-8") + ".js?" + API_KEY)
+                    .as(new TypeToken<Object>(){})
+                    .setCallback(callback);
+        }
+        catch(final UnsupportedEncodingException e) {
+            callback.onCompleted(e, null);
+        }
     }
 
     /**
