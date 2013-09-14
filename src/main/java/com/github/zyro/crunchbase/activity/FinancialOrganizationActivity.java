@@ -27,7 +27,6 @@ import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.UiThread;
-import com.koushikdutta.async.future.FutureCallback;
 
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -42,8 +41,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @EActivity(R.layout.financial_organization)
-public class FinancialOrganizationActivity extends BaseActivity
-        implements FutureCallback<FinancialOrganization> {
+public class FinancialOrganizationActivity extends BaseActivity<FinancialOrganization> {
 
     @SystemService
     protected LayoutInflater layoutInflater;
@@ -77,11 +75,6 @@ public class FinancialOrganizationActivity extends BaseActivity
     public void refresh() {
         refreshStarted();
         client.getFinancialOrganization(permalink, this);
-    }
-
-    @UiThread
-    public void refreshStarted() {
-        RefreshMessage.hideRefreshFailed(this);
     }
 
     @UiThread
@@ -319,23 +312,6 @@ public class FinancialOrganizationActivity extends BaseActivity
         findViewById(R.id.financialOrganizationContents).setVisibility(View.VISIBLE);
         onRefreshCompleted();
         RefreshMessage.hideRefreshFailed(this);
-    }
-
-    @UiThread
-    public void refreshFailed() {
-        onRefreshCompleted();
-        RefreshMessage.showRefreshFailed(this);
-    }
-
-    @Override
-    public void onCompleted(final Exception e,
-                            final FinancialOrganization financialOrganization) {
-        if(e == null) {
-            refreshDone(financialOrganization);
-        }
-        else {
-            refreshFailed();
-        }
     }
 
 }

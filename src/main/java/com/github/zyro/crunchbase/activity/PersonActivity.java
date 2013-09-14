@@ -13,7 +13,6 @@ import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.github.zyro.crunchbase.entity.*;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.googlecode.androidannotations.annotations.*;
-import com.koushikdutta.async.future.FutureCallback;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import static org.apache.commons.lang3.StringUtils.*;
 
 @EActivity(R.layout.person)
-public class PersonActivity extends BaseActivity implements FutureCallback<Person> {
+public class PersonActivity extends BaseActivity<Person> {
 
     @SystemService
     protected LayoutInflater layoutInflater;
@@ -56,11 +55,6 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
     public void refresh() {
         refreshStarted();
         client.getPerson(permalink, this);
-    }
-
-    @UiThread
-    public void refreshStarted() {
-        RefreshMessage.hideRefreshFailed(this);
     }
 
     @UiThread
@@ -218,22 +212,6 @@ public class PersonActivity extends BaseActivity implements FutureCallback<Perso
         findViewById(R.id.personContents).setVisibility(View.VISIBLE);
         onRefreshCompleted();
         RefreshMessage.hideRefreshFailed(this);
-    }
-
-    @UiThread
-    public void refreshFailed() {
-        onRefreshCompleted();
-        RefreshMessage.showRefreshFailed(this);
-    }
-
-    @Override
-    public void onCompleted(final Exception e, final Person person) {
-        if(e == null) {
-            refreshDone(person);
-        }
-        else {
-            refreshFailed();
-        }
     }
 
 }

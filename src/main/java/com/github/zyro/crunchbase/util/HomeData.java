@@ -1,14 +1,6 @@
 package com.github.zyro.crunchbase.util;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /** Entity used to store home activity data. */
 public class HomeData {
@@ -16,70 +8,6 @@ public class HomeData {
     private List<Trending> trending;
     private List<Recent> recent;
     private List<Biggest> biggest;
-
-    public HomeData(final String rawData, final String unknownField) {
-        // Parse HTML response.
-        final Document document = Jsoup.parse(rawData);
-
-        // Extract Trending items.
-        trending = new ArrayList<Trending>();
-        for(final Element elem : document.getElementById(
-                "trending-now").getElementsByTag("li")) {
-            final HomeData.Trending item = new HomeData.Trending();
-
-            final String[] link = elem.getElementsByTag("a").first()
-                    .attr("href").replace("http://www.crunchbase.com/", "")
-                    .split("/");
-            item.setNamespace(link[link.length - 2]);
-            item.setPermalink(link[link.length - 1].replaceAll("[?].*", ""));
-            item.setPoints(elem.getElementsByTag("img").size());
-            item.setName(StringEscapeUtils.unescapeJava(
-                    elem.getElementsByTag("a").text().trim()));
-            if(isBlank(item.getName())) {
-                item.setName(unknownField);
-            }
-
-            trending.add(item);
-        }
-
-        // Extract Recent items.
-        recent = new ArrayList<HomeData.Recent>();
-        for(final Element elem : document.getElementById(
-                "content-newlyfunded").getElementsByTag("li")) {
-            final HomeData.Recent item = new HomeData.Recent();
-
-            item.setPermalink(elem.getElementsByTag("a").attr("href")
-                    .replace("/company/", ""));
-            item.setName(elem.getElementsByTag("a").text().trim());
-            item.setSubtext(elem.getElementsByTag("strong").size() > 1 ?
-                    elem.getElementsByTag("strong").last().text().trim() :
-                    elem.getElementsByTag("span").size() > 0 ?
-                            elem.getElementsByTag("span").last().text().trim() :
-                            unknownField);
-            item.setFunds(elem.getElementsByClass("horizbar").text().trim());
-
-            recent.add(item);
-        }
-
-        // Extract Biggest (Top Funded This Year) items.
-        biggest = new ArrayList<HomeData.Biggest>();
-        for(final Element elem : document.getElementById(
-                "content-biggestfunded").getElementsByTag("li")) {
-            final HomeData.Biggest item = new HomeData.Biggest();
-
-            item.setPermalink(elem.getElementsByTag("a").attr("href")
-                    .replace("/company/", ""));
-            item.setName(elem.getElementsByTag("a").text().trim());
-            item.setSubtext(elem.getElementsByTag("strong").size() > 1 ?
-                    elem.getElementsByTag("strong").last().text().trim() :
-                    elem.getElementsByTag("span").size() > 0 ?
-                            elem.getElementsByTag("span").last().text().trim() :
-                            unknownField);
-            item.setFunds(elem.getElementsByClass("horizbar").text().trim());
-
-            biggest.add(item);
-        }
-    }
 
     public List<Trending> getTrending() {
         return trending;

@@ -22,7 +22,6 @@ import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.ItemClick;
 import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.UiThread;
-import com.koushikdutta.async.future.FutureCallback;
 
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -30,8 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EActivity(R.layout.search)
-public class SearchActivity extends BaseActivity
-        implements FutureCallback<Search>, LoadMoreListener {
+public class SearchActivity extends BaseActivity<Search>
+        implements LoadMoreListener {
 
     @SystemService
     protected LayoutInflater inflater;
@@ -128,12 +127,6 @@ public class SearchActivity extends BaseActivity
     }
 
     @Override
-    @Background
-    public void refresh() {
-        refreshStarted();
-        client.getSearchResults(query, 1, entity, field, this);
-    }
-
     @UiThread
     public void refreshStarted() {
         loading = true;
@@ -142,6 +135,13 @@ public class SearchActivity extends BaseActivity
         footer.findViewById(R.id.searchFooterLoading).setVisibility(View.VISIBLE);
         footer.findViewById(R.id.searchFooterNoMore).setVisibility(View.GONE);
         footer.findViewById(R.id.searchFooterFailed).setVisibility(View.GONE);
+    }
+
+    @Override
+    @Background
+    public void refresh() {
+        refreshStarted();
+        client.getSearchResults(query, 1, entity, field, this);
     }
 
     @UiThread
@@ -171,6 +171,7 @@ public class SearchActivity extends BaseActivity
                 getString(R.string.search_results_plural)));
     }
 
+    @Override
     @UiThread
     public void refreshFailed() {
         loading = false;
@@ -179,16 +180,6 @@ public class SearchActivity extends BaseActivity
         footer.findViewById(R.id.searchFooterLoading).setVisibility(View.GONE);
         footer.findViewById(R.id.searchFooterNoMore).setVisibility(View.GONE);
         footer.findViewById(R.id.searchFooterFailed).setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onCompleted(final Exception e, final Search search) {
-        if(e == null) {
-            refreshDone(search);
-        }
-        else {
-            refreshFailed();
-        }
     }
 
     @Override

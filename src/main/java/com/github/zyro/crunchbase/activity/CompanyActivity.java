@@ -17,7 +17,6 @@ import com.github.zyro.crunchbase.entity.PersonShort;
 import com.github.zyro.crunchbase.entity.RelationshipToPerson;
 import com.github.zyro.crunchbase.util.FormatUtils;
 import com.googlecode.androidannotations.annotations.*;
-import com.koushikdutta.async.future.FutureCallback;
 
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -32,7 +31,7 @@ import java.util.List;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
 @EActivity(R.layout.company)
-public class CompanyActivity extends BaseActivity implements FutureCallback<Company> {
+public class CompanyActivity extends BaseActivity<Company> {
 
     @SystemService
     protected LayoutInflater layoutInflater;
@@ -66,11 +65,6 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
     public void refresh() {
         refreshStarted();
         client.getCompany(permalink, this);
-    }
-
-    @UiThread
-    public void refreshStarted() {
-        RefreshMessage.hideRefreshFailed(this);
     }
 
     @UiThread
@@ -246,22 +240,6 @@ public class CompanyActivity extends BaseActivity implements FutureCallback<Comp
         findViewById(R.id.companyContents).setVisibility(View.VISIBLE);
         onRefreshCompleted();
         RefreshMessage.hideRefreshFailed(this);
-    }
-
-    @UiThread
-    public void refreshFailed() {
-        onRefreshCompleted();
-        RefreshMessage.showRefreshFailed(this);
-    }
-
-    @Override
-    public void onCompleted(final Exception e, final Company company) {
-        if(e == null) {
-            refreshDone(company);
-        }
-        else {
-            refreshFailed();
-        }
     }
 
 }

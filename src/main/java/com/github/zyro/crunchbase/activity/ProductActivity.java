@@ -22,7 +22,6 @@ import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.UiThread;
-import com.koushikdutta.async.future.FutureCallback;
 
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -33,7 +32,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @EActivity(R.layout.product)
-public class ProductActivity extends BaseActivity implements FutureCallback<Product> {
+public class ProductActivity extends BaseActivity<Product> {
 
     @SystemService
     protected LayoutInflater layoutInflater;
@@ -67,11 +66,6 @@ public class ProductActivity extends BaseActivity implements FutureCallback<Prod
     public void refresh() {
         refreshStarted();
         client.getProduct(permalink, this);
-    }
-
-    @UiThread
-    public void refreshStarted() {
-        RefreshMessage.hideRefreshFailed(this);
     }
 
     @UiThread
@@ -182,22 +176,6 @@ public class ProductActivity extends BaseActivity implements FutureCallback<Prod
         findViewById(R.id.productContents).setVisibility(View.VISIBLE);
         onRefreshCompleted();
         RefreshMessage.hideRefreshFailed(this);
-    }
-
-    @UiThread
-    public void refreshFailed() {
-        onRefreshCompleted();
-        RefreshMessage.showRefreshFailed(this);
-    }
-
-    @Override
-    public void onCompleted(final Exception e, final Product product) {
-        if(e == null) {
-            refreshDone(product);
-        }
-        else {
-            refreshFailed();
-        }
     }
 
 }

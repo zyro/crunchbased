@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.github.zyro.crunchbase.R;
+import com.github.zyro.crunchbase.entity.Search;
 import com.github.zyro.crunchbase.service.CrunchbaseClient;
 import com.github.zyro.crunchbase.service.Preferences_;
 import com.github.zyro.crunchbase.util.HeaderTransformer;
+import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.github.zyro.crunchbase.util.SearchDialog;
 import com.googlecode.androidannotations.annotations.*;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
+import com.koushikdutta.async.future.FutureCallback;
 
 import java.lang.reflect.Field;
 
@@ -21,8 +24,8 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 /** Common behaviour, encapsulated in an abstract Activity. */
 @EActivity
 @OptionsMenu(R.menu.menu)
-public abstract class BaseActivity extends FragmentActivity
-        implements PullToRefreshAttacher.OnRefreshListener {
+public abstract class BaseActivity<T> extends FragmentActivity
+        implements PullToRefreshAttacher.OnRefreshListener, FutureCallback<T> {
 
     /** Access to remote data. */
     @Bean
@@ -86,7 +89,30 @@ public abstract class BaseActivity extends FragmentActivity
         attacher.setRefreshComplete();
     }
 
+    @UiThread
+    public void refreshStarted() {
+        RefreshMessage.hideRefreshFailed(this);
+    }
+
     public abstract void refresh();
+
+    public abstract void refreshDone(final T entity);
+
+    @UiThread
+    public void refreshFailed() {
+        onRefreshCompleted();
+        RefreshMessage.showRefreshFailed(this);
+    }
+
+    @Override
+    public void onCompleted(final Exception e, final T entity) {
+        if(e == null) {
+            refreshDone(entity);
+        }
+        else {
+            refreshFailed();
+        }
+    }
 
     @OptionsItem(android.R.id.home)
     public void homeButton() {

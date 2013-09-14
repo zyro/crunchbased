@@ -24,7 +24,6 @@ import org.jsoup.nodes.Element;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import static java.net.URLEncoder.encode;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -41,16 +40,94 @@ public class CrunchbaseClient {
     protected static final String API_KEY = "api_key=9za7pzrvfch6quf3vgwp2dja";
 
     /**
-     * Get primary home page data to be later parsed into a HomeData instance.
-     * Page scraping isn't pretty but the API does not provide any lookup
-     * functions that would constitute a decent application landing space.
+     * Get primary home page data as a HomeData instance. Page scraping isn't
+     * pretty but the API does not provide any lookup functions that would
+     * constitute a decent application landing space.
      *
      * @param callback The callback to pass the data back to, or to notify of a
      *                 failure during the loading or mapping process.
      */
-    public void getHomeData(final FutureCallback<String> callback) {
-        Ion.with(context, "http://www.crunchbase.com/").asString()
-                .setCallback(callback);
+    public void getHomeData(final FutureCallback<HomeData> callback) {
+        try {
+            // Open a connection and pull data. This is a blocking operation.
+            final String response = Ion.with(context,
+                    "http://www.crunchbase.com/").asString().get();
+
+            final HomeData data = new HomeData();
+
+            // Parse HTML response.
+            final Document document = Jsoup.parse(response);
+
+            // Extract Trending items.
+            final List<HomeData.Trending> trendingItems =
+                    new ArrayList<HomeData.Trending>();
+            for(final Element elem : document.getElementById(
+                    "trending-now").getElementsByTag("li")) {
+                final HomeData.Trending item = new HomeData.Trending();
+
+                final String[] link = elem.getElementsByTag("a").first()
+                        .attr("href").replace("http://www.crunchbase.com/", "")
+                        .split("/");
+                item.setNamespace(link[link.length - 2]);
+                item.setPermalink(link[link.length - 1].replaceAll("[?].*", ""));
+                item.setPoints(elem.getElementsByTag("img").size());
+                item.setName(StringEscapeUtils.unescapeJava(
+                        elem.getElementsByTag("a").text().trim()));
+                if(isBlank(item.getName())) {
+                    item.setName(context.getString(R.string.unknown));
+                }
+
+                trendingItems.add(item);
+            }
+            data.setTrending(trendingItems);
+
+            // Extract Recent items.
+            final List<HomeData.Recent> recentItems =
+                    new ArrayList<HomeData.Recent>();
+            for(final Element elem : document.getElementById(
+                    "content-newlyfunded").getElementsByTag("li")) {
+                final HomeData.Recent item = new HomeData.Recent();
+
+                item.setPermalink(elem.getElementsByTag("a").attr("href")
+                        .replace("/company/", ""));
+                item.setName(elem.getElementsByTag("a").text().trim());
+                item.setSubtext(elem.getElementsByTag("strong").size() > 1 ?
+                        elem.getElementsByTag("strong").last().text().trim() :
+                        elem.getElementsByTag("span").size() > 0 ?
+                                elem.getElementsByTag("span").last().text().trim() :
+                                context.getString(R.string.unknown));
+                item.setFunds(elem.getElementsByClass("horizbar").text().trim());
+
+                recentItems.add(item);
+            }
+            data.setRecent(recentItems);
+
+            // Extract Biggest (Top Funded This Year) items.
+            final List<HomeData.Biggest> biggestItems =
+                    new ArrayList<HomeData.Biggest>();
+            for(final Element elem : document.getElementById(
+                    "content-biggestfunded").getElementsByTag("li")) {
+                final HomeData.Biggest item = new HomeData.Biggest();
+
+                item.setPermalink(elem.getElementsByTag("a").attr("href")
+                        .replace("/company/", ""));
+                item.setName(elem.getElementsByTag("a").text().trim());
+                item.setSubtext(elem.getElementsByTag("strong").size() > 1 ?
+                        elem.getElementsByTag("strong").last().text().trim() :
+                        elem.getElementsByTag("span").size() > 0 ?
+                                elem.getElementsByTag("span").last().text().trim() :
+                                context.getString(R.string.unknown));
+                item.setFunds(elem.getElementsByClass("horizbar").text().trim());
+
+                biggestItems.add(item);
+            }
+            data.setBiggest(biggestItems);
+
+            callback.onCompleted(null, data);
+        }
+        catch(final Exception e) {
+            callback.onCompleted(e, null);
+        }
     }
 
     /**
@@ -156,8 +233,16 @@ public class CrunchbaseClient {
         }
     }
 
-    public void getServiceProvider(final String permalink,
-                                   final FutureCallback<Object> callback) {
+    /**
+     * Perform a provider API call and return the data to the given callback in
+     * the form of a Product entity instance.
+     *
+     * @param permalink The permalink identifier of the provider.
+     * @param callback The callback to pass the data back to, or to notify of a
+     *                 failure during the loading or mapping process.
+     */
+    public void getProvider(final String permalink,
+                            final FutureCallback<Object> callback) {
         try {
             Ion.with(context,
                     "http://api.crunchbase.com/v/1/service-provider/" +

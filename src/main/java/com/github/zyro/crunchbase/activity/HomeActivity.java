@@ -15,7 +15,6 @@ import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.fragment.HomeFragment;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
-import com.koushikdutta.async.future.FutureCallback;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ import java.util.List;
 
 /** Activity to handle the application home area. */
 @EActivity(R.layout.home)
-public class HomeActivity extends BaseActivity implements FutureCallback<String> {
+public class HomeActivity extends BaseActivity<HomeData> {
 
     /** Pager adapter for home page tabs. */
     protected HomePagerAdapter adapter;
@@ -96,21 +95,22 @@ public class HomeActivity extends BaseActivity implements FutureCallback<String>
         refreshButton();
     }
 
-    /** Begin a data refresh attempt. */
-    @Override
-    @Background
-    public void refresh() {
-        refreshStarted();
-        client.getHomeData(this);
-    }
-
     /** Refresh started action. */
+    @Override
     @UiThread
     public void refreshStarted() {
         for(final HomeFragment fragment : adapter.getAll()) {
             fragment.refreshStarted();
         }
         RefreshMessage.hideRefreshFailed(this);
+    }
+
+    /** Begin a data refresh attempt. */
+    @Override
+    @Background
+    public void refresh() {
+        refreshStarted();
+        client.getHomeData(this);
     }
 
     /** Refresh complete action. */
@@ -126,29 +126,11 @@ public class HomeActivity extends BaseActivity implements FutureCallback<String>
     }
 
     /** Refresh failed action. */
+    @Override
     @UiThread
     public void refreshFailed() {
         onRefreshCompleted();
         RefreshMessage.showRefreshFailed(this);
-    }
-
-    @Override
-    @Background
-    public void onCompleted(final Exception e, final String rawData) {
-        if(e == null) {
-            final HomeData homeData;
-            try {
-                homeData = new HomeData(rawData, getString(R.string.unknown));
-            }
-            catch(final Exception ex) {
-                refreshFailed();
-                return;
-            }
-            refreshDone(homeData);
-        }
-        else {
-            refreshFailed();
-        }
     }
 
     /** Adapter for tab fragments on the application home screen. */
