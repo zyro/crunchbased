@@ -8,6 +8,7 @@ import com.github.zyro.crunchbase.entity.FinancialOrganization;
 import com.github.zyro.crunchbase.entity.Person;
 import com.github.zyro.crunchbase.entity.Product;
 import com.github.zyro.crunchbase.entity.Search;
+import com.github.zyro.crunchbase.entity.ServiceProvider;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.google.gson.reflect.TypeToken;
 import com.googlecode.androidannotations.annotations.EBean;
@@ -234,20 +235,20 @@ public class CrunchbaseClient {
     }
 
     /**
-     * Perform a provider API call and return the data to the given callback in
-     * the form of a Product entity instance.
+     * Perform a service provider API call and return the data to the given
+     * callback in the form of a Product entity instance.
      *
-     * @param permalink The permalink identifier of the provider.
+     * @param permalink The permalink identifier of the service provider.
      * @param callback The callback to pass the data back to, or to notify of a
      *                 failure during the loading or mapping process.
      */
-    public void getProvider(final String permalink,
-                            final FutureCallback<Object> callback) {
+    public void getServiceProvider(final String permalink,
+                               final FutureCallback<ServiceProvider> callback) {
         try {
             Ion.with(context,
                     "http://api.crunchbase.com/v/1/service-provider/" +
                     encode(permalink.toLowerCase(), "UTF-8") + ".js?" + API_KEY)
-                    .as(new TypeToken<Object>(){})
+                    .as(new TypeToken<ServiceProvider>(){})
                     .setCallback(callback);
         }
         catch(final UnsupportedEncodingException e) {
