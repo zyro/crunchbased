@@ -13,9 +13,9 @@ import com.github.zyro.crunchbase.fragment.HomeRecentFragment_;
 import com.github.zyro.crunchbase.fragment.HomeTrendingFragment_;
 import com.github.zyro.crunchbase.R;
 import com.github.zyro.crunchbase.fragment.HomeFragment;
-import com.github.zyro.crunchbase.service.ClientException;
 import com.github.zyro.crunchbase.util.HomeData;
 import com.googlecode.androidannotations.annotations.*;
+import com.koushikdutta.async.future.FutureCallback;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.List;
 
 /** Activity to handle the application home area. */
 @EActivity(R.layout.home)
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements FutureCallback<String> {
 
     /** Pager adapter for home page tabs. */
     protected HomePagerAdapter adapter;
@@ -101,13 +101,7 @@ public class HomeActivity extends BaseActivity {
     @Background
     public void refresh() {
         refreshStarted();
-        try {
-            final HomeData data = client.getHomeData();
-            refreshDone(data);
-        }
-        catch(final ClientException e) {
-            refreshFailed();
-        }
+        client.getHomeData(this);
     }
 
     /** Refresh started action. */
@@ -136,6 +130,25 @@ public class HomeActivity extends BaseActivity {
     public void refreshFailed() {
         onRefreshCompleted();
         RefreshMessage.showRefreshFailed(this);
+    }
+
+    @Override
+    @Background
+    public void onCompleted(final Exception e, final String rawData) {
+        if(e == null) {
+            final HomeData homeData;
+            try {
+                homeData = new HomeData(rawData, getString(R.string.unknown));
+            }
+            catch(final Exception ex) {
+                refreshFailed();
+                return;
+            }
+            refreshDone(homeData);
+        }
+        else {
+            refreshFailed();
+        }
     }
 
     /** Adapter for tab fragments on the application home screen. */
