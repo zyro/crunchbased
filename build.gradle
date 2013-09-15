@@ -31,7 +31,7 @@ dependencies {
     apt 'com.googlecode.androidannotations:androidannotations:2.7.1'
     compile 'com.googlecode.androidannotations:androidannotations-api:2.7.1'
     
-    compile 'com.koushikdutta.ion:ion:1.1.7'
+    compile 'com.koushikdutta.ion:ion:1.1.8'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:0.7.2'
     compile 'org.jsoup:jsoup:1.7.2'
     compile 'org.apache.commons:commons-lang3:3.1'
@@ -45,7 +45,6 @@ android {
         minSdkVersion 15
         targetSdkVersion 18
     }
-
 }
 
 def getSourceSetName(variant) {
