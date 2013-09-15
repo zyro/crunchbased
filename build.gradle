@@ -56,8 +56,8 @@ android.applicationVariants.all { variant ->
     def aptOutput = new File(aptOutputDir, variant.dirName)
     println "****************************"
     println "variant: ${variant.name}"
-    println "manifest:  ${variant.processResources.manifestFile}"
-    println "aptOutput:  ${aptOutput}"
+    println "manifest: ${variant.processResources.manifestFile}"
+    println "aptOutput: ${aptOutput}"
     println "****************************"
 
     android.sourceSets[getSourceSetName(variant)].java.srcDirs += aptOutput.getPath()
