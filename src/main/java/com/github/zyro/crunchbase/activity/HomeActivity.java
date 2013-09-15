@@ -61,7 +61,7 @@ public class HomeActivity extends BaseActivity<HomeData> {
         pager.setOffscreenPageLimit(adapter.getCount());
         pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-            public void onPageSelected(int index) {
+            public void onPageSelected(final int index) {
                 getActionBar().setSelectedNavigationItem(index);
             }
         });
