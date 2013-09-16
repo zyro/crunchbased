@@ -38,7 +38,7 @@ public class CrunchbaseClient {
     protected Context context;
 
     /** Crunchbase API key. */
-    protected static final String API_KEY = "api_key=9za7pzrvfch6quf3vgwp2dja";
+    protected static final String API_KEY = "api_key=" + Api.KEY;
 
     /**
      * Get primary home page data as a HomeData instance. Page scraping isn't
