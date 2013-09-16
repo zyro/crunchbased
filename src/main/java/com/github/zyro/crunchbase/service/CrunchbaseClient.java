@@ -140,10 +140,6 @@ public class CrunchbaseClient {
      * @param view The ImageView to display the loaded image in.
      */
     public void loadImage(final String asset, final ImageView view) {
-        //if(!preferences.loadImages().get()) {
-        //    return;
-        //}
-
         Ion.with(view).error(R.drawable.no_image_placeholder)
                 .load("http://www.crunchbase.com/" + asset);
     }

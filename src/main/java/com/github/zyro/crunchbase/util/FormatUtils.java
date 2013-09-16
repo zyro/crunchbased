@@ -10,17 +10,9 @@ import com.github.zyro.crunchbase.activity.CompanyActivity_;
 import com.github.zyro.crunchbase.activity.FinancialOrganizationActivity_;
 import com.github.zyro.crunchbase.activity.PersonActivity_;
 import com.github.zyro.crunchbase.activity.ProductActivity_;
-import com.github.zyro.crunchbase.entity.Company;
-import com.github.zyro.crunchbase.entity.FinancialOrganization;
-import com.github.zyro.crunchbase.entity.Fund;
-import com.github.zyro.crunchbase.entity.FundingRound;
-import com.github.zyro.crunchbase.entity.FundingRoundShort;
-import com.github.zyro.crunchbase.entity.Person;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /** Various static utility methods to format or convert miscellaneous data. */
 public class FormatUtils {
@@ -28,23 +20,8 @@ public class FormatUtils {
     /** Strictly a static class. */
     private FormatUtils() {}
 
-    // The date/time format to convert timestamps to.
-    private static final SimpleDateFormat FORMAT =
-            new SimpleDateFormat("dd/MM/yyyy '@' HH:mm:ss");
-
     // Date symbols used to convert month numbers to names.
     private static final DateFormatSymbols SYMBOLS = new DateFormatSymbols();
-
-    /**
-     * Format a long millisecond timestamp based on existing configuration.
-     * Target date/time format is: dd/MM/yyyy '@' HH:mm:ss
-     *
-     * @param timestamp A long value representing a timestamp.
-     * @return A String containing the formatted date/time.
-     */
-    public static String formatTimestamp(final long timestamp) {
-        return FORMAT.format(new Date(timestamp));
-    }
 
     /**
      * Convert a month number to the corresponding month name.

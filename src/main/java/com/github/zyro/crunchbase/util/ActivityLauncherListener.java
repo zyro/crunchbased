@@ -11,6 +11,7 @@ import com.github.zyro.crunchbase.activity.CompanyActivity_;
 import com.github.zyro.crunchbase.activity.FinancialOrganizationActivity_;
 import com.github.zyro.crunchbase.activity.PersonActivity_;
 import com.github.zyro.crunchbase.activity.ProductActivity_;
+import com.github.zyro.crunchbase.activity.ServiceProviderActivity_;
 
 /**
  * OnClickListener implementation that launches an internal activity selected
@@ -28,11 +29,11 @@ public class ActivityLauncherListener implements View.OnClickListener {
     private String permalink;
 
     /**
-     * OnClickListener implementation that launches an internal activity.
+     * OnClickListener implementation that launches an internal activity
      *
-     * @param activity The activity that acts as the source of the intent.
-     * @param namespace The namespace of the item, to determine target activity.
-     * @param permalink The permalink to be passed to the target activity.
+     * @param activity
+     * @param namespace
+     * @param permalink
      */
     public ActivityLauncherListener(final Activity activity,
                                     final String namespace,
@@ -80,8 +81,14 @@ public class ActivityLauncherListener implements View.OnClickListener {
             activity.startActivity(intent);
             activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
         }
+        else if(namespace.equals("service-provider")) {
+            final Intent intent = new Intent(activity, ServiceProviderActivity_.class);
+            intent.setData(Uri.parse("http://www.crunchbase.com/service-provider/" + permalink));
+            activity.startActivity(intent);
+            activity.overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        }
         else {
-            Toast.makeText(activity, "Not yet implemented", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Unknown entity type: " + namespace, Toast.LENGTH_SHORT).show();
         }
     }
 

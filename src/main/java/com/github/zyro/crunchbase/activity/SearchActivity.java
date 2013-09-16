@@ -118,8 +118,6 @@ public class SearchActivity extends BaseActivity<Search>
         list.setAdapter(adapter);
         list.setOnScrollListener(new LoadMoreScrollListener(this));
         addRefreshableView(list);
-        //((PullToRefreshLayout) findViewById(R.id.companyPtr))
-        //        .setPullToRefreshAttacher(attacher, this);
 
         //findViewById(R.id.companyContents).setOnTouchListener(
         //        new SwipeBackListener(this));

@@ -7,14 +7,11 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.github.zyro.crunchbase.R;
-import com.github.zyro.crunchbase.entity.Search;
 import com.github.zyro.crunchbase.service.CrunchbaseClient;
-import com.github.zyro.crunchbase.service.Preferences_;
 import com.github.zyro.crunchbase.util.HeaderTransformer;
 import com.github.zyro.crunchbase.util.RefreshMessage;
 import com.github.zyro.crunchbase.util.SearchDialog;
 import com.googlecode.androidannotations.annotations.*;
-import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
 import com.koushikdutta.async.future.FutureCallback;
 
 import java.lang.reflect.Field;
@@ -30,10 +27,6 @@ public abstract class BaseActivity<T> extends FragmentActivity
     /** Access to remote data. */
     @Bean
     protected CrunchbaseClient client;
-
-    /** Access to application preferences. */
-    @Pref
-    protected Preferences_ preferences;
 
     protected PullToRefreshAttacher attacher;
 

@@ -23,6 +23,13 @@ public class ActivityLauncherSpan extends ClickableSpan {
     /** The launched activity class. */
     protected Class<? extends Activity> activityClass;
 
+    /**
+     * Create a span that on click will launch a specified internal activity.
+     *
+     * @param parentActivity The activity to use as the source of the intent.
+     * @param url The underlying URL to pass to the launched activity.
+     * @param activityClass The activity class to launch on span click.
+     */
     public ActivityLauncherSpan(final Activity parentActivity, final String url,
                                 final Class<? extends Activity> activityClass) {
         this.parentActivity = parentActivity;

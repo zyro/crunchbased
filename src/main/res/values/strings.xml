@@ -2,28 +2,13 @@
 <resources>
     <!-- Generic or shared strings -->
     <string name="app_name">CrunchBase</string>
-    <string name="splash_image">Splash</string>
-    <string name="splash_bottom">Unofficial CrunchBase app for Android</string>
     <string name="refresh">Refresh</string>
     <string name="search">Search</string>
     <string name="refresh_failed">Refresh failed. Tap to retry.</string>
     <string name="no_items">Nothing found. Refresh to retry.</string>
     <string name="unknown">\u003F</string>
-    <string name="more">More</string>
-    <string name="less">Less</string>
     <string name="cancel">Cancel</string>
-    <string name="yes">Yes</string>
-
-    <!-- Menu strings -->
-    <string name="menu_loadImagesSwitch">Fetch images</string>
-    <string name="menu_cacheImagesSwitch">Cache images</string>
-    <string name="menu_cacheDataSwitch">Cache data</string>
-    <string name="menu_cacheClearItem">Clear cache</string>
-    <string name="clear_text">
-        Are you sure you want to clear all cache data?
-    </string>
-    <string name="clearing_text">Clearing cache…</string>
-    <string name="menu_aboutItem">About</string>
+    <string name="about">About</string>
     <string name="about_dismiss">Dismiss</string>
     <string name="about_text">
         \n
@@ -130,4 +115,15 @@
     <string name="product_twitter"><u>Twitter</u></string>
     <string name="product_overview">Overview</string>
     <string name="product_company">Made By</string>
+
+    <!-- Service Provider activity strings -->
+    <string name="service_provider_image">Service Provider Image</string>
+    <string name="service_provider_presence">Presence</string>
+    <string name="service_provider_crunchbase_url"><u>Crunchbase</u></string>
+    <string name="service_provider_email"><u>Email</u></string>
+    <string name="service_provider_overview">Overview</string>
+    <string name="service_provider_providerships">
+        Key Current Providerships
+    </string>
+    <string name="service_provider_provided">Provided:\u0020</string>
 </resources>
