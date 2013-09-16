@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Generic or shared strings -->
-    <string name="app_name">CrunchBase</string>
+    <string name="app_name">CrunchBased</string>
     <string name="refresh">Refresh</string>
     <string name="search">Search</string>
     <string name="refresh_failed">Refresh failed. Tap to retry.</string>
     <string name="no_items">Nothing found. Refresh to retry.</string>
     <string name="unknown">\u003F</string>
     <string name="cancel">Cancel</string>
-    <string name="about">About</string>
+    <!-- <string name="about">About</string>
     <string name="about_dismiss">Dismiss</string>
     <string name="about_text">
         \n
@@ -23,7 +23,7 @@
         The project repository can be found here:\n
         https://github.com/zyro/crunchbase-android
         \n
-    </string>
+    </string> -->
 
     <!-- Search dialog strings -->
     <string name="search_title">Search</string>
