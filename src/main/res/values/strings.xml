@@ -56,7 +56,7 @@
     <!-- Home activity strings -->
     <string name="trending_header">Trending</string>
     <string name="recent_header">Recent</string>
-    <string name="biggest_header">Top This Year</string>
+    <string name="biggest_header">Top</string>
     <string name="details_view">Details</string>
     <string name="trending_points_plural">points</string>
     <string name="trending_points_singular">point</string>

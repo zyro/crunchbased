@@ -31,28 +31,28 @@ public class HomeActivity extends BaseActivity<HomeData> {
     @Override
     public void onConfigurationChanged(final Configuration config) {
         super.onConfigurationChanged(config);
-        forceTabs();
+        //forceTabs();
     }
 
-    /** Force tabs embedded in action bar regardless of screen orientation. */
-    public void forceTabs() {
-        try {
-            final ActionBar actionBar = getActionBar();
-            final Method setHasEmbeddedTabsMethod = actionBar.getClass()
-                    .getDeclaredMethod("setHasEmbeddedTabs", boolean.class);
-            setHasEmbeddedTabsMethod.setAccessible(true);
-            setHasEmbeddedTabsMethod.invoke(actionBar, true);
-        }
-        catch(final Exception e) {} // Don't care if it doesn't work.
-    }
+//    /** Force tabs embedded in action bar regardless of screen orientation. */
+//    public void forceTabs() {
+//        try {
+//            final ActionBar actionBar = getActionBar();
+//            final Method setHasEmbeddedTabsMethod = actionBar.getClass()
+//                    .getDeclaredMethod("setHasEmbeddedTabs", boolean.class);
+//            setHasEmbeddedTabsMethod.setAccessible(true);
+//            setHasEmbeddedTabsMethod.invoke(actionBar, true);
+//        }
+//        catch(final Exception e) {} // Don't care if it doesn't work.
+//    }
 
     /** Initialize tabs and associated view pager. */
     @AfterViews
     public void initState() {
         final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        forceTabs();
+        //forceTabs();
 
         adapter = new HomePagerAdapter(getSupportFragmentManager());
 
