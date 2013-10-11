@@ -9,7 +9,7 @@ Requirements:
 * Gradle 1.8+
 * Properly configured Android SDK API level 18 and Build Tools 18.0.1
 
-That's it! All other libraries are retrieved by Gradle during the build process. A simple `gradle build` will 
+That's it! All other libraries are retrieved by Gradle during the build process. All you need is `gradle build`.
 
 ## API Key
 
