@@ -1,6 +1,6 @@
 # CrunchBase Direct
 
-Dedicated app to browse and search CrunchBase data on Android 4.0.3 and above. You can download the latest version from [Google Play](https://play.google.com/store/apps/details?id=com.github.zyro.crunchbased).
+Dedicated app to browse and search [CrunchBase](http://www.crunchbase.com/) data on Android 4.0.3 and above. You can download the latest version from [Google Play](https://play.google.com/store/apps/details?id=com.github.zyro.crunchbased).
 
 ## Build
 
@@ -9,7 +9,7 @@ Requirements:
 * Gradle 1.8+
 * Properly configured Android SDK API level 18 and Build Tools 18.0.1
 
-That's it! All other libraries are retrieved by Gradle during the build process.
+That's it! All other libraries are retrieved by Gradle during the build process. A simple `gradle build` will 
 
 ## API Key
 
@@ -18,19 +18,20 @@ While the above is enough to compile and run the application, you will need to a
 1. Register for the CrunchBase Developer API [here](http://developer.crunchbase.com/) and generate an API key. It should only take moments to get your key.
 
 2. Find the `Api` class in package `com.github.zyro.crunchbased.service`. It looks like this:
-```java
-package com.github.zyro.crunchbased.service;
 
-public class Api {
+    ```java
+    package com.github.zyro.crunchbased.service;
 
-    public static final String KEY = "YOUR CRUNCHBASE KEY HERE";
+    public class Api {
 
-}
-```
+        public static final String KEY = "YOUR CRUNCHBASE KEY HERE";
+
+    }
+    ```
 
 3. Replace the value of the `KEY` field with your API key.
 
-4. Build the app with a simple `gradle build`, and away you go!
+4. Build the app and away you go!
 
 ## Attribution
 
@@ -45,6 +46,7 @@ Some graphical resources generated with:
 
 ## License
 
+```
 The MIT License (MIT)
 
 Copyright (c) 2013 Andrei Mihu
@@ -66,3 +68,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+```
