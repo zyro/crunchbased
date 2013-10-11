@@ -13,9 +13,9 @@ That's it! All other libraries are retrieved by Gradle during the build process.
 
 ## API Key
 
-While the above is enough to compile and run the application, you will need to add your API key to use any feature beyond browsing the home tabs.
+While the above is enough to compile and run the application, you will need to add your own API key to use any feature beyond browsing the home tabs.
 
-1. Register for the CrunchBase Developer API [here](http://developer.crunchbase.com/) and generate an API key. It should only take moments to get your key.
+1. Register on the [CrunchBase Developer site](http://developer.crunchbase.com/) and generate an API key. It should only take moments to get your key.
 
 2. Find the `Api` class in package `com.github.zyro.crunchbased.service`. It looks like this:
 
