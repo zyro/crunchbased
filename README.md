@@ -1,6 +1,6 @@
 # ![](images/crunchbase-direct-featured.png)
 
-Dedicated app to browse and search [CrunchBase](http://www.crunchbase.com/) data on Android 4.0.3 and above. You can download the latest version from [Google Play](https://play.google.com/store/apps/details?id=com.github.zyro.crunchbased).
+Dedicated app to browse and search [CrunchBase](http://www.crunchbase.com/) data on Android 4.0.3 and above. You can view screenshots and download the latest version from the app's [Google Play page](https://play.google.com/store/apps/details?id=com.github.zyro.crunchbased).
 
 ## Build
 
