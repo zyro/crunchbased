@@ -1,8 +1,6 @@
 # CrunchBase Direct
 
-Dedicated app to browse and search CrunchBase data on Android 4.0.3 and above.
-
-Grab it from [Google Play](https://play.google.com/store/apps/details?id=com.github.zyro.crunchbased).
+Dedicated app to browse and search CrunchBase data on Android 4.0.3 and above. You can download the latest version from [Google Play](https://play.google.com/store/apps/details?id=com.github.zyro.crunchbased).
 
 ## Build
 
@@ -20,7 +18,6 @@ While the above is enough to compile and run the application, you will need to a
 1. Register for the CrunchBase Developer API [here](http://developer.crunchbase.com/) and generate an API key. It should only take moments to get your key.
 
 2. Find the `Api` class in package `com.github.zyro.crunchbased.service`. It looks like this:
-
 ```java
 package com.github.zyro.crunchbased.service;
 
