@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.1'
+        classpath 'com.android.tools.build:gradle:0.6.3'
     }
 }
 
@@ -31,9 +31,9 @@ dependencies {
     apt 'com.googlecode.androidannotations:androidannotations:2.7.1'
     compile 'com.googlecode.androidannotations:androidannotations-api:2.7.1'
     
-    compile 'com.koushikdutta.ion:ion:1.1.8'
+    compile 'com.koushikdutta.ion:ion:1.2.0'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:0.8'
-    compile 'org.jsoup:jsoup:1.7.2'
+    compile 'org.jsoup:jsoup:1.7.3'
     compile 'org.apache.commons:commons-lang3:3.1'
 }
 
@@ -45,6 +45,21 @@ android {
         minSdkVersion 15
         targetSdkVersion 18
     }
+
+//    signingConfigs {
+//        release {
+//            storeFile file(System.console().readLine("\n\$ Enter keystore path: "))
+//            storePassword new String(System.console().readPassword("\$ Enter keystore password: "))
+//            keyAlias System.console().readLine("\$ Enter key alias: ")
+//            keyPassword new String(System.console().readPassword("\$ Enter key password: "))
+//        }
+//    }
+//
+//    buildTypes {
+//        release {
+//            signingConfig signingConfigs.release
+//        }
+//    }
 }
 
 def getSourceSetName(variant) {
